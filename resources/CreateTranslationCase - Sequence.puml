@@ -1,0 +1,28 @@
+@startuml
+
+actor Client
+participant "API Gateway/Lambda"
+participant CreateTranslationCaseActivity
+participant TranslationCaseDao
+database    DynamoDB
+
+Client -> "API Gateway/Lambda" : HTTP Request
+"API Gateway/Lambda" -> CreateTranslationCaseActivity : CreateTranslationCaseRequest
+
+CreateTranslationCaseActivity -> TranslationCaseDao : saveTranslationCase(String generateTranslationCaseId(), String customerId, String translationCaseNickname)
+
+alt if case nickname-client pair is identical to existing pair
+    DynamoDB --> TranslationCaseDao: throw ConditionalCheckFailedException
+    TranslationCaseDao --> CreateTranslationCaseActivity: throw DuplicateCaseNicknameException
+    CreateTranslationCaseActivity --> "API Gateway/Lambda": propagate DuplicateCaseNicknameException
+    "API Gateway/Lambda" --> Client : return 400 response
+else else continue
+end
+
+TranslationCaseDao -> DynamoDB : store translationCase
+DynamoDB --> TranslationCaseDao : return 200 response
+TranslationCaseDao --> CreateTranslationCaseActivity : return translationCase object
+CreateTranslationCaseActivity --> "API Gateway/Lambda" : return CreateTranslationCaseResult
+"API Gateway/Lambda" --> Client : return 200 response with CreateTranslationCaseResult data
+
+@enduml

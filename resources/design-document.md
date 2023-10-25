@@ -15,7 +15,7 @@ _List the most important questions you have about your design, or things that yo
 you might like help working through._
 
 1. I would like to soft-delete clients and translation cases - would I still use DELETE in the endpoint? 
-2.
+2. 
 3.
 
 ## 3. Use Cases
@@ -230,7 +230,9 @@ Double wordsPerHourEstimate;
 * Accepts `GET` requests to `/cases/:id`
 * Accepts a `TranslationCase` ID and returns the corresponding `TranslationCaseModel`.
     * If the given `TranslationCase` ID is not found, will throw a
-      `CaseNotFoundException`
+      `TranslationCaseNotFoundException`
+
+<img src="images/GetTranslationCase-Sequence.png" width="70%" alt="Get Translation Case Endpoint Sequence Diagram"/>
 
 ## 6.3 Create Translation Case Endpoint
 
@@ -238,21 +240,23 @@ Double wordsPerHourEstimate;
 * Accepts data to create a new `TranslationCase` with a provided case nickname, a given `Client`
   ID, with all other values being optional. 
 * Returns the new `TranslationCase`, including a unique `TranslationCase` ID assigned by Translation Tracker.
-  * If the case nickname is identical to an already-existing case nickname, will throw an 
-    `InvalidCaseNicknameException`.
+  * If the case nickname-client pair is identical to an already-existing pair, will throw a 
+    `DuplicateCaseNicknameException`.
+
+<img src="images/CreateTranslationCase-Sequence.png" width="70%" alt="Create Translation Case Endpoint Sequence Diagram"/>
 
 ## 6.4 Update Translation Case Endpoint
 
 * Accepts `PUT` requests to `/cases/:id`
 * Accepts data to update a `TranslationCase` including a `TranslationCase` ID, and the update values. Returns the updated
   `TranslationCase`.
-    * If the `TranslationCase` ID is not found, will throw a `CaseNotFoundException`
+    * If the `TranslationCase` ID is not found, will throw a `TranslationCaseNotFoundException`
 
 ## 6.5 Archive Translation Case Endpoint
 
 * Accepts `DELETE` requests to `/cases/:id`
 * Accepts a `TranslationCase` ID and archives the specified `TranslationCase`.
-  * If the `TranslationCase` ID is not found, will throw a `CaseNotFoundException`
+  * If the `TranslationCase` ID is not found, will throw a `TranslationCaseNotFoundException`
 
 ## 6.6 Get Client Endpoint
 
