@@ -1,0 +1,48 @@
+@startuml
+
+actor Client
+participant "API Gateway/Lambda"
+participant ArchiveTranslationClientActivity
+participant ArchiveTranslationCaseActivity
+participant TranslationClientDao
+database    DynamoDB
+
+Client -> "API Gateway/Lambda" : HTTP Request
+"API Gateway/Lambda" -> ArchiveTranslationClientActivity : ArchiveTranslationClientRequest
+
+ArchiveTranslationClientActivity -> TranslationClientDao : getTranslationClient(translationClientId)
+TranslationClientDao -> DynamoDB : load(translationClientId)
+
+alt if DynamoDB returns null
+    DynamoDB --> TranslationClientDao: return with no item data
+    TranslationClientDao --> ArchiveTranslationClientActivity: throw TranslationClientNotFoundException
+    ArchiveTranslationClientActivity --> "API Gateway/Lambda": propagate TranslationClientNotFoundException
+    "API Gateway/Lambda" --> Client : return 400 response
+else else continue
+end
+
+alt if archivedClient has associated translation cases
+    loop for each translation case
+    ArchiveTranslationClientActivity -> ArchiveTranslationCaseActivity : ArchiveTranslationCaseRequest
+    ArchiveTranslationCaseActivity --> ArchiveTranslationClientActivity : return archived TranslationCase
+    end
+else else continue
+end
+
+ArchiveTranslationClientActivity -> ArchiveTranslationClientActivity : append "archived" to \n the translationClientId
+
+ArchiveTranslationClientActivity -> TranslationClientDao : updateTranslationClient(archivedClient)
+
+TranslationClientDao -> DynamoDB : save(archivedClient)
+DynamoDB --> TranslationClientDao : return 200 response
+
+
+TranslationClientDao -> DynamoDB : delete(translationClientId)
+DynamoDB --> TranslationClientDao : return 200 response
+
+
+TranslationClientDao --> ArchiveTranslationClientActivity : return the removed translationClient object
+ArchiveTranslationClientActivity --> "API Gateway/Lambda" : return ArchiveTranslationClientResult
+"API Gateway/Lambda" --> Client : return 200 response with ArchiveTranslationClientResult data
+
+@enduml

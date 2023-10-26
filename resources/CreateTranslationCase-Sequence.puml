@@ -9,9 +9,10 @@ database    DynamoDB
 Client -> "API Gateway/Lambda" : HTTP Request
 "API Gateway/Lambda" -> CreateTranslationCaseActivity : CreateTranslationCaseRequest
 
-CreateTranslationCaseActivity -> TranslationCaseDao : saveTranslationCase(String generateTranslationCaseId(), String customerId, String translationCaseNickname)
+CreateTranslationCaseActivity -> TranslationCaseDao : createTranslationCase(generateTranslationCaseId(), translationClientId, translationCaseNickname)
+TranslationCaseDao -> DynamoDB : save(newTranslationCase)
 
-alt if case nickname-client pair is identical to existing pair
+alt if case nickname-translationClient ID pair is identical to existing pair
     DynamoDB --> TranslationCaseDao: throw ConditionalCheckFailedException
     TranslationCaseDao --> CreateTranslationCaseActivity: throw DuplicateCaseNicknameException
     CreateTranslationCaseActivity --> "API Gateway/Lambda": propagate DuplicateCaseNicknameException
@@ -19,9 +20,8 @@ alt if case nickname-client pair is identical to existing pair
 else else continue
 end
 
-TranslationCaseDao -> DynamoDB : store translationCase
 DynamoDB --> TranslationCaseDao : return 200 response
-TranslationCaseDao --> CreateTranslationCaseActivity : return translationCase object
+TranslationCaseDao --> CreateTranslationCaseActivity : return newTranslationCase object
 CreateTranslationCaseActivity --> "API Gateway/Lambda" : return CreateTranslationCaseResult
 "API Gateway/Lambda" --> Client : return 200 response with CreateTranslationCaseResult data
 
