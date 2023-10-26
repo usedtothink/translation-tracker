@@ -1,0 +1,33 @@
+@startuml
+
+actor Client
+participant "API Gateway/Lambda"
+participant UpdateTranslationCaseActivity
+participant TranslationCaseDao
+database    DynamoDB
+
+Client -> "API Gateway/Lambda" : HTTP Request
+"API Gateway/Lambda" -> UpdateTranslationCaseActivity : UpdateTranslationCaseRequest
+
+UpdateTranslationCaseActivity -> TranslationCaseDao : getTranslationCase(translationCaseId)
+TranslationCaseDao -> DynamoDB : load(translationCaseId)
+
+alt if DynamoDB returns null
+    DynamoDB --> TranslationCaseDao: return with no item data
+    TranslationCaseDao --> UpdateTranslationCaseActivity: throw TranslationCaseNotFoundException
+    UpdateTranslationCaseActivity --> "API Gateway/Lambda": propagate TranslationCaseNotFoundException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
+
+UpdateTranslationCaseActivity -> UpdateTranslationCaseActivity : update the item values based\non the values in the request
+
+UpdateTranslationCaseActivity -> TranslationCaseDao : saveTranslationCase(updatedCase)
+
+TranslationCaseDao -> DynamoDB : save(updatedCase)
+DynamoDB --> TranslationCaseDao : return 200 response
+TranslationCaseDao --> UpdateTranslationCaseActivity : return updated translationCase object
+UpdateTranslationCaseActivity --> "API Gateway/Lambda" : return UpdateTranslationCaseResult
+"API Gateway/Lambda" --> Client : return 200 response with UpdateTranslationCaseResult data
+
+@enduml

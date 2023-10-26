@@ -8,10 +8,10 @@ database    DynamoDB
 
 Client -> "API Gateway/Lambda" : HTTP Request
 "API Gateway/Lambda" -> GetTranslationCaseActivity : GetTranslationCaseRequest
-GetTranslationCaseActivity -> TranslationCaseDao : getTranslationCase(id)
-TranslationCaseDao -> DynamoDB : look up translationCase id
+GetTranslationCaseActivity -> TranslationCaseDao : getTranslationCase(translationCaseId)
+TranslationCaseDao -> DynamoDB : load(translationCaseId)
 
-alt "if translationCase does not exist"
+alt if translationCase does not exist
     DynamoDB --> TranslationCaseDao : return with no item data
     TranslationCaseDao --> GetTranslationCaseActivity : throw TranslationCaseNotFoundException
     GetTranslationCaseActivity --> "API Gateway/Lambda" : propagate TranslationCaseNotFoundException
