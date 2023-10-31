@@ -287,8 +287,8 @@ Double wordsPerHourEstimate;
 
 ### 7.1. `translationCases`
 ```
-translationClientId // partition key, string
-translationCaseId // sort key, string 
+translationCaseId // partition key, string
+translationClientId // string
 sourceTextTitle // string
 sourceTextAuthor // string
 translatedTitle // string
@@ -311,7 +311,7 @@ totalWorkingHours // number
 wordsPerHour // number
 ```
 
-### 7.2. `clients`
+### 7.2. `translationClients`
 ```
 translationClientId // partition key, string
 translationClientName // string
