@@ -7,6 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents a record in the translationCases table.
@@ -233,5 +234,43 @@ public class TranslationCase {
 
     public void setWordsPerHour(Double wordsPerHour) {
         this.wordsPerHour = wordsPerHour;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TranslationCase that = (TranslationCase) o;
+        return Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&
+                Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
+                Objects.equals(getCaseNickname(), that.getCaseNickname()) &&
+                Objects.equals(getSourceTextTitle(), that.getSourceTextTitle()) &&
+                Objects.equals(getSourceTextAuthor(), that.getSourceTextAuthor()) &&
+                Objects.equals(getTranslatedTitle(), that.getTranslatedTitle()) &&
+                Objects.equals(getRate(), that.getRate()) &&
+                Objects.equals(getRateUnit(), that.getRateUnit()) &&
+                Objects.equals(getCount(), that.getCount()) &&
+                Objects.equals(getCountUnit(), that.getCountUnit()) &&
+                Objects.equals(getGrossPayment(), that.getGrossPayment()) &&
+                Objects.equals(getTaxRate(), that.getTaxRate()) &&
+                Objects.equals(getProjectType(), that.getProjectType()) &&
+                Objects.equals(getDueDate(), that.getDueDate()) &&
+                Objects.equals(getStartDate(), that.getStartDate()) &&
+                Objects.equals(getEndDate(), that.getEndDate()) &&
+                Objects.equals(getOpenCase(), that.getOpenCase()) &&
+                Objects.equals(getCasePaid(), that.getCasePaid()) &&
+                Objects.equals(getRushJob(), that.getRushJob()) &&
+                Objects.equals(getProgressLog(), that.getProgressLog()) &&
+                Objects.equals(getTotalWorkingHours(), that.getTotalWorkingHours()) &&
+                Objects.equals(getWordsPerHour(), that.getWordsPerHour());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTranslationCaseId(), getTranslationClientId(), getCaseNickname(), getSourceTextTitle(),
+                getSourceTextAuthor(), getTranslatedTitle(), getRate(), getRateUnit(), getCount(), getCountUnit(),
+                getGrossPayment(), getTaxRate(), getProjectType(), getDueDate(), getStartDate(), getEndDate(),
+                getOpenCase(), getCasePaid(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
+                getWordsPerHour());
     }
 }
