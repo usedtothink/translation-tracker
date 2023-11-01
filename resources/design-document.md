@@ -60,33 +60,29 @@ U12. As a customer, I want to search for a translation client from the home page
 
 U13. As a customer, I want to search for a translation case from the home page.
 
-U14. As a customer, I want to click a link on the home page to see a clickable list of all translation clients sorted alphabetically.
+U14. As a customer, I want to click a link on the home page to see a clickable list of all translation clients that can be sorted in multiple ways (alphabetically, most recent activity).
 
-U15. As a customer, I want to click a link on the home page to see a clickable list of all translation clients sorted by most recent activity.
-
-U16. As a customer, I want to click a link on the home page to see a clickable list of all translation cases associated with a certain type of project.
-
-U17. As a customer, I want to click a link on the home page to see a clickable list of all translation cases sorted by most recent activity.
+U15. As a customer, I want to click a link on the home page to see a clickable list of all translation that can be sorted in multiple ways (project type, most recent activity).
 
 
 ### Stretch Goals
 
 #### Estimates
 
-U18. As a customer, I want to create a new estimate from the home page.
+U16. As a customer, I want to create a new estimate from the home page.
 
-U19. As a customer, I want to create a new translation client and either associate it with an existing translation client or create a new client at the same time.
+U17. As a customer, I want to create a new translation client and either associate it with an existing translation client or create a new client at the same time.
 
-U20. As a customer, I want to create new case estimates with estimated time needed for completion.
+U18. As a customer, I want to create new case estimates with estimated time needed for completion.
 
-U21. As a customer, I want to create new case estimates with a suggested pricing based on past cases of the same type.
+U19. As a customer, I want to create new case estimates with a suggested pricing based on past cases of the same type.
 
-U22. As a customer, I want to create new case estimates that show potential time conflicts with currently open cases.
+U20. As a customer, I want to create new case estimates that show potential time conflicts with currently open cases.
 
 
 #### Statistics
 
-U23. As a customer, I want to see useful statistics about my translation habits displayed on the home page.
+U21. As a customer, I want to see useful statistics about my translation habits displayed on the home page.
 
 
 
@@ -167,6 +163,7 @@ TranslationTracker will also provide a web interface for users to manage their t
 
 String translationCaseId;
 String translationClientId;
+String mostRecentActivity;
 String sourceTextTitle;
 String sourceTextAuthor;
 String translatedTitle;
@@ -177,7 +174,7 @@ Integer count;
 String countUnit;
 Double grossPayment;
 Double taxRate;
-String projectType;
+Enum projectType;
 String dueDate;
 String startDate;
 String endDate;
@@ -192,7 +189,8 @@ Double wordsPerHour;
 
 String translationClientId;
 String translationClientName;
-String translationClientType;
+Enum translationClientType;
+String mostRecentActivity;
 Map<String, Map<String, String>> translationCaseHistory;
 Map<String, Map<String, String>> paymentHistory;
 Map<String, String> outstandingPayments;
@@ -223,7 +221,7 @@ Double wordsPerHourEstimate;
 
 ## 6.2. Get Translation Case Endpoint
 
-* Accepts `GET` requests to `/cases/:id`
+* Accepts `GET` requests to `/translationcases/:id`
 * Accepts a translation case ID and returns the corresponding `TranslationCaseModel`.
     * If the given translation case ID is not found, will throw a
       `TranslationCaseNotFoundException`
@@ -232,18 +230,17 @@ Double wordsPerHourEstimate;
 
 ## 6.3 Create Translation Case Endpoint
 
-* Accepts `POST` requests to `/cases`
-* Accepts data to create a new `TranslationCase` with a provided case nickname, a given translation case ID, with all 
-  other values being optional. 
+* Accepts `POST` requests to `/translationcases`
+* Accepts data to create a new `TranslationCase` with a provided caseNickname and projectType, all other values being optional. 
 * Returns the new `TranslationCase`, including a unique translation case ID assigned by Translation Tracker.
-  * If the case-nickname translation-client-id pair is identical to an already-existing pair, will throw a 
+  * If the caseNickname is identical to an already-existing caseNickname, will throw a 
     `DuplicateCaseNicknameException`.
 
 <img src="images/CreateTranslationCase-Sequence.png" width="100%" alt="Create Translation Case Endpoint Sequence Diagram"/>
 
 ## 6.4 Update Translation Case Endpoint
 
-* Accepts `PUT` requests to `/cases/:id`
+* Accepts `PUT` requests to `/translationcases/:id`
 * Accepts data to update a `TranslationCase` including a translation case ID, and the update values. Returns the updated
   `TranslationCase`.
     * If the given translation case ID is not found, will throw a `TranslationCaseNotFoundException`
@@ -252,7 +249,7 @@ Double wordsPerHourEstimate;
 
 ## 6.5 Archive Translation Case Endpoint
 
-* Accepts `DELETE` requests to `/cases/:id`
+* Accepts `DELETE` requests to `/translationcases/:id`
 * Accepts a translation case ID and archives the specified `TranslationCase`.
   * If the translation case ID is not found, will throw a `TranslationCaseNotFoundException`
 
@@ -265,6 +262,17 @@ Double wordsPerHourEstimate;
   * If the given translation client ID is not found, will throw a `TranslationClientNotFoundException`
 
 <img src="images/GetTranslationClient-Sequence.png" width="100%" alt="Get Translation Client Endpoint Sequence Diagram"/>
+
+## 6.3 Create Translation Client Endpoint
+
+* Accepts `POST` requests to `/translationclients`
+* Accepts data to create a new `TranslationClient` with the provided translationClientName, translationCaseId and translationClientType, 
+   with all other values being optional.
+* Returns the new `TranslationClient`, including a unique translation client ID assigned by Translation Tracker.
+  * If the translationClientName is identical to an already-existing translationClientName, will throw a
+    `DuplicateTranslationClientException`.
+
+<img src="images/CreateTranslationClient-Sequence.png" width="100%" alt="Create Translation Client Endpoint Sequence Diagram"/>
 
 ## 6.7 Update Translation Client Endpoint
 
@@ -289,6 +297,7 @@ Double wordsPerHourEstimate;
 ```
 translationClientId // partition key, string
 translationCaseId // sort key, string
+mostRecentActivity // string
 sourceTextTitle // string
 sourceTextAuthor // string
 translatedTitle // string
@@ -316,6 +325,7 @@ wordsPerHour // number
 translationClientId // partition key, string
 translationClientName // string
 translationClientType // string
+mostRecentActivity // string
 translationCaseHistory // map
 paymentHistory // map
 outstandingPayments // map
