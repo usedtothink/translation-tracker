@@ -6,17 +6,16 @@ import java.util.List;
 import java.util.Objects;
 
 public class TranslationClientModel {
-
     private String translationClientId;
     private String translationClientName;
-    private String translationClientType;
+    private TranslationClientType translationClientType;
     private String mostRecentActivity;
     private List<String> translationCaseHistory;
     private List<PaymentHistoryRecord> paymentHistory;
 
     private TranslationClientModel(String translationClientId,
                                    String translationClientName,
-                                   String translationClientType,
+                                   TranslationClientType translationClientType,
                                    List<String> translationCaseHistory,
                                    List<PaymentHistoryRecord> paymentHistory) {
         this.translationClientId = translationClientId;
@@ -35,7 +34,7 @@ public class TranslationClientModel {
         return translationClientName;
     }
 
-    public String getTranslationClientType() {
+    public TranslationClientType getTranslationClientType() {
         return translationClientType;
     }
 
@@ -83,7 +82,7 @@ public class TranslationClientModel {
     public static class Builder {
         private String translationClientId;
         private String translationClientName;
-        private String translationClientType;
+        private TranslationClientType translationClientType;
         private List<String> translationCaseHistory;
         private List<PaymentHistoryRecord> paymentHistory;
 
@@ -97,7 +96,7 @@ public class TranslationClientModel {
             return this;
         }
 
-        public Builder withTranslationClientType(String translationClientType) {
+        public Builder withTranslationClientType(TranslationClientType translationClientType) {
             this.translationClientType = translationClientType;
             return this;
         }

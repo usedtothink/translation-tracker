@@ -7,6 +7,10 @@ import java.util.Objects;
 /**
  * Represents a payment history record.
  */
+
+
+// THIS SHOULD BE USED WITH BOTH TRANSLATION CASE & TRANSLATION CLIENT
+
 public class PaymentHistoryRecord {
     private final String paymentHistoryId;
     private final String translationCaseId;
@@ -172,12 +176,23 @@ public class PaymentHistoryRecord {
         PaymentHistoryRecord that = (PaymentHistoryRecord) o;
         return Objects.equals(getPaymentHistoryId(), that.getPaymentHistoryId()) &&
                 Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&
-                Objects.equals(getTranslationClientId(), that.getTranslationClientId());
+                Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
+                Objects.equals(getCasePaid(), that.getCasePaid()) &&
+                Objects.equals(getPaymentDate(), that.getPaymentDate()) &&
+                Objects.equals(getOnTime(), that.getOnTime()) &&
+                Objects.equals(getGrossPayment(), that.getGrossPayment()) &&
+                Objects.equals(getTaxRate(), that.getTaxRate()) &&
+                Objects.equals(getPayRate(), that.getPayRate()) &&
+                Objects.equals(getPayRateUnit(), that.getPayRateUnit()) &&
+                Objects.equals(getWordCount(), that.getWordCount()) &&
+                Objects.equals(getWordCountUnit(), that.getWordCountUnit());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPaymentHistoryId(), getTranslationCaseId(), getTranslationClientId());
+        return Objects.hash(getPaymentHistoryId(), getTranslationCaseId(), getTranslationClientId(),
+                getCasePaid(), getPaymentDate(), getOnTime(), getGrossPayment(), getTaxRate(), getPayRate(),
+                getPayRateUnit(), getWordCount(), getWordCountUnit());
     }
 
     //CHECKSTYLE:OFF:Builder
