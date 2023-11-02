@@ -1,6 +1,8 @@
 package translationtracker;
 
-import java.util.Map;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class TranslationClientModel {
@@ -8,19 +10,21 @@ public class TranslationClientModel {
     private String translationClientId;
     private String translationClientName;
     private String translationClientType;
-    private Map<String, Map<String, String>> translationCaseHistory;
-    private Map<String, Map<String, String>> paymentHistory;
+    private String mostRecentActivity;
+    private List<String> translationCaseHistory;
+    private List<PaymentHistoryRecord> paymentHistory;
 
     private TranslationClientModel(String translationClientId,
                                    String translationClientName,
                                    String translationClientType,
-                                   Map<String, Map<String, String>> translationCaseHistory,
-                                   Map<String, Map<String, String>> paymentHistory) {
+                                   List<String> translationCaseHistory,
+                                   List<PaymentHistoryRecord> paymentHistory) {
         this.translationClientId = translationClientId;
         this.translationClientName = translationClientName;
         this.translationClientType = translationClientType;
-        this.translationCaseHistory = MapUtils.defensiveCopyNestedMaps(translationCaseHistory);
-        this.paymentHistory = MapUtils.defensiveCopyNestedMaps(paymentHistory);
+        this.mostRecentActivity = ZonedDateTime.now().toString();
+        this.translationCaseHistory = new ArrayList<>(translationCaseHistory);
+        this.paymentHistory = PaymentHistoryRecord.defensiveCopyPaymentHistoryList(paymentHistory);
     }
 
     public String getTranslationClientId() {
@@ -35,12 +39,16 @@ public class TranslationClientModel {
         return translationClientType;
     }
 
-    public Map<String, Map<String, String>> getTranslationCaseHistory() {
-        return MapUtils.defensiveCopyNestedMaps(translationCaseHistory);
+    public String getMostRecentActivity() {
+        return mostRecentActivity;
     }
 
-    public Map<String, Map<String, String>> getPaymentHistory() {
-        return MapUtils.defensiveCopyNestedMaps(paymentHistory);
+    public List<String> getTranslationCaseHistory() {
+        return new ArrayList<>(translationCaseHistory);
+    }
+
+    public List<PaymentHistoryRecord> getPaymentHistory() {
+        return PaymentHistoryRecord.defensiveCopyPaymentHistoryList(paymentHistory);
     }
 
     @Override
@@ -55,6 +63,7 @@ public class TranslationClientModel {
         return Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
                 Objects.equals(getTranslationClientType(), that.getTranslationClientType()) &&
+                Objects.equals(getMostRecentActivity(), that.getMostRecentActivity()) &&
                 Objects.equals(getTranslationCaseHistory(), that.getTranslationCaseHistory()) &&
                 Objects.equals(getPaymentHistory(), that.getPaymentHistory());
     }
@@ -62,8 +71,8 @@ public class TranslationClientModel {
     @Override
     public int hashCode() {
         return Objects.hash(getTranslationClientId(),
-                getTranslationClientName(), getTranslationClientType(), getTranslationCaseHistory(),
-                getPaymentHistory());
+                getTranslationClientName(), getTranslationClientType(), getMostRecentActivity(),
+                getTranslationCaseHistory(), getPaymentHistory());
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -75,8 +84,8 @@ public class TranslationClientModel {
         private String translationClientId;
         private String translationClientName;
         private String translationClientType;
-        private Map<String, Map<String, String>> translationCaseHistory;
-        private Map<String, Map<String, String>> paymentHistory;
+        private List<String> translationCaseHistory;
+        private List<PaymentHistoryRecord> paymentHistory;
 
         public Builder withTranslationClientId(String translationClientId){
             this.translationClientId = translationClientId;
@@ -93,12 +102,12 @@ public class TranslationClientModel {
             return this;
         }
 
-        public Builder withTranslationCaseHistory(Map<String, Map<String, String>> translationCaseHistory) {
+        public Builder withTranslationCaseHistory(List<String> translationCaseHistory) {
             this.translationCaseHistory = translationCaseHistory;
             return this;
         }
 
-        public Builder withPaymentHistory(Map<String, Map<String, String>> paymentHistory) {
+        public Builder withPaymentHistory(List<PaymentHistoryRecord> paymentHistory) {
             this.paymentHistory = paymentHistory;
             return this;
         }
