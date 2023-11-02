@@ -168,20 +168,14 @@ String sourceTextTitle;
 String sourceTextAuthor;
 String translatedTitle;
 String caseNickname;
-Double rate;
-String rateUnit;
-Integer count;
-String countUnit;
-Double grossPayment;
-Double taxRate;
-Enum projectType;
+ProjectType projectType;
 String dueDate;
 String startDate;
 String endDate;
 Boolean openCase;
-Boolean casePaid;
 Boolean rushJob;
-Map<String, Map<String, String>> progressLog;
+List<TranslationCaseUpdate> progressLog;
+PaymentHistoryRecord paymentRecord;
 Double totalWorkingHours;
 Double wordsPerHour;
 
@@ -191,9 +185,8 @@ String translationClientId;
 String translationClientName;
 Enum translationClientType;
 String mostRecentActivity;
-Map<String, Map<String, String>> translationCaseHistory;
-Map<String, Map<String, String>> paymentHistory;
-Map<String, String> outstandingPayments;
+List<String> translationCaseHistory;
+List<PaymentHistoryRecord> paymentHistory;
 ```
 
 ### Stretch Goal
@@ -302,20 +295,13 @@ sourceTextTitle // string
 sourceTextAuthor // string
 translatedTitle // string
 caseNickname // string
-rate // number
-rateUnit // string
-count // number
-countUnit // string
-grossPayment // number
-taxRate // number
 projectType // string
 dueDate // string
 startDate // string
 endDate // string
 openCase // boolean
-casePaid // boolean
 rushJob // boolean
-progressLog // map
+progressLog // string
 totalWorkingHours // number
 wordsPerHour // number
 ```
@@ -326,9 +312,8 @@ translationClientId // partition key, string
 translationClientName // string
 translationClientType // string
 mostRecentActivity // string
-translationCaseHistory // map
-paymentHistory // map
-outstandingPayments // map
+translationCaseHistory // string list
+paymentHistory // string list
 ```
 
 
