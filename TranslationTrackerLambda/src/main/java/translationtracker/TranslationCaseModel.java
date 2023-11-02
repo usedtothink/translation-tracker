@@ -1,7 +1,7 @@
 package translationtracker;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class TranslationCaseModel {
@@ -17,23 +17,24 @@ public class TranslationCaseModel {
     private String countUnit;
     private Double grossPayment;
     private Double taxRate;
-    private String projectType;
+    private ProjectType projectType;
     private String dueDate;
     private String startDate;
     private String endDate;
     private Boolean openCase;
     private Boolean casePaid;
     private Boolean rushJob;
-    private Map<String, Map<String, String>> progressLog;
+    private List<TranslationCaseUpdate> progressLog;
     private Double totalWorkingHours;
     private Double wordsPerHour;
 
     private TranslationCaseModel(String translationCaseId, String translationClientId, String caseNickname,
                                  String sourceTextTitle, String sourceTextAuthor, String translatedTitle, Double rate,
                                  String rateUnit, Integer count, String countUnit, Double grossPayment, Double taxRate,
-                                 String projectType, String dueDate, String startDate, String endDate, Boolean openCase,
-                                 Boolean casePaid, Boolean rushJob, Map<String, Map<String, String>> progressLog,
-                                 Double totalWorkingHours, Double wordsPerHour) {
+                                 ProjectType projectType, String dueDate, String startDate, String endDate,
+                                 Boolean openCase, Boolean casePaid, Boolean rushJob,
+                                 List<TranslationCaseUpdate> progressLog, Double totalWorkingHours,
+                                 Double wordsPerHour) {
         this.translationCaseId = translationCaseId;
         this.translationClientId = translationClientId;
         this.caseNickname = caseNickname;
@@ -53,7 +54,7 @@ public class TranslationCaseModel {
         this.openCase = openCase;
         this.casePaid = casePaid;
         this.rushJob = rushJob;
-        this.progressLog = defensiveCopyProgressLog(progressLog);
+        this.progressLog = new ArrayList<>(progressLog);
         this.totalWorkingHours = totalWorkingHours;
         this.wordsPerHour = wordsPerHour;
     }
@@ -106,7 +107,7 @@ public class TranslationCaseModel {
         return taxRate;
     }
 
-    public String getProjectType() {
+    public ProjectType getProjectType() {
         return projectType;
     }
 
@@ -134,8 +135,8 @@ public class TranslationCaseModel {
         return rushJob;
     }
 
-    public Map<String, Map<String, String>> getProgressLog() {
-        return defensiveCopyProgressLog(progressLog);
+    public List<TranslationCaseUpdate> getProgressLog() {
+        return new ArrayList<>(progressLog);
     }
 
     public Double getTotalWorkingHours() {
@@ -144,18 +145,6 @@ public class TranslationCaseModel {
 
     public Double getWordsPerHour() {
         return wordsPerHour;
-    }
-
-    private Map<String, Map<String, String>> defensiveCopyProgressLog(Map<String, Map<String, String>> original) {
-        Map<String, Map<String, String>> outputProgressLog = new HashMap<>();
-        for (String key : original.keySet()) {
-            for (Map.Entry<String, String> internalEntry : original.get(key).entrySet()) {
-                Map<String, String> outputInternalMap = new HashMap<>();
-                outputInternalMap.put(internalEntry.getKey(), internalEntry.getValue());
-                outputProgressLog.put(key, outputInternalMap);
-            }
-        }
-        return outputProgressLog;
     }
 
     @Override
@@ -218,14 +207,14 @@ public class TranslationCaseModel {
         private String countUnit;
         private Double grossPayment;
         private Double taxRate;
-        private String projectType;
+        private ProjectType projectType;
         private String dueDate;
         private String startDate;
         private String endDate;
         private Boolean openCase;
         private Boolean casePaid;
         private Boolean rushJob;
-        private Map<String, Map<String, String>> progressLog;
+        private List<TranslationCaseUpdate> progressLog;
         private Double totalWorkingHours;
         private Double wordsPerHour;
 
@@ -277,7 +266,7 @@ public class TranslationCaseModel {
             this.taxRate = taxRate;
             return this;
         }
-        public Builder withProjectType(String projectType){
+        public Builder withProjectType(ProjectType projectType){
             this.projectType = projectType;
             return this;
         }
@@ -305,7 +294,7 @@ public class TranslationCaseModel {
             this.rushJob = rushJob;
             return this;
         }
-        public Builder withProgressLog(Map<String, Map<String, String>> progressLog){
+        public Builder withProgressLog(List<TranslationCaseUpdate> progressLog){
             this.progressLog = progressLog;
             return this;
         }

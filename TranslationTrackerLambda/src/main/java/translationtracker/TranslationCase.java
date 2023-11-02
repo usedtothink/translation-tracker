@@ -5,7 +5,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -26,14 +28,14 @@ public class TranslationCase {
     private String countUnit;
     private Double grossPayment;
     private Double taxRate;
-    private String projectType;
+    private ProjectType projectType;
     private String dueDate;
     private String startDate;
     private String endDate;
     private Boolean openCase;
     private Boolean casePaid;
     private Boolean rushJob;
-    private Map<String, Map<String, String>> progressLog;
+    private List<TranslationCaseUpdate> progressLog;
     private Double totalWorkingHours;
     private Double wordsPerHour;
 
@@ -145,12 +147,13 @@ public class TranslationCase {
         this.taxRate = taxRate;
     }
 
+    @DynamoDBTypeConvertedEnum
     @DynamoDBAttribute(attributeName = "projectType")
-    public String getProjectType() {
+    public ProjectType getProjectType() {
         return projectType;
     }
 
-    public void setProjectType(String projectType) {
+    public void setProjectType(ProjectType projectType) {
         this.projectType = projectType;
     }
 
@@ -208,13 +211,13 @@ public class TranslationCase {
         this.rushJob = rushJob;
     }
 
-    @DynamoDBTypeConverted(converter = ProgressLogMapConverter.class)
+    @DynamoDBTypeConverted(converter = TranslationCaseUpdateConverter.class)
     @DynamoDBAttribute(attributeName = "progressLog")
-    public Map<String, Map<String, String>> getProgressLog() {
+    public List<TranslationCaseUpdate> getProgressLog() {
         return progressLog;
     }
 
-    public void setProgressLog(Map<String, Map<String, String>> progressLog) {
+    public void setProgressLog(List<TranslationCaseUpdate> progressLog) {
         this.progressLog = progressLog;
     }
 
@@ -238,8 +241,12 @@ public class TranslationCase {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TranslationCase that = (TranslationCase) o;
         return Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&
                 Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
