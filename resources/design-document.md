@@ -185,8 +185,6 @@ String translationClientId;
 String translationClientName;
 Enum translationClientType;
 String mostRecentActivity;
-List<String> translationCaseHistory;
-List<PaymentHistoryRecord> paymentHistory;
 ```
 
 ### Stretch Goal
@@ -312,8 +310,6 @@ translationClientId // partition key, string
 translationClientName // string
 translationClientType // string
 mostRecentActivity // string
-translationCaseHistory // string list
-paymentHistory // string list
 ```
 
 
