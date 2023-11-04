@@ -13,8 +13,6 @@ public class TranslationClient {
     private String translationClientName;
     private TranslationClientType translationClientType;
     private String mostRecentActivity;
-    private List<String> translationCaseHistory;
-    private List<PaymentHistoryRecord> paymentHistory;
 
     @DynamoDBHashKey(attributeName = "translationClientID")
     public String getTranslationClientId() {
@@ -53,25 +51,6 @@ public class TranslationClient {
         this.mostRecentActivity = mostRecentActivity;
     }
 
-    @DynamoDBAttribute(attributeName = "translationCaseHistory")
-    public List<String> getTranslationCaseHistory() {
-        return translationCaseHistory;
-    }
-
-    public void setTranslationCaseHistory(List<String> translationCaseHistory) {
-        this.translationCaseHistory = translationCaseHistory;
-    }
-
-    @DynamoDBTypeConverted(converter = PaymentHistoryRecordListConverter.class)
-    @DynamoDBAttribute(attributeName = "paymentHistory")
-    public List<PaymentHistoryRecord> getPaymentHistory() {
-        return paymentHistory;
-    }
-
-    public void setPaymentHistory(List<PaymentHistoryRecord> paymentHistory) {
-        this.paymentHistory = paymentHistory;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -80,14 +59,12 @@ public class TranslationClient {
         return Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
                 getTranslationClientType() == that.getTranslationClientType() &&
-                Objects.equals(getMostRecentActivity(), that.getMostRecentActivity()) &&
-                Objects.equals(getTranslationCaseHistory(), that.getTranslationCaseHistory()) &&
-                Objects.equals(getPaymentHistory(), that.getPaymentHistory());
+                Objects.equals(getMostRecentActivity(), that.getMostRecentActivity());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getTranslationClientId(), getTranslationClientName(), getTranslationClientType(),
-                getMostRecentActivity(), getTranslationCaseHistory(), getPaymentHistory());
+                getMostRecentActivity());
     }
 }

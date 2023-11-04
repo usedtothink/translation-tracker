@@ -1,7 +1,7 @@
 package translationtracker;
 
 public enum TranslationClientType {
-    ACADEMIC,
+    BUSINESS,
     CAMPAIGN,
     COMMERCIAL,
     CONTRACT,
@@ -19,6 +19,7 @@ public enum TranslationClientType {
     PRINT,
     PRIVATESECTOR,
     PUBLISHER,
+    SCHOOL,
     SOCIALMEDIA,
     SUBTITLE,
     UNIVERSITY

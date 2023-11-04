@@ -10,20 +10,14 @@ public class TranslationClientModel {
     private String translationClientName;
     private TranslationClientType translationClientType;
     private String mostRecentActivity;
-    private List<String> translationCaseHistory;
-    private List<PaymentHistoryRecord> paymentHistory;
 
     private TranslationClientModel(String translationClientId,
                                    String translationClientName,
-                                   TranslationClientType translationClientType,
-                                   List<String> translationCaseHistory,
-                                   List<PaymentHistoryRecord> paymentHistory) {
+                                   TranslationClientType translationClientType) {
         this.translationClientId = translationClientId;
         this.translationClientName = translationClientName;
         this.translationClientType = translationClientType;
         this.mostRecentActivity = ZonedDateTime.now().toString();
-        this.translationCaseHistory = new ArrayList<>(translationCaseHistory);
-        this.paymentHistory = PaymentHistoryRecord.defensiveCopyPaymentHistoryList(paymentHistory);
     }
 
     public String getTranslationClientId() {
@@ -42,14 +36,6 @@ public class TranslationClientModel {
         return mostRecentActivity;
     }
 
-    public List<String> getTranslationCaseHistory() {
-        return new ArrayList<>(translationCaseHistory);
-    }
-
-    public List<PaymentHistoryRecord> getPaymentHistory() {
-        return PaymentHistoryRecord.defensiveCopyPaymentHistoryList(paymentHistory);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -62,16 +48,13 @@ public class TranslationClientModel {
         return Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
                 Objects.equals(getTranslationClientType(), that.getTranslationClientType()) &&
-                Objects.equals(getMostRecentActivity(), that.getMostRecentActivity()) &&
-                Objects.equals(getTranslationCaseHistory(), that.getTranslationCaseHistory()) &&
-                Objects.equals(getPaymentHistory(), that.getPaymentHistory());
+                Objects.equals(getMostRecentActivity(), that.getMostRecentActivity());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getTranslationClientId(),
-                getTranslationClientName(), getTranslationClientType(), getMostRecentActivity(),
-                getTranslationCaseHistory(), getPaymentHistory());
+                getTranslationClientName(), getTranslationClientType(), getMostRecentActivity());
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -83,8 +66,6 @@ public class TranslationClientModel {
         private String translationClientId;
         private String translationClientName;
         private TranslationClientType translationClientType;
-        private List<String> translationCaseHistory;
-        private List<PaymentHistoryRecord> paymentHistory;
 
         public Builder withTranslationClientId(String translationClientId){
             this.translationClientId = translationClientId;
@@ -101,19 +82,8 @@ public class TranslationClientModel {
             return this;
         }
 
-        public Builder withTranslationCaseHistory(List<String> translationCaseHistory) {
-            this.translationCaseHistory = translationCaseHistory;
-            return this;
-        }
-
-        public Builder withPaymentHistory(List<PaymentHistoryRecord> paymentHistory) {
-            this.paymentHistory = paymentHistory;
-            return this;
-        }
-
         public TranslationClientModel build() {
-            return new TranslationClientModel(translationClientId, translationClientName, translationClientType,
-                    translationCaseHistory, paymentHistory);
+            return new TranslationClientModel(translationClientId, translationClientName, translationClientType);
         }
 
     }
