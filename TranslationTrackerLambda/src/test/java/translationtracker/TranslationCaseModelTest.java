@@ -12,7 +12,7 @@ class TranslationCaseModelTest {
 
 
     @Test
-    public void basicTest() {
+    public void basicTestForTranslationCaseModel() {
         // GIVEN
         String translationCaseId = "translationCaseId";
         String translationClientId = "translationClientId";
@@ -36,6 +36,7 @@ class TranslationCaseModelTest {
         List<TranslationCaseUpdate> progressLog = new ArrayList<>(List.of(TranslationCaseUpdate.builder().build()));
         Double totalWorkingHours = 3.2;
         Double wordsPerHour = 400.3;
+        PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();
 
         TranslationCaseModel model = TranslationCaseModel.builder()
                 .withTranslationCaseId(translationCaseId)
@@ -44,22 +45,16 @@ class TranslationCaseModelTest {
                 .withSourceTextTitle(sourceTextTitle)
                 .withSourceTextAuthor(sourceTextAuthor)
                 .withTranslatedTitle(translatedTitle)
-                .withRate(rate)
-                .withRateUnit(rateUnit)
-                .withCount(count)
-                .withCountUnit(countUnit)
-                .withGrossPayment(grossPayment)
-                .withTaxRate(taxRate)
                 .withProjectType(projectType)
                 .withDueDate(dueDate)
                 .withStartDate(startDate)
                 .withEndDate(endDate)
                 .withOpenCase(openCase)
-                .withCasePaid(casePaid)
                 .withRushJob(rushJob)
                 .withProgressLog(progressLog)
                 .withTotalWorkingHours(totalWorkingHours)
                 .withWordsPerHour(wordsPerHour)
+                .withPaymentHistoryRecord(paymentRecord)
                 .build();
 
         // WHEN & THEN
@@ -69,22 +64,16 @@ class TranslationCaseModelTest {
         assertEquals(sourceTextTitle, model.getSourceTextTitle());
         assertEquals(sourceTextAuthor, model.getSourceTextAuthor());
         assertEquals(translatedTitle, model.getTranslatedTitle());
-        assertEquals(rate, model.getRate());
-        assertEquals(rateUnit, model.getRateUnit());
-        assertEquals(count, model.getCount());
-        assertEquals(countUnit, model.getCountUnit());
-        assertEquals(grossPayment, model.getGrossPayment());
-        assertEquals(taxRate, model.getTaxRate());
         assertEquals(projectType, model.getProjectType());
         assertEquals(dueDate, model.getDueDate());
         assertEquals(startDate, model.getStartDate());
         assertEquals(endDate, model.getEndDate());
         assertEquals(openCase, model.getOpenCase());
-        assertEquals(casePaid, model.getCasePaid());
         assertEquals(rushJob, model.getRushJob());
         assertEquals(progressLog, model.getProgressLog());
         assertEquals(totalWorkingHours, model.getTotalWorkingHours());
         assertEquals(wordsPerHour, model.getWordsPerHour());
+        assertEquals(paymentRecord, model.getPaymentRecord());
     }
 
 

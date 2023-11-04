@@ -3,6 +3,7 @@ package translationtracker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class TranslationCaseModel {
     private String translationCaseId;
@@ -11,52 +12,40 @@ public class TranslationCaseModel {
     private String sourceTextTitle;
     private String sourceTextAuthor;
     private String translatedTitle;
-    private Double rate;
-    private String rateUnit;
-    private Integer count;
-    private String countUnit;
-    private Double grossPayment;
-    private Double taxRate;
     private ProjectType projectType;
     private String dueDate;
     private String startDate;
     private String endDate;
     private Boolean openCase;
-    private Boolean casePaid;
     private Boolean rushJob;
     private List<TranslationCaseUpdate> progressLog;
     private Double totalWorkingHours;
     private Double wordsPerHour;
+    private PaymentHistoryRecord paymentRecord;
 
     private TranslationCaseModel(String translationCaseId, String translationClientId, String caseNickname,
-                                 String sourceTextTitle, String sourceTextAuthor, String translatedTitle, Double rate,
-                                 String rateUnit, Integer count, String countUnit, Double grossPayment, Double taxRate,
+                                 String sourceTextTitle, String sourceTextAuthor, String translatedTitle,
                                  ProjectType projectType, String dueDate, String startDate, String endDate,
-                                 Boolean openCase, Boolean casePaid, Boolean rushJob,
-                                 List<TranslationCaseUpdate> progressLog, Double totalWorkingHours,
-                                 Double wordsPerHour) {
+                                 Boolean openCase, Boolean rushJob, List<TranslationCaseUpdate> progressLog,
+                                 Double totalWorkingHours, Double wordsPerHour, PaymentHistoryRecord paymentRecord) {
         this.translationCaseId = translationCaseId;
         this.translationClientId = translationClientId;
         this.caseNickname = caseNickname;
         this.sourceTextTitle = sourceTextTitle;
         this.sourceTextAuthor = sourceTextAuthor;
         this.translatedTitle = translatedTitle;
-        this.rate = rate;
-        this.rateUnit = rateUnit;
-        this.count = count;
-        this.countUnit = countUnit;
-        this.grossPayment = grossPayment;
-        this.taxRate = taxRate;
         this.projectType = projectType;
         this.dueDate = dueDate;
         this.startDate = startDate;
         this.endDate = endDate;
         this.openCase = openCase;
-        this.casePaid = casePaid;
         this.rushJob = rushJob;
-        this.progressLog = new ArrayList<>(progressLog);
+        this.progressLog = progressLog.stream()
+                .map(TranslationCaseUpdate::defensiveCopyTranslationCaseUpdate)
+                .collect(Collectors.toList());
         this.totalWorkingHours = totalWorkingHours;
         this.wordsPerHour = wordsPerHour;
+        this.paymentRecord = PaymentHistoryRecord.defensiveCopyPaymentHistory(paymentRecord);
     }
 
     public String getTranslationCaseId() {
@@ -83,30 +72,6 @@ public class TranslationCaseModel {
         return translatedTitle;
     }
 
-    public Double getRate() {
-        return rate;
-    }
-
-    public String getRateUnit() {
-        return rateUnit;
-    }
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public String getCountUnit() {
-        return countUnit;
-    }
-
-    public Double getGrossPayment() {
-        return grossPayment;
-    }
-
-    public Double getTaxRate() {
-        return taxRate;
-    }
-
     public ProjectType getProjectType() {
         return projectType;
     }
@@ -127,16 +92,14 @@ public class TranslationCaseModel {
         return openCase;
     }
 
-    public Boolean getCasePaid() {
-        return casePaid;
-    }
-
     public Boolean getRushJob() {
         return rushJob;
     }
 
     public List<TranslationCaseUpdate> getProgressLog() {
-        return new ArrayList<>(progressLog);
+        return progressLog.stream()
+                .map(TranslationCaseUpdate::defensiveCopyTranslationCaseUpdate)
+                .collect(Collectors.toList());
     }
 
     public Double getTotalWorkingHours() {
@@ -145,6 +108,10 @@ public class TranslationCaseModel {
 
     public Double getWordsPerHour() {
         return wordsPerHour;
+    }
+
+    public PaymentHistoryRecord getPaymentRecord() {
+        return PaymentHistoryRecord.defensiveCopyPaymentHistory(paymentRecord);
     }
 
     @Override
@@ -162,31 +129,24 @@ public class TranslationCaseModel {
                 Objects.equals(getSourceTextTitle(), that.getSourceTextTitle()) &&
                 Objects.equals(getSourceTextAuthor(), that.getSourceTextAuthor()) &&
                 Objects.equals(getTranslatedTitle(), that.getTranslatedTitle()) &&
-                Objects.equals(getRate(), that.getRate()) &&
-                Objects.equals(getRateUnit(), that.getRateUnit()) &&
-                Objects.equals(getCount(), that.getCount()) &&
-                Objects.equals(getCountUnit(), that.getCountUnit()) &&
-                Objects.equals(getGrossPayment(), that.getGrossPayment()) &&
-                Objects.equals(getTaxRate(), that.getTaxRate()) &&
                 Objects.equals(getProjectType(), that.getProjectType()) &&
                 Objects.equals(getDueDate(), that.getDueDate()) &&
                 Objects.equals(getStartDate(), that.getStartDate()) &&
                 Objects.equals(getEndDate(), that.getEndDate()) &&
                 Objects.equals(getOpenCase(), that.getOpenCase()) &&
-                Objects.equals(getCasePaid(), that.getCasePaid()) &&
                 Objects.equals(getRushJob(), that.getRushJob()) &&
                 Objects.equals(getProgressLog(), that.getProgressLog()) &&
                 Objects.equals(getTotalWorkingHours(), that.getTotalWorkingHours()) &&
-                Objects.equals(getWordsPerHour(), that.getWordsPerHour());
+                Objects.equals(getWordsPerHour(), that.getWordsPerHour()) &&
+                Objects.equals(getPaymentRecord(), that.getPaymentRecord());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getTranslationCaseId(), getTranslationClientId(), getCaseNickname(), getSourceTextTitle(),
-                getSourceTextAuthor(), getTranslatedTitle(), getRate(), getRateUnit(), getCount(), getCountUnit(),
-                getGrossPayment(), getTaxRate(), getProjectType(), getDueDate(), getStartDate(), getEndDate(),
-                getOpenCase(), getCasePaid(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
-                getWordsPerHour());
+                getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(), getStartDate(), getEndDate(),
+                getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
+                getWordsPerHour(), getPaymentRecord());
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -201,22 +161,16 @@ public class TranslationCaseModel {
         private String sourceTextTitle;
         private String sourceTextAuthor;
         private String translatedTitle;
-        private Double rate;
-        private String rateUnit;
-        private Integer count;
-        private String countUnit;
-        private Double grossPayment;
-        private Double taxRate;
         private ProjectType projectType;
         private String dueDate;
         private String startDate;
         private String endDate;
         private Boolean openCase;
-        private Boolean casePaid;
         private Boolean rushJob;
         private List<TranslationCaseUpdate> progressLog;
         private Double totalWorkingHours;
         private Double wordsPerHour;
+        private PaymentHistoryRecord paymentRecord;
 
         public Builder withTranslationCaseId(String translationCaseId){
             this.translationCaseId = translationCaseId;
@@ -242,30 +196,6 @@ public class TranslationCaseModel {
             this.translatedTitle = translatedTitle;
             return this;
         }
-        public Builder withRate(Double rate){
-            this.rate = rate;
-            return this;
-        }
-        public Builder withRateUnit(String rateUnit){
-            this.rateUnit = rateUnit;
-            return this;
-        }
-        public Builder withCount(Integer count){
-            this.count = count;
-            return this;
-        }
-        public Builder withCountUnit(String countUnit){
-            this.countUnit = countUnit;
-            return this;
-        }
-        public Builder withGrossPayment(Double grossPayment){
-            this.grossPayment = grossPayment;
-            return this;
-        }
-        public Builder withTaxRate(Double taxRate){
-            this.taxRate = taxRate;
-            return this;
-        }
         public Builder withProjectType(ProjectType projectType){
             this.projectType = projectType;
             return this;
@@ -286,10 +216,6 @@ public class TranslationCaseModel {
             this.openCase = openCase;
             return this;
         }
-        public Builder withCasePaid(Boolean casePaid){
-            this.casePaid = casePaid;
-            return this;
-        }
         public Builder withRushJob(Boolean rushJob){
             this.rushJob = rushJob;
             return this;
@@ -306,13 +232,15 @@ public class TranslationCaseModel {
             this.wordsPerHour = wordsPerHour;
             return this;
         }
+        public Builder withPaymentHistoryRecord(PaymentHistoryRecord paymentRecord) {
+            this.paymentRecord = paymentRecord;
+            return this;
+        }
 
         public TranslationCaseModel build() {
             return new TranslationCaseModel(translationCaseId, translationClientId, caseNickname,
-                    sourceTextTitle, sourceTextAuthor, translatedTitle, rate,
-                    rateUnit, count, countUnit, grossPayment, taxRate,
-                    projectType, dueDate, startDate, endDate, openCase,
-                    casePaid, rushJob, progressLog, totalWorkingHours, wordsPerHour);
+                    sourceTextTitle, sourceTextAuthor, translatedTitle, projectType, dueDate, startDate,
+                    endDate, openCase, rushJob, progressLog, totalWorkingHours, wordsPerHour, paymentRecord);
         }
     }
 }
