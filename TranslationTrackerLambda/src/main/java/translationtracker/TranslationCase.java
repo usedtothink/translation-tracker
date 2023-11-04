@@ -22,22 +22,16 @@ public class TranslationCase {
     private String sourceTextTitle;
     private String sourceTextAuthor;
     private String translatedTitle;
-    private Double rate;
-    private String rateUnit;
-    private Integer count;
-    private String countUnit;
-    private Double grossPayment;
-    private Double taxRate;
     private ProjectType projectType;
     private String dueDate;
     private String startDate;
     private String endDate;
     private Boolean openCase;
-    private Boolean casePaid;
     private Boolean rushJob;
     private List<TranslationCaseUpdate> progressLog;
     private Double totalWorkingHours;
     private Double wordsPerHour;
+    private PaymentHistoryRecord paymentRecord;
 
     @DynamoDBHashKey(attributeName = "translationClientId")
     public String getTranslationClientId() {
@@ -93,60 +87,6 @@ public class TranslationCase {
         this.translatedTitle = translatedTitle;
     }
 
-    @DynamoDBAttribute(attributeName = "rate")
-    public Double getRate() {
-        return rate;
-    }
-
-    public void setRate(Double rate) {
-        this.rate = rate;
-    }
-
-    @DynamoDBAttribute(attributeName = "rateUnit")
-    public String getRateUnit() {
-        return rateUnit;
-    }
-
-    public void setRateUnit(String rateUnit) {
-        this.rateUnit = rateUnit;
-    }
-
-    @DynamoDBAttribute(attributeName = "count")
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-
-    @DynamoDBAttribute(attributeName = "countUnit")
-    public String getCountUnit() {
-        return countUnit;
-    }
-
-    public void setCountUnit(String countUnit) {
-        this.countUnit = countUnit;
-    }
-
-    @DynamoDBAttribute(attributeName = "grossPayment")
-    public Double getGrossPayment() {
-        return grossPayment;
-    }
-
-    public void setGrossPayment(Double grossPayment) {
-        this.grossPayment = grossPayment;
-    }
-
-    @DynamoDBAttribute(attributeName = "taxRate")
-    public Double getTaxRate() {
-        return taxRate;
-    }
-
-    public void setTaxRate(Double taxRate) {
-        this.taxRate = taxRate;
-    }
-
     @DynamoDBTypeConvertedEnum
     @DynamoDBAttribute(attributeName = "projectType")
     public ProjectType getProjectType() {
@@ -193,15 +133,6 @@ public class TranslationCase {
         this.openCase = openCase;
     }
 
-    @DynamoDBAttribute(attributeName = "casePaid")
-    public Boolean getCasePaid() {
-        return casePaid;
-    }
-
-    public void setCasePaid(Boolean casePaid) {
-        this.casePaid = casePaid;
-    }
-
     @DynamoDBAttribute(attributeName = "rushJob")
     public Boolean getRushJob() {
         return rushJob;
@@ -239,6 +170,16 @@ public class TranslationCase {
         this.wordsPerHour = wordsPerHour;
     }
 
+    @DynamoDBTypeConverted(converter = PaymentHistoryRecordConverter.class)
+    @DynamoDBAttribute(attributeName = "paymentRecord")
+    public PaymentHistoryRecord getPaymentRecord() {
+        return paymentRecord;
+    }
+
+    public void setPaymentRecord(PaymentHistoryRecord paymentRecord) {
+        this.paymentRecord = paymentRecord;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -254,30 +195,23 @@ public class TranslationCase {
                 Objects.equals(getSourceTextTitle(), that.getSourceTextTitle()) &&
                 Objects.equals(getSourceTextAuthor(), that.getSourceTextAuthor()) &&
                 Objects.equals(getTranslatedTitle(), that.getTranslatedTitle()) &&
-                Objects.equals(getRate(), that.getRate()) &&
-                Objects.equals(getRateUnit(), that.getRateUnit()) &&
-                Objects.equals(getCount(), that.getCount()) &&
-                Objects.equals(getCountUnit(), that.getCountUnit()) &&
-                Objects.equals(getGrossPayment(), that.getGrossPayment()) &&
-                Objects.equals(getTaxRate(), that.getTaxRate()) &&
                 Objects.equals(getProjectType(), that.getProjectType()) &&
                 Objects.equals(getDueDate(), that.getDueDate()) &&
                 Objects.equals(getStartDate(), that.getStartDate()) &&
                 Objects.equals(getEndDate(), that.getEndDate()) &&
                 Objects.equals(getOpenCase(), that.getOpenCase()) &&
-                Objects.equals(getCasePaid(), that.getCasePaid()) &&
                 Objects.equals(getRushJob(), that.getRushJob()) &&
                 Objects.equals(getProgressLog(), that.getProgressLog()) &&
                 Objects.equals(getTotalWorkingHours(), that.getTotalWorkingHours()) &&
-                Objects.equals(getWordsPerHour(), that.getWordsPerHour());
+                Objects.equals(getWordsPerHour(), that.getWordsPerHour())&&
+                Objects.equals(getPaymentRecord(), that.getPaymentRecord());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getTranslationCaseId(), getTranslationClientId(), getCaseNickname(), getSourceTextTitle(),
-                getSourceTextAuthor(), getTranslatedTitle(), getRate(), getRateUnit(), getCount(), getCountUnit(),
-                getGrossPayment(), getTaxRate(), getProjectType(), getDueDate(), getStartDate(), getEndDate(),
-                getOpenCase(), getCasePaid(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
-                getWordsPerHour());
+                getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(), getStartDate(), getEndDate(),
+                getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
+                getWordsPerHour(), getPaymentRecord());
     }
 }

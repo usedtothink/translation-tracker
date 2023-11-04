@@ -45,6 +45,22 @@ public final class TranslationCaseUpdate {
         return notes;
     }
 
+    /**
+     * Makes a defensive copy of a single TranslationCaseUpdate object.
+     * @param original the original TranslationCaseUpdate to be copied.
+     * @return the new, copied TranslationCaseUpdate.
+     */
+    public static TranslationCaseUpdate defensiveCopyTranslationCaseUpdate(TranslationCaseUpdate original) {
+        return TranslationCaseUpdate.builder()
+                .withWordCount(original.getWordCount())
+                .withStartDate(original.getStartDate())
+                .withEndDate(original.getEndDate())
+                .withStartTime(original.getStartTime())
+                .withEndTime(original.getEndTime())
+                .withNotes(original.getNotes())
+                .build();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
