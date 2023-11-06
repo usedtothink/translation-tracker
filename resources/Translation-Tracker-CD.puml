@@ -1,0 +1,108 @@
+@startuml
+
+TranslationClient "1" ---{ "0..*"TranslationCase
+TranslationClient --- TranslationClientType
+
+TranslationCase "1" ---{ "0..*" TranslationCaseUpdate
+TranslationCase "1" ---> "1" PaymentHistoryRecord
+TranslationCase --- ProjectType
+
+
+class TranslationCase {
+    - String : translationCaseId;
+    - String : translationClientId;
+    - String : caseNickname;
+    - String : sourceTextTitle;
+    - String : sourceTextAuthor;
+    - String : translatedTitle;
+    - Double : rate;
+    - String : rateUnit;
+    - Integer : count;
+    - String : countUnit;
+    - Double : grossPayment;
+    - Double : taxRate;
+    - ProjectType : projectType;
+    - String : dueDate;
+    - String : startDate;
+    - String : endDate;
+    - Boolean : openCase;
+    - Boolean : casePaid;
+    - Boolean : rushJob;
+    - List<TranslationCaseUpdate> : progressLog;
+    - Double : totalWorkingHours;
+    - Double : wordsPerHour;
+}
+
+class TranslationClient {
+    - String : translationClientId;
+    - String : translationClientName;
+    - TranslationClientType : translationClientType;
+    - String : mostRecentActivity;
+}
+
+class PaymentHistoryRecord {
+    - String : paymentHistoryId;
+    - String : translationCaseId;
+    - String : translationClientId;
+    - Boolean : casePaid;
+    - String : paymentDate;
+    - Boolean : onTime;
+    - Double : grossPayment;
+    - Double : taxRate;
+    - Double : payRate;
+    - String : payRateUnit;
+    - Integer : wordCount;
+    - String : wordCountUnit;
+
+    + {static} defensiveCopyPaymentHistory(PaymentHistoryRecord)
+    + {static} defensiveCopyPaymentHistoryList(List<PaymentHistoryRecord>)
+}
+
+class TranslationCaseUpdate {
+    - Integer : wordCount;
+    - String : startDate;
+    - String : endDate;
+    - String : startTime;
+    - String : endTime;
+    - String : notes;
+}
+
+enum TranslationClientType{
+        BUSINESS
+        CAMPAIGN
+        COMMERCIAL
+        CONTRACT
+        CORPORATE
+        INDIVIDUAL
+        GOVERNMENT
+        MASSMEDIA
+        NGO
+        NONPROFIT
+        ONLINE
+        OTHER
+        PERSONAL
+        PROBONO
+        PUBLICSECTOR
+        PRINT
+        PRIVATESECTOR
+        PUBLISHER
+        SCHOOL
+        SOCIALMEDIA
+        SUBTITLE
+        UNIVERSITY
+}
+
+enum ProjectType {
+        ACADEMIC
+        ADMINISTRATIVE
+        COMMERCIAL
+        FINANCIAL
+        GENERAL
+        JUDICIAL
+        LEGAL
+        LITERARY
+        MEDICAL
+        TECHNICAL
+}
+
+@enduml
