@@ -15,7 +15,7 @@ public class CreateTranslationCaseActivity {
     /**
      * Instantiates a new CreateTranslationCaseActivity object.
      *
-     * @param translationCaseDao to access the translation cases table.
+     * @param caseDao to access the translation cases table.
      */
     @Inject
     public CreateTranslationCaseActivity(TranslationCaseDao caseDao) {
@@ -27,7 +27,8 @@ public class CreateTranslationCaseActivity {
          * Then it returns the newly created translation case.
          * <p>
          * If the provided case nickname already exists, throw a
-         * Duplicate
+         * DuplicateCaseNicknameException.
+         * @param createTranslationCaseRequest request object containing the translation case nickname,
          */
     }
 
