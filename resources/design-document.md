@@ -211,7 +211,7 @@ Double wordsPerHourEstimate;
 ## 6.2. Get Translation Case Endpoint
 
 * Accepts `GET` requests to `/translationcases/:id`
-* Accepts a translation case ID and returns the corresponding `TranslationCase`.
+* Accepts a translation case ID and returns the corresponding `TranslationCaseModel`.
     * If the given translation case ID is not found, will throw a
       `TranslationCaseNotFoundException`
 
@@ -235,7 +235,7 @@ Double wordsPerHourEstimate;
 
 * Accepts `POST` requests to `/translationcases`
 * Accepts data to create a new `TranslationCase` with a provided caseNickname and projectType, all other values being optional. 
-* Returns the new `TranslationCase`, including a unique translation case ID assigned by Translation Tracker.
+* Returns the new `TranslationCaseModel`, including a unique translation case ID assigned by Translation Tracker.
   * If the caseNickname is identical to an already-existing caseNickname, will throw a 
     `DuplicateCaseNicknameException`.
 
@@ -261,7 +261,7 @@ Double wordsPerHourEstimate;
 ## 6.7 Get Translation Client Endpoint
 
 * Accepts `GET` requests to `/translationclients/:id`
-* Accepts a translation client ID and returns the corresponding `TranslationClient`.
+* Accepts a translation client ID and returns the corresponding `TranslationClientModel`.
   * If the given translation client ID is not found, will throw a `TranslationClientNotFoundException`
 
 <img src="images/GetTranslationClient-Sequence.png" width="100%" alt="Get Translation Client Endpoint Sequence Diagram"/>
@@ -286,7 +286,7 @@ Double wordsPerHourEstimate;
 * Accepts `POST` requests to `/translationclients`
 * Accepts data to create a new `TranslationClient` with the provided translationClientName, translationCaseId and translationClientType, 
    with all other values being optional.
-* Returns the new `TranslationClient`, including a unique translation client ID assigned by Translation Tracker.
+* Returns the new `TranslationClientModel`, including a unique translation client ID assigned by Translation Tracker.
   * If the translationClientName is identical to an already-existing translationClientName, will throw a
     `DuplicateTranslationClientException`.
 
@@ -296,7 +296,7 @@ Double wordsPerHourEstimate;
 
 * Accepts `PUT` requests to `/translationclients/:id`
 * Accepts data to update a `TranslationClient` including a translation client ID, and the update values. Returns the updated
-  `TranslationClient`.
+  `TranslationClientModel`.
   * If the client ID is not found, will throw a `TranslationClientNotFoundException`
 
 <img src="images/UpdateTranslationClient-Sequence.png" width="100%" alt="Update Translation Client Endpoint Sequence Diagram"/>
