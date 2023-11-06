@@ -1,11 +1,11 @@
 @startuml
 
-TranslationClient ---> TranslationCase
-TranslationClient ---> TranslationClientType
+TranslationClient "1" ---{ "0..*"TranslationCase
+TranslationClient --- TranslationClientType
 
-TranslationCase ---> TranslationCaseUpdate
-TranslationCase ---> PaymentHistoryRecord
-TranslationCase ---> ProjectType
+TranslationCase "1" ---{ "0..*" TranslationCaseUpdate
+TranslationCase "1" ---> "1" PaymentHistoryRecord
+TranslationCase --- ProjectType
 
 
 class TranslationCase {

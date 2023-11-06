@@ -52,8 +52,6 @@ U9. As a customer, I want to see a clickable list of all translation cases assoc
 
 U10. As a customer, I want to see a list of open translation cases on the home page, sorted by soonest deadline.
 
-U10. As a customer, I want to see a list of up to 10 translation clients on the home page, sorted by most recent activity.
-
 U11. As a customer, I want to add a new translation case from the home page.
 
 U12. As a customer, I want to search for a translation client from the home page.
@@ -100,7 +98,7 @@ U21. As a customer, I want to see useful statistics about my translation habits 
 * Archive (soft-delete) translation cases
 
 #### Translation Clients
-* Create a new translation client (must be linked to a new translation case)
+* Create a new translation client
 * Retrieve translation client information
 * Retrieve a list of all translation clients, sorted alphabetically
 * Retrieve a list of all translation clients, sorted by most recent activity
