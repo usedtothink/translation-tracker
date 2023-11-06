@@ -1,0 +1,20 @@
+@startuml
+
+actor Client
+participant "API Gateway/Lambda"
+participant GetAllTranslationCasesActivity
+participant TranslationCaseDao
+database    DynamoDB
+
+Client -> "API Gateway/Lambda" : HTTP Request
+"API Gateway/Lambda" -> GetAllTranslationCasesActivity : GetAllTranslationCasesRequest
+GetAllTranslationCasesActivity -> TranslationCaseDao : getAllTranslationCases(order)
+TranslationCaseDao -> DynamoDB : scan()
+
+
+DynamoDB --> TranslationCaseDao : return TranslationCase data
+TranslationCaseDao --> GetAllTranslationCasesActivity : return List<TranslationCase>
+GetAllTranslationCasesActivity --> "API Gateway/Lambda" : return GetAllTranslationCasesResult
+"API Gateway/Lambda" --> Client : return 200 response with GetAllTranslationCasesResult data
+
+@enduml

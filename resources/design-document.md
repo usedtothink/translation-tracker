@@ -211,13 +211,27 @@ Double wordsPerHourEstimate;
 ## 6.2. Get Translation Case Endpoint
 
 * Accepts `GET` requests to `/translationcases/:id`
-* Accepts a translation case ID and returns the corresponding `TranslationCaseModel`.
+* Accepts a translation case ID and returns the corresponding `TranslationCase`.
     * If the given translation case ID is not found, will throw a
       `TranslationCaseNotFoundException`
 
 <img src="images/GetTranslationCase-Sequence.png" width="100%" alt="Get Translation Case Endpoint Sequence Diagram"/>
 
-## 6.3 Create Translation Case Endpoint
+## 6.3. Get All Translation Cases Endpoint
+
+* Accepts `GET` requests to `/translationcases/`
+* Retrieves all translation cases
+  * Returns the list of translation cases in default order
+  * If the optional `order` parameter is provided, this API will return the
+    translation case list in order of most recent activity or alphabetically by
+    translation case nickname, based on the value of `order`
+    * DEFAULT - same as default behavior, returns translation cases in order of most recent activity
+    * ALPHABETIC - returns translation cases in alphabetic order by translation case nickname
+* If there are no translation cases, the list will be empty
+
+<img src="images/GetAllTranslationCases-Sequence.png" width="100%" alt="Get All Translation Cases Endpoint Sequence Diagram"/>
+
+## 6.4 Create Translation Case Endpoint
 
 * Accepts `POST` requests to `/translationcases`
 * Accepts data to create a new `TranslationCase` with a provided caseNickname and projectType, all other values being optional. 
@@ -227,7 +241,7 @@ Double wordsPerHourEstimate;
 
 <img src="images/CreateTranslationCase-Sequence.png" width="100%" alt="Create Translation Case Endpoint Sequence Diagram"/>
 
-## 6.4 Update Translation Case Endpoint
+## 6.5 Update Translation Case Endpoint
 
 * Accepts `PUT` requests to `/translationcases/:id`
 * Accepts data to update a `TranslationCase` including a translation case ID, and the update values. Returns the updated
@@ -236,23 +250,38 @@ Double wordsPerHourEstimate;
 
 <img src="images/UpdateTranslationCase-Sequence.png" width="100%" alt="Update Translation Case Endpoint Sequence Diagram"/>
 
-## 6.5 Archive Translation Case Endpoint
+## 6.6 Archive Translation Case Endpoint
 
 * Accepts `DELETE` requests to `/translationcases/:id`
-* Accepts a translation case ID and archives the specified `TranslationCase`.
+* Accepts a translation case ID and archives the corresponding `TranslationCase`.
   * If the translation case ID is not found, will throw a `TranslationCaseNotFoundException`
 
 <img src="images/ArchiveTranslationCase-Sequence.png" width="100%" alt="Archive Translation Case Endpoint Sequence Diagram"/>
 
-## 6.6 Get Translation Client Endpoint
+## 6.7 Get Translation Client Endpoint
 
 * Accepts `GET` requests to `/translationclients/:id`
-* Accepts a translation client ID and returns the corresponding `TranslationClientModel`.
+* Accepts a translation client ID and returns the corresponding `TranslationClient`.
   * If the given translation client ID is not found, will throw a `TranslationClientNotFoundException`
 
 <img src="images/GetTranslationClient-Sequence.png" width="100%" alt="Get Translation Client Endpoint Sequence Diagram"/>
 
-## 6.3 Create Translation Client Endpoint
+## 6.8. Get All Translation Cases Endpoint
+
+* Accepts `GET` requests to `/translationclients/`
+* Retrieves all translation clients
+  * Returns the list of translation clients in default order
+  * If the optional `order` parameter is provided, this API will return the
+    translation case list in order of most recent activity or alphabetically by
+    translation client name, based on the value of `order`
+    * DEFAULT - same as default behavior, returns translation cases in order of most recent activity
+    * ALPHABETIC - returns translation cases in alphabetic order by translation client name
+* If there are no translation clients, the list will be empty
+
+<img src="images/GetAllTranslationClients-Sequence.png" width="100%" alt="Get All Translation Clients Endpoint Sequence Diagram"/>
+
+
+## 6.9 Create Translation Client Endpoint
 
 * Accepts `POST` requests to `/translationclients`
 * Accepts data to create a new `TranslationClient` with the provided translationClientName, translationCaseId and translationClientType, 
@@ -263,7 +292,7 @@ Double wordsPerHourEstimate;
 
 <img src="images/CreateTranslationClient-Sequence.png" width="100%" alt="Create Translation Client Endpoint Sequence Diagram"/>
 
-## 6.7 Update Translation Client Endpoint
+## 6.10 Update Translation Client Endpoint
 
 * Accepts `PUT` requests to `/translationclients/:id`
 * Accepts data to update a `TranslationClient` including a translation client ID, and the update values. Returns the updated
@@ -272,7 +301,7 @@ Double wordsPerHourEstimate;
 
 <img src="images/UpdateTranslationClient-Sequence.png" width="100%" alt="Update Translation Client Endpoint Sequence Diagram"/>
 
-## 6.8 Archive Translation Client Endpoint
+## 6.11 Archive Translation Client Endpoint
 
 * Accepts `DELETE` requests to `/translationclients/:id`
 * Accepts a translation client ID and archives the specified `TranslationClient`.
