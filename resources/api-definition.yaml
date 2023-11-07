@@ -1,0 +1,335 @@
+openapi: 3.0.0
+info:
+  title: Translation Tracker
+  description: "This is the API definition for the Translation Tracker."
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+tags:
+  - name: TranslationCases
+    description: Create, view, update, and archive translation cases
+
+  - name: TranslationClients
+    description: Create, view, update, and archive translation clients
+
+paths:
+
+  /translationCases:
+    post:
+      tags:
+        - TranslationCases
+      summary: Create a new translation case (CreateTranslationCaseLambda)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                translationClientId:
+                  type: string
+                caseNickname:
+                  type: string
+                projectType:
+                  type: string
+      responses:
+        "200":
+          description: A translation case object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  translationCaseId:
+                    type: string
+                  translationClientId:
+                    type: string
+                  caseNickname:
+                    type: string
+                  projectType:
+                    type: string
+                  mostRecentActivity:
+                    type: string
+                  sourceTextTitle:
+                    type: string
+                  sourceTextAuthor:
+                    type: string
+                  translatedTitle:
+                    type: string
+                  dueDate:
+                    type: string
+                  startDate:
+                    type: string
+                  endDate:
+                    type: string
+                  openCase:
+                    type: boolean
+                  rushJob:
+                    type: boolean
+                  progressLog:
+                    type: string
+                  totalWorkingHours:
+                    type: number
+                  wordsPerHour:
+                    type: number
+
+    get:
+      tags:
+        - TranslationCases
+      summary: Get a list of all translation cases (GetAllTranslationCasesLambda)
+      operationId: getAllCases
+      responses:
+        "200":
+          description: A translation case object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  translationCaseList:
+                    type: array
+                    items:
+                      properties:
+                        translationCaseId:
+                          type: string
+                        translationClientId:
+                          type: string
+                        caseNickname:
+                          type: string
+                        projectType:
+                          type: string
+                        mostRecentActivity:
+                          type: string
+                        sourceTextTitle:
+                          type: string
+                        sourceTextAuthor:
+                          type: string
+                        translatedTitle:
+                          type: string
+                        dueDate:
+                          type: string
+                        startDate:
+                          type: string
+                        endDate:
+                          type: string
+                        openCase:
+                          type: boolean
+                        rushJob:
+                          type: boolean
+                        progressLog:
+                          type: string
+                        totalWorkingHours:
+                          type: number
+                        wordsPerHour:
+                          type: number
+
+  /translationCases/{id}:
+    get:
+      tags:
+        - TranslationCases
+      summary: Get an existing translation case (GetTranslationCaseLambda)
+      parameters:
+        - name: id
+          in: path
+          description: ID of translation case to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: TranslationCaseResponse
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  translationCaseId:
+                    type: string
+                  translationClientId:
+                    type: string
+                  caseNickname:
+                    type: string
+                  projectType:
+                    type: string
+                  mostRecentActivity:
+                    type: string
+                  sourceTextTitle:
+                    type: string
+                  sourceTextAuthor:
+                    type: string
+                  translatedTitle:
+                    type: string
+                  dueDate:
+                    type: string
+                  startDate:
+                    type: string
+                  endDate:
+                    type: string
+                  openCase:
+                    type: boolean
+                  rushJob:
+                    type: boolean
+                  progressLog:
+                    type: string
+                  totalWorkingHours:
+                    type: number
+                  wordsPerHour:
+                    type: number
+        "500":
+          description: "Invalid input parameters"
+
+    put:
+      tags:
+        -TranslationCases
+      summary: Update an existing translation case (UpdateTranslationCaseLambda)
+      parameters:
+        - name: id
+          in: path
+          description: ID of translation case to retrieve
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              caseNickname:
+                type: string
+              projectType:
+                type: string
+              sourceTextTitle:
+                type: string
+              sourceTextAuthor:
+                type: string
+              translatedTitle:
+                type: string
+              dueDate:
+                type: string
+              startDate:
+                type: string
+              endDate:
+                type: string
+              openCase:
+                type: boolean
+              rushJob:
+                type: boolean
+              progressLog:
+                type: string
+      responses:
+        "200":
+          description: TranslationCaseResponse
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  translationCaseId:
+                    type: string
+                  translationClientId:
+                    type: string
+                  caseNickname:
+                    type: string
+                  projectType:
+                    type: string
+                  mostRecentActivity:
+                    type: string
+                  sourceTextTitle:
+                    type: string
+                  sourceTextAuthor:
+                    type: string
+                  translatedTitle:
+                    type: string
+                  dueDate:
+                    type: string
+                  startDate:
+                    type: string
+                  endDate:
+                    type: string
+                  openCase:
+                    type: boolean
+                  rushJob:
+                    type: boolean
+                  progressLog:
+                    type: string
+                  totalWorkingHours:
+                    type: number
+                  wordsPerHour:
+                    type: number
+        "500":
+          description: "Invalid input parameters"
+
+    delete:
+      tags:
+        - TranslationCases
+      summary: Archive an existing translation case (ArchiveTranslationCaseLambda)
+      parameters:
+        - name: id
+          in: path
+          description: ID of translation case to archive
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: TranslationCaseResponse
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  translationCaseId:
+                    type: string
+                  translationClientId:
+                    type: string
+                  caseNickname:
+                    type: string
+                  projectType:
+                    type: string
+                  mostRecentActivity:
+                    type: string
+                  sourceTextTitle:
+                    type: string
+                  sourceTextAuthor:
+                    type: string
+                  translatedTitle:
+                    type: string
+                  dueDate:
+                    type: string
+                  startDate:
+                    type: string
+                  endDate:
+                    type: string
+                  openCase:
+                    type: boolean
+                  rushJob:
+                    type: boolean
+                  progressLog:
+                    type: string
+                  totalWorkingHours:
+                    type: number
+                  wordsPerHour:
+                    type: number
+        "500":
+          description: "Invalid input parameters"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

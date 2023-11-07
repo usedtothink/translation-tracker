@@ -214,7 +214,7 @@ Resources:
               Statement:
               - Effect: Allow
                 Action: dynamodb:*
-                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/translationcases"
+                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/translationCases"
 
     #-----------------------------------------------------
     # Lambda Functions Configuration
@@ -237,7 +237,7 @@ Resources:
           Translation-Tracker:
             Type: Api
             Properties:
-              Path: /translationcases
+              Path: /translationCases
               Method: post
 
     GetTranslationCaseLambda:
@@ -257,7 +257,7 @@ Resources:
           Translation-Tracker:
             Type: Api
             Properties:
-              Path: /translationcases/{id}
+              Path: /translationCases/{id}
               Method: get
               Auth:
                 Authorizer: 'NONE'
@@ -279,7 +279,7 @@ Resources:
           Translation-Tracker:
             Type: Api
             Properties:
-              Path: /translationcases/
+              Path: /translationCases/
               Method: get
               Auth:
                 Authorizer: 'NONE'
@@ -301,7 +301,7 @@ Resources:
           Translation-Tracker:
             Type: Api
             Properties:
-              Path: /translationcases/{id}
+              Path: /translationCases/{id}
               Method: put
 
     ArchiveTranslationCaseLambda:
@@ -321,7 +321,7 @@ Resources:
           Translation-Tracker:
             Type: Api
             Properties:
-              Path: /translationcases/{id}
+              Path: /translationCases/{id}
               Method: put
 
     CreateTranslationClientLambda:
@@ -341,7 +341,7 @@ Resources:
           Translation-Tracker:
             Type: Api
             Properties:
-              Path: /translationclients
+              Path: /translationClients
               Method: post
 
     GetTranslationClientLambda:
@@ -361,7 +361,7 @@ Resources:
           Translation-Tracker:
             Type: Api
             Properties:
-              Path: /translationclients/{id}
+              Path: /translationClients/{id}
               Method: get
               Auth:
                 Authorizer: 'NONE'
@@ -383,7 +383,7 @@ Resources:
           Translation-Tracker:
             Type: Api
             Properties:
-              Path: /translationclients/
+              Path: /translationClients/
               Method: get
               Auth:
                 Authorizer: 'NONE'
@@ -405,7 +405,7 @@ Resources:
           Translation-Tracker:
             Type: Api
             Properties:
-              Path: /translationclients/{id}
+              Path: /translationClients/{id}
               Method: put
 
     ArchiveTranslationClientLambda:
@@ -425,7 +425,7 @@ Resources:
           Translation-Tracker:
             Type: Api
             Properties:
-              Path: /translationclients/{id}
+              Path: /translationClients/{id}
               Method: put
 
   #-----------------------------------------------------
@@ -446,7 +446,7 @@ Resources:
           - AttributeName: "translationCaseId"
             KeyType: "RANGE"
         BillingMode: "PAY_PER_REQUEST"
-        TableName: "translationcases"
+        TableName: "translationCases"
 
     TranslationClientsTable:
       Type: AWS::DynamoDB::Table
@@ -458,7 +458,7 @@ Resources:
           - AttributeName: "translationClientId"
             KeyType: "HASH"
         BillingMode: "PAY_PER_REQUEST"
-        TableName: "translationclients"
+        TableName: "translationClients"
 
 #-----------------------------------------------------
 # The outputs defined below will be printed
