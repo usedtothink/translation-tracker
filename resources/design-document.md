@@ -234,7 +234,8 @@ Double wordsPerHourEstimate;
 ## 6.4 Create Translation Case Endpoint
 
 * Accepts `POST` requests to `/translationcases`
-* Accepts data to create a new `TranslationCase` with a provided caseNickname and projectType, all other values being optional. 
+* Accepts data to create a new `TranslationCase` with a provided caseNickname, projectType, and translationClientId, 
+  all other values being optional. 
 * Returns the new `TranslationCaseModel`, including a unique translation case ID assigned by Translation Tracker.
   * If the caseNickname is identical to an already-existing caseNickname, will throw a 
     `DuplicateCaseNicknameException`.
@@ -284,7 +285,7 @@ Double wordsPerHourEstimate;
 ## 6.9 Create Translation Client Endpoint
 
 * Accepts `POST` requests to `/translationclients`
-* Accepts data to create a new `TranslationClient` with the provided translationClientName, translationCaseId and translationClientType, 
+* Accepts data to create a new `TranslationClient` with the provided translationClientName and translationClientType, 
    with all other values being optional.
 * Returns the new `TranslationClientModel`, including a unique translation client ID assigned by Translation Tracker.
   * If the translationClientName is identical to an already-existing translationClientName, will throw a
@@ -315,12 +316,12 @@ Double wordsPerHourEstimate;
 ```
 translationClientId // partition key, string
 translationCaseId // sort key, string
+caseNickname // string
+projectType // string
 mostRecentActivity // string
 sourceTextTitle // string
 sourceTextAuthor // string
 translatedTitle // string
-caseNickname // string
-projectType // string
 dueDate // string
 startDate // string
 endDate // string
