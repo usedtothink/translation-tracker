@@ -28,7 +28,8 @@ public class CreateTranslationCaseActivity {
          * <p>
          * If the provided case nickname already exists, throw a
          * DuplicateCaseNicknameException.
-         * @param createTranslationCaseRequest request object containing the translation case nickname,
+         * @param createTranslationCaseRequest request object containing the translation case nickname and project type.
+         * @return createTranslationCaseResult result object containing the API defined {@link TranslationCaseModel}
          */
     }
 
