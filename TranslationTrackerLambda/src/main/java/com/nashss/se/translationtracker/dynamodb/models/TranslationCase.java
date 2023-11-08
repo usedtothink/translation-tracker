@@ -1,14 +1,15 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
+import com.nashss.se.translationtracker.converters.PaymentHistoryRecordConverter;
+import com.nashss.se.translationtracker.converters.TranslationCaseUpdateConverter;
+import com.nashss.se.translationtracker.types.ProjectType;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
-import com.nashss.se.translationtracker.converters.PaymentHistoryRecordConverter;
-import com.nashss.se.translationtracker.converters.TranslationCaseUpdateConverter;
-import com.nashss.se.translationtracker.types.ProjectType;
 
 import java.util.List;
 import java.util.Objects;
@@ -205,15 +206,15 @@ public class TranslationCase {
                 Objects.equals(getRushJob(), that.getRushJob()) &&
                 Objects.equals(getProgressLog(), that.getProgressLog()) &&
                 Objects.equals(getTotalWorkingHours(), that.getTotalWorkingHours()) &&
-                Objects.equals(getWordsPerHour(), that.getWordsPerHour())&&
+                Objects.equals(getWordsPerHour(), that.getWordsPerHour()) &&
                 Objects.equals(getPaymentRecord(), that.getPaymentRecord());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getTranslationCaseId(), getTranslationClientId(), getCaseNickname(), getSourceTextTitle(),
-                getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(), getStartDate(), getEndDate(),
-                getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
+                getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(), getStartDate(),
+                getEndDate(), getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
                 getWordsPerHour(), getPaymentRecord());
     }
 }

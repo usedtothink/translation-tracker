@@ -1,8 +1,8 @@
 package com.nashss.se.translationtracker.model;
 
 import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
-import com.nashss.se.translationtracker.types.ProjectType;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
+import com.nashss.se.translationtracker.types.ProjectType;
 
 import java.util.List;
 import java.util.Objects;
@@ -147,8 +147,8 @@ public class TranslationCaseModel {
     @Override
     public int hashCode() {
         return Objects.hash(getTranslationCaseId(), getTranslationClientId(), getCaseNickname(), getSourceTextTitle(),
-                getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(), getStartDate(), getEndDate(),
-                getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
+                getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(), getStartDate(),
+                getEndDate(), getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
                 getWordsPerHour(), getPaymentRecord());
     }
 

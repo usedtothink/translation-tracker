@@ -1,9 +1,10 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
+import com.nashss.se.translationtracker.types.TranslationClientType;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
-import com.nashss.se.translationtracker.types.TranslationClientType;
 
 import java.util.Objects;
 
@@ -52,8 +53,12 @@ public class TranslationClient {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TranslationClient that = (TranslationClient) o;
         return Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&

@@ -1,9 +1,10 @@
 package com.nashss.se.translationtracker.converters;
 
+import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
 
 public class TranslationCaseUpdateConverter implements DynamoDBTypeConverter<String, TranslationCaseUpdate> {
 

@@ -1,9 +1,11 @@
 package com.nashss.se.translationtracker.converters;
 
+import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
+
 
 public class PaymentHistoryRecordConverter implements DynamoDBTypeConverter<String, PaymentHistoryRecord> {
 
