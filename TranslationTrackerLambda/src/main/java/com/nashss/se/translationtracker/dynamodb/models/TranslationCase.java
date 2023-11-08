@@ -1,4 +1,4 @@
-package translationtracker;
+package com.nashss.se.translationtracker.dynamodb.models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
@@ -6,9 +6,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
+import com.nashss.se.translationtracker.converters.PaymentHistoryRecordConverter;
+import com.nashss.se.translationtracker.converters.TranslationCaseUpdateConverter;
+import com.nashss.se.translationtracker.types.ProjectType;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**

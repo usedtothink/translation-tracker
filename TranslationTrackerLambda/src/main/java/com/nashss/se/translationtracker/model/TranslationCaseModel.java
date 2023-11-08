@@ -1,6 +1,9 @@
-package translationtracker;
+package com.nashss.se.translationtracker.model;
 
-import java.util.ArrayList;
+import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
+import com.nashss.se.translationtracker.types.ProjectType;
+import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package translationtracker;
+package com.nashss.se.translationtracker.types;
 
 public enum ProjectType {
     ACADEMIC,
