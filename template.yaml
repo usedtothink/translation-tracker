@@ -237,7 +237,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationCases
+              Path: /translationcases
               Method: post
 
     GetTranslationCaseLambda:
@@ -257,7 +257,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationCases/{id}
+              Path: /translationcases/{id}
               Method: get
               Auth:
                 Authorizer: 'NONE'
@@ -279,7 +279,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationCases/
+              Path: /translationcases
               Method: get
               Auth:
                 Authorizer: 'NONE'
@@ -301,7 +301,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationCases/{id}
+              Path: /translationcases/{id}
               Method: put
 
     ArchiveTranslationCaseLambda:
@@ -321,7 +321,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationCases/{id}
+              Path: /translationcases/{id}
               Method: delete
 
     CreateTranslationClientLambda:
@@ -341,7 +341,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationClients
+              Path: /translationclients
               Method: post
 
     GetTranslationClientLambda:
@@ -361,7 +361,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationClients/{id}
+              Path: /translationclients/{id}
               Method: get
               Auth:
                 Authorizer: 'NONE'
@@ -383,7 +383,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationClients/
+              Path: /translationclients
               Method: get
               Auth:
                 Authorizer: 'NONE'
