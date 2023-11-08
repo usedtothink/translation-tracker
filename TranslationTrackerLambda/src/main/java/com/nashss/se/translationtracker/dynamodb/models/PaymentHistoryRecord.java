@@ -1,4 +1,4 @@
-package translationtracker;
+package com.nashss.se.translationtracker.dynamodb.models;
 
 import java.util.ArrayList;
 import java.util.List;

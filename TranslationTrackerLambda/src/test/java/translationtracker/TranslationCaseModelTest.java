@@ -1,10 +1,13 @@
 package translationtracker;
 
+import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
+import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
+import com.nashss.se.translationtracker.model.TranslationCaseModel;
+import com.nashss.se.translationtracker.types.ProjectType;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
