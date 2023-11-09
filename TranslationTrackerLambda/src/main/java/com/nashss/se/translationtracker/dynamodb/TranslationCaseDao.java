@@ -1,6 +1,7 @@
 package com.nashss.se.translationtracker.dynamodb;
 
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
+import com.nashss.se.translationtracker.exceptions.DuplicateCaseException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -41,12 +42,28 @@ public class TranslationCaseDao {
     }
 
     /**
-     * Saves (creates or updates) the given translation case.
+     * Updates the given translation case.
      *
      * @param translationCase The translation case to save
      * @return The TranslationCase object that was saved
      */
-    public TranslationCase saveTranslationCase(TranslationCase translationCase) {
+    public TranslationCase updateTranslationCase(TranslationCase translationCase) {
+        this.dynamoDbMapper.save(translationCase);
+        return translationCase;
+    }
+
+    /**
+     * Creates a new translation case, checks to make sure the case nickname is not a duplicate.
+     *
+     * @param translationCase The translation case to save
+     * @return The TranslationCase object that was saved
+     * @throws DuplicateCaseException when the case nickname already exists
+     */
+    public TranslationCase createTranslationCase(TranslationCase translationCase) {
+        if (dynamoDbMapper.load(TranslationCase.class, translationCase.getTranslationCaseId()) != null) {
+            throw new DuplicateCaseException("The case nickname " + translationCase.getCaseNickname() +
+                                                " already exists! Please choose a unique case nickname.");
+        }
         this.dynamoDbMapper.save(translationCase);
         return translationCase;
     }

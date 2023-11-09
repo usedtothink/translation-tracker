@@ -12,7 +12,7 @@ public class CreateTranslationCaseRequest {
 
     private CreateTranslationCaseRequest(ProjectType projectType, String caseNickname) {
         this.projectType = projectType;
-        this.translationCaseId = "type:" + projectType + "case:" + caseNickname;
+        this.translationCaseId = "case:" + caseNickname;
         this.caseNickname = caseNickname;
     }
 

@@ -194,8 +194,6 @@ paths:
         content:
           application/json:
             schema:
-              caseNickname:
-                type: string
               projectType:
                 type: string
               mostRecentActivity:

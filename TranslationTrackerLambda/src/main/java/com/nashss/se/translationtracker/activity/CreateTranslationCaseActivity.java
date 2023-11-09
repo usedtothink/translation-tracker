@@ -46,14 +46,11 @@ public class CreateTranslationCaseActivity {
             newTranslationCase.setProjectType(createTranslationCaseRequest.getProjectType());
             newTranslationCase.setCaseNickname(newTranslationCase.getCaseNickname());
 
-            caseDao.saveTranslationCase(newTranslationCase);
+            caseDao.createTranslationCase(newTranslationCase);
 
             TranslationCaseModel translationCaseModel = new ModelConverter().toTranslationCaseModel(newTranslationCase);
             return CreateTranslationCaseResult.builder()
                     .withTranslationCase(translationCaseModel)
                     .build();
         }
-    }
-
-
 }
