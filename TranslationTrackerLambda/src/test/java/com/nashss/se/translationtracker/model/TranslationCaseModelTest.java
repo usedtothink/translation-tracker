@@ -1,4 +1,4 @@
-package translationtracker;
+package com.nashss.se.translationtracker.model;
 
 import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;

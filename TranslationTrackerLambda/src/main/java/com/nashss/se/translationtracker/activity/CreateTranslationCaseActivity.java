@@ -43,7 +43,7 @@ public class CreateTranslationCaseActivity {
         TranslationCase newTranslationCase = new TranslationCase();
         newTranslationCase.setTranslationCaseId(createTranslationCaseRequest.getTranslationCaseId());
         newTranslationCase.setProjectType(createTranslationCaseRequest.getProjectType());
-        newTranslationCase.setCaseNickname(newTranslationCase.getCaseNickname());
+        newTranslationCase.setCaseNickname(createTranslationCaseRequest.getCaseNickname());
 
         caseDao.createTranslationCase(newTranslationCase);
 

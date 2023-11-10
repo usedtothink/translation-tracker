@@ -4,6 +4,7 @@ import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
 import com.nashss.se.translationtracker.types.ProjectType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -43,12 +44,23 @@ public class TranslationCaseModel {
         this.endDate = endDate;
         this.openCase = openCase;
         this.rushJob = rushJob;
-        this.progressLog = progressLog.stream()
-                .map(TranslationCaseUpdate::defensiveCopyTranslationCaseUpdate)
-                .collect(Collectors.toList());
+        if (progressLog != null) {
+            this.progressLog = progressLog.stream()
+                                            .map(TranslationCaseUpdate::defensiveCopyTranslationCaseUpdate)
+                                            .collect(Collectors.toList());
+        } else {
+            this.progressLog = new ArrayList<>();
+        }
         this.totalWorkingHours = totalWorkingHours;
         this.wordsPerHour = wordsPerHour;
-        this.paymentRecord = PaymentHistoryRecord.defensiveCopyPaymentHistory(paymentRecord);
+        if (paymentRecord != null) {
+            this.paymentRecord = PaymentHistoryRecord.defensiveCopyPaymentHistory(paymentRecord);
+        } else {
+            this.paymentRecord = PaymentHistoryRecord.builder()
+                    .withTranslationCaseId(translationCaseId)
+                    .withTranslationClientId(translationClientId)
+                    .build();
+        }
     }
 
     public String getTranslationCaseId() {
