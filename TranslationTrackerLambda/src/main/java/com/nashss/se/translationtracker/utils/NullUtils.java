@@ -51,6 +51,6 @@ public class NullUtils {
      */
 
     public static <T, U> U ifNotNull(T obj, Supplier<U> valIfNotNullSupplier) {
-         return obj == null ? null : valIfNotNullSupplier.get();
+        return obj == null ? null : valIfNotNullSupplier.get();
     }
 }

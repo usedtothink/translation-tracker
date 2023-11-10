@@ -1,8 +1,10 @@
 package com.nashss.se.translationtracker.dependency;
 
+import com.nashss.se.translationtracker.dynamodb.DynamoDbClientProvider;
+
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.nashss.se.translationtracker.dynamodb.DynamoDbClientProvider;
+
 import dagger.Module;
 import dagger.Provides;
 

@@ -1,12 +1,11 @@
 package com.nashss.se.translationtracker.activity;
 
-
+import com.nashss.se.translationtracker.activity.requests.CreateTranslationCaseRequest;
+import com.nashss.se.translationtracker.activity.results.CreateTranslationCaseResult;
 import com.nashss.se.translationtracker.converters.ModelConverter;
 import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
-import com.nashss.se.translationtracker.activity.requests.CreateTranslationCaseRequest;
-import com.nashss.se.translationtracker.activity.results.CreateTranslationCaseResult;
 
 import javax.inject.Inject;
 
@@ -28,29 +27,29 @@ public class CreateTranslationCaseActivity {
     public CreateTranslationCaseActivity(TranslationCaseDao caseDao) {
         this.caseDao = caseDao;
     }
-        /**
-         * This method handles the incoming request by persisting a new translation case
-         * with the provided case nickname and translation client ID from the request.
-         * <p>
-         * Then it returns the newly created translation case.
-         * <p>
-         * If the provided case nickname already exists, throw a
-         * DuplicateCaseNicknameException.
-         * @param createTranslationCaseRequest request object containing the translation case nickname and project type.
-         * @return createTranslationCaseResult result object containing the API defined {@link TranslationCaseModel}
-         */
-        public CreateTranslationCaseResult handleRequest(final CreateTranslationCaseRequest
-                                                                 createTranslationCaseRequest) {
-            TranslationCase newTranslationCase = new TranslationCase();
-            newTranslationCase.setTranslationCaseId(createTranslationCaseRequest.getTranslationCaseId());
-            newTranslationCase.setProjectType(createTranslationCaseRequest.getProjectType());
-            newTranslationCase.setCaseNickname(newTranslationCase.getCaseNickname());
+    /**
+     * This method handles the incoming request by persisting a new translation case
+     * with the provided case nickname and translation client ID from the request.
+     * <p>
+     * Then it returns the newly created translation case.
+     * <p>
+     * If the provided case nickname already exists, throw a
+     * DuplicateCaseNicknameException.
+     * @param createTranslationCaseRequest request object containing the translation case nickname and project type.
+     * @return createTranslationCaseResult result object containing the API defined {@link TranslationCaseModel}
+     */
+    public CreateTranslationCaseResult handleRequest(final CreateTranslationCaseRequest
+            createTranslationCaseRequest) {
+        TranslationCase newTranslationCase = new TranslationCase();
+        newTranslationCase.setTranslationCaseId(createTranslationCaseRequest.getTranslationCaseId());
+        newTranslationCase.setProjectType(createTranslationCaseRequest.getProjectType());
+        newTranslationCase.setCaseNickname(newTranslationCase.getCaseNickname());
 
-            caseDao.createTranslationCase(newTranslationCase);
+        caseDao.createTranslationCase(newTranslationCase);
 
-            TranslationCaseModel translationCaseModel = new ModelConverter().toTranslationCaseModel(newTranslationCase);
-            return CreateTranslationCaseResult.builder()
-                    .withTranslationCase(translationCaseModel)
-                    .build();
-        }
+        TranslationCaseModel translationCaseModel = new ModelConverter().toTranslationCaseModel(newTranslationCase);
+        return CreateTranslationCaseResult.builder()
+                .withTranslationCase(translationCaseModel)
+                .build();
+    }
 }
