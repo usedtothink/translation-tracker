@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="assets/createTranslationCase.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body class="background">
+    <header class="header" id="header"></header>
+    <div class="card">
+        <h2>Create Translation Case</h2>
+        <form class="card-content" id="create-translationCase-form">
+            <p class="hidden error" id="error-message"> </p>
+            <p class="form-field">
+                <label>Translation Case Nickname</label>
+                <input type="text" required class="validated-field" id="translation-case-nickname"
+                       data-tip="Translation case nicknames must be unique." autofocus>
+            </p>
+            <p class="form-field">
+                <label>Project Type</label>
+                <input type="text" id="projectType" class="projectType" placeholder="ACADEMIC"
+                    data-tip="Must be in all-caps.">
+            </p>
+            <p>
+                <a href="#" class="button" id="create">Create Translation Case</a>
+            </p>
+        </form>
+    </div>
+</body>
+
+</html>
