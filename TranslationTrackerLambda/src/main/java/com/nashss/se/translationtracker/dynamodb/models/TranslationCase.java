@@ -19,6 +19,7 @@ import java.util.Objects;
  */
 @DynamoDBTable(tableName = "translationCases")
 public class TranslationCase {
+    private String customerId;
     private String translationCaseId;
     private String translationClientId;
     private String caseNickname;
@@ -36,7 +37,16 @@ public class TranslationCase {
     private Double wordsPerHour;
     private PaymentHistoryRecord paymentRecord;
 
-    @DynamoDBHashKey(attributeName = "translationClientId")
+    @DynamoDBAttribute(attributeName = "customerId")
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    @DynamoDBAttribute(attributeName = "translationClientId")
     public String getTranslationClientId() {
         return translationClientId;
     }
@@ -45,7 +55,7 @@ public class TranslationCase {
         this.translationClientId = translationClientId;
     }
 
-    @DynamoDBRangeKey(attributeName = "translationCaseId")
+    @DynamoDBHashKey(attributeName = "translationCaseId")
     public String getTranslationCaseId() {
         return translationCaseId;
     }
@@ -192,7 +202,8 @@ public class TranslationCase {
             return false;
         }
         TranslationCase that = (TranslationCase) o;
-        return Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&
+        return Objects.equals(getCustomerId(), that.getCustomerId()) &&
+                Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&
                 Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getCaseNickname(), that.getCaseNickname()) &&
                 Objects.equals(getSourceTextTitle(), that.getSourceTextTitle()) &&
@@ -212,9 +223,9 @@ public class TranslationCase {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTranslationCaseId(), getTranslationClientId(), getCaseNickname(), getSourceTextTitle(),
-                getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(), getStartDate(),
-                getEndDate(), getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
+        return Objects.hash(getCustomerId(), getTranslationCaseId(), getTranslationClientId(), getCaseNickname(),
+                getSourceTextTitle(), getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(),
+                getStartDate(), getEndDate(), getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
                 getWordsPerHour(), getPaymentRecord());
     }
 }

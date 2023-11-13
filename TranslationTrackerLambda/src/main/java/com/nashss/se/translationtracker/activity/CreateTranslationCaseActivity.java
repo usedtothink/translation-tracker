@@ -6,6 +6,7 @@ import com.nashss.se.translationtracker.converters.ModelConverter;
 import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
+import com.nashss.se.translationtracker.types.ProjectType;
 
 import javax.inject.Inject;
 
@@ -42,7 +43,7 @@ public class CreateTranslationCaseActivity {
             createTranslationCaseRequest) {
         TranslationCase newTranslationCase = new TranslationCase();
         newTranslationCase.setTranslationCaseId(createTranslationCaseRequest.getTranslationCaseId());
-        newTranslationCase.setProjectType(createTranslationCaseRequest.getProjectType());
+        newTranslationCase.setProjectType(ProjectType.valueOf(createTranslationCaseRequest.getProjectType()));
         newTranslationCase.setCaseNickname(createTranslationCaseRequest.getCaseNickname());
 
         caseDao.createTranslationCase(newTranslationCase);

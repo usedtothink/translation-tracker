@@ -37,7 +37,7 @@ class CreateTranslationCaseActivityTest {
 
         CreateTranslationCaseRequest request = CreateTranslationCaseRequest.builder()
                 .withCaseNickname(expectedCaseNickname)
-                .withProjectType(expectedProjectType)
+                .withProjectType(expectedProjectType.name())
                 .build();
 
         // WHEN

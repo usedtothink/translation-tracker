@@ -7,17 +7,23 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 @JsonDeserialize(builder = CreateTranslationCaseRequest.Builder.class)
 public class CreateTranslationCaseRequest {
-    private final ProjectType projectType;
+    private final String customerId;
+    private final String projectType;
     private final String translationCaseId;
     private final String caseNickname;
 
-    private CreateTranslationCaseRequest(ProjectType projectType, String caseNickname) {
+    private CreateTranslationCaseRequest(String customerId, String projectType, String caseNickname) {
+        this.customerId = customerId;
         this.projectType = projectType;
         this.translationCaseId = "case:" + caseNickname;
         this.caseNickname = caseNickname;
     }
 
-    public ProjectType getProjectType() {
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public String getProjectType() {
         return projectType;
     }
 
@@ -32,6 +38,7 @@ public class CreateTranslationCaseRequest {
     @Override
     public String toString() {
         return "CreateTranslationCaseRequest{ " +
+                "customerId= '" + customerId + '\'' +
                 "caseNickname= '" + caseNickname + '\'' +
                 ", projectType= '" + projectType + '\'' +
                 ", translationCaseId= '" + translationCaseId + "' " +
@@ -45,10 +52,16 @@ public class CreateTranslationCaseRequest {
 
     @JsonPOJOBuilder
     public static class Builder {
-        private ProjectType projectType;
+        private String customerId;
+        private String projectType;
         private String caseNickname;
 
-        public Builder withProjectType(ProjectType projectType) {
+        public Builder withCustomerId(String customerId) {
+            this.customerId = customerId;
+            return this;
+        }
+
+        public Builder withProjectType(String projectType) {
             this.projectType = projectType;
             return this;
         }
@@ -59,7 +72,7 @@ public class CreateTranslationCaseRequest {
         }
 
         public CreateTranslationCaseRequest build() {
-            return new CreateTranslationCaseRequest(projectType, caseNickname);
+            return new CreateTranslationCaseRequest(customerId, projectType, caseNickname);
         }
     }
 }
