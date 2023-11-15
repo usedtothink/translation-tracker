@@ -29,8 +29,8 @@ public class TranslationCaseDao {
     /**
      * Returns the {@link TranslationCase} corresponding to the specified id.
      *
-     * @param translationCaseId the TranslationCase ID
-     * @return the stored TranslationCase, or null if none was found.
+     * @param translationCaseId The TranslationCase ID.
+     * @return The stored TranslationCase, or null if none was found.
      */
     public TranslationCase getTranslationCase(String translationCaseId) {
         TranslationCase translationCase = this.dynamoDbMapper.load(TranslationCase.class, translationCaseId);
@@ -42,12 +42,12 @@ public class TranslationCaseDao {
     }
 
     /**
-     * Updates the given translation case.
+     * Saves the given translation case.
      *
-     * @param translationCase The translation case to save
-     * @return The TranslationCase object that was saved
+     * @param translationCase The translation case to save.
+     * @return The TranslationCase object that was saved.
      */
-    public TranslationCase updateTranslationCase(TranslationCase translationCase) {
+    public TranslationCase saveTranslationCase(TranslationCase translationCase) {
         this.dynamoDbMapper.save(translationCase);
         return translationCase;
     }
@@ -55,9 +55,9 @@ public class TranslationCaseDao {
     /**
      * Creates a new translation case, checks to make sure the case nickname is not a duplicate.
      *
-     * @param translationCase The translation case to save
-     * @return The TranslationCase object that was saved
-     * @throws DuplicateCaseException when the case nickname already exists
+     * @param translationCase The translation case to save.
+     * @return The TranslationCase object that was saved.
+     * @throws DuplicateCaseException when the case nickname already exists.
      */
     public TranslationCase createTranslationCase(TranslationCase translationCase) {
         if (dynamoDbMapper.load(TranslationCase.class, translationCase.getTranslationCaseId()) != null) {
