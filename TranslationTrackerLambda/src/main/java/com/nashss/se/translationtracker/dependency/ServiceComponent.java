@@ -2,6 +2,7 @@ package com.nashss.se.translationtracker.dependency;
 
 import com.nashss.se.translationtracker.activity.CreateTranslationCaseActivity;
 
+import com.nashss.se.translationtracker.activity.GetTranslationCaseActivity;
 import dagger.Component;
 
 import javax.inject.Singleton;
@@ -18,4 +19,10 @@ public interface ServiceComponent {
      * @return CreateTranslationCaseActivity
      */
     CreateTranslationCaseActivity provideCreateTranslationCaseActivity();
+
+    /**
+     * Provides the relevant activity.
+     * @return GetTranslationCaseActivity
+     */
+    GetTranslationCaseActivity provideGetTranslationCaseActivity();
 }
