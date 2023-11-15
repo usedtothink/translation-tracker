@@ -1,5 +1,6 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.nashss.se.translationtracker.types.TranslationClientType;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
@@ -8,6 +9,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
 
 import java.util.Objects;
 
+@DynamoDBTable(tableName = "translation_clients")
 public class TranslationClient {
     private String customerId;
     private String translationClientId;

@@ -17,7 +17,7 @@ import java.util.Objects;
 /**
  * Represents a record in the translationCases table.
  */
-@DynamoDBTable(tableName = "translationCases")
+@DynamoDBTable(tableName = "translation_cases")
 public class TranslationCase {
     private String customerId;
     private String translationCaseId;

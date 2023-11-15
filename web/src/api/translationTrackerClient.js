@@ -10,10 +10,7 @@ export default class TranslationTrackerClient extends BindingClass {
     constructor(props = {}) {
         super();
 
-        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getTranslationCase',
-            'getAllTranslationCases', 'createTranslationCase', 'updateTranslationCase', 'archiveTranslationCase',
-            'getTranslationClient', 'getAllTranslationClients', 'createTranslationClient', 'updateTranslationClient',
-            'archiveTranslationClient'];
+        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'createTranslationCase'];
         this.bindClassMethods(methodsToBind, this);
 
         this.authenticator = new Authenticator();;
@@ -70,46 +67,16 @@ export default class TranslationTrackerClient extends BindingClass {
     }
 
     /**
-     * Gets the translation case for the given ID.
-     * @param id Unique identifier for a translation case
-     * @param errorCallback (Optional) A function to execute if the call fails.
-     * @returns The translation case's metadata.
-     */
-    async getTranslationCase(id, errorCallback) {
-        try {
-            const response = await this.axiosClient.get(`translationcases/${id}`);
-            return response.data.playlist;
-        } catch (error) {
-            this.handleError(error, errorCallback)
-        }
-    }
-
-    /**
-     * Gets the translation client for the given ID.
-     * @param id Unique identifier for a translation client
-     * @param errorCallback (Optional) A function to execute if the call fails.
-     * @returns The translation case's metadata.
-     */
-    async getTranslationClient(id, errorCallback) {
-        try {
-            const response = await this.axiosClient.get(`translationclients/${id}`);
-            return response.data.playlist;
-        } catch (error) {
-            this.handleError(error, errorCallback)
-        }
-    }
-
-    /**
      * Create a new translation case owned by the current user.
-     * @param name The name of the translation case to create.
-     * @param tags Metadata tags to associate with a translation case.
+     * @param caseNickname The nickname of the translation case to create.
+     * @param projectType The project type to associate with a translation case.
      * @param errorCallback (Optional) A function to execute if the call fails.
      * @returns The translation case that has been created.
      */
     async createTranslationCase(caseNickname, projectType, errorCallback) {
         try {
             const token = await this.getTokenOrThrow("Only authenticated users can create translation cases.");
-            const response = await this.axiosClient.post(`translationcases`, {
+            const response = await this.axiosClient.post(`translation_cases`, {
                 caseNickname: caseNickname,
                 projectType: projectType
             }, {
