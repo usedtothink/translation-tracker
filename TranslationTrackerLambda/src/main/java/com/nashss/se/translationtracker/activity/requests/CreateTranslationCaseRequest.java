@@ -1,7 +1,5 @@
 package com.nashss.se.translationtracker.activity.requests;
 
-import com.nashss.se.translationtracker.types.ProjectType;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
