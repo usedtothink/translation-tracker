@@ -1,9 +1,11 @@
 package com.nashss.se.translationtracker.lambda;
 
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.nashss.se.translationtracker.activity.requests.GetTranslationCaseRequest;
 import com.nashss.se.translationtracker.activity.results.GetTranslationCaseResult;
+
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
+
 
 public class GetTranslationCaseLambda
         extends LambdaActivityRunner<GetTranslationCaseRequest, GetTranslationCaseResult>
@@ -12,12 +14,12 @@ public class GetTranslationCaseLambda
     @Override
     public LambdaResponse handleRequest(LambdaRequest<GetTranslationCaseRequest> input, Context context) {
         return super.runActivity(
-                () -> input.fromPath(path ->
-                        GetTranslationCaseRequest.builder()
-                                .withTranslationCaseId(path.get("translationCaseId"))
-                                .build()),
-                (request, serviceComponent) ->
-                        serviceComponent.provideGetTranslationCaseActivity().handleRequest(request)
+            () -> input.fromPath(path ->
+                    GetTranslationCaseRequest.builder()
+                            .withTranslationCaseId(path.get("translationCaseId"))
+                            .build()),
+            (request, serviceComponent) ->
+                    serviceComponent.provideGetTranslationCaseActivity().handleRequest(request)
         );
     }
 }

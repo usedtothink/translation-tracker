@@ -3,6 +3,7 @@ package com.nashss.se.translationtracker.dependency;
 import com.nashss.se.translationtracker.activity.CreateTranslationCaseActivity;
 
 import com.nashss.se.translationtracker.activity.GetTranslationCaseActivity;
+
 import dagger.Component;
 
 import javax.inject.Singleton;
