@@ -2,6 +2,7 @@ package com.nashss.se.translationtracker.activity.requests;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.nashss.se.translationtracker.utils.TranslationCaseIdGenerator;
 
 @JsonDeserialize(builder = CreateTranslationCaseRequest.Builder.class)
 public class CreateTranslationCaseRequest {
@@ -13,7 +14,7 @@ public class CreateTranslationCaseRequest {
     private CreateTranslationCaseRequest(String customerId, String projectType, String caseNickname) {
         this.customerId = customerId;
         this.projectType = projectType;
-        this.translationCaseId = "case:" + caseNickname;
+        this.translationCaseId = TranslationCaseIdGenerator.newId(customerId, projectType, caseNickname);
         this.caseNickname = caseNickname;
     }
 
