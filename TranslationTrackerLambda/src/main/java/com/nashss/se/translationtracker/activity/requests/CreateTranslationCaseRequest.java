@@ -1,8 +1,9 @@
 package com.nashss.se.translationtracker.activity.requests;
 
+import com.nashss.se.translationtracker.utils.TranslationCaseIdGenerator;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.nashss.se.translationtracker.utils.TranslationCaseIdGenerator;
 
 @JsonDeserialize(builder = CreateTranslationCaseRequest.Builder.class)
 public class CreateTranslationCaseRequest {

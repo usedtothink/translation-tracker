@@ -16,7 +16,7 @@ public class GetTranslationCaseLambda
         return super.runActivity(
             () -> input.fromPath(path ->
                     GetTranslationCaseRequest.builder()
-                            .withTranslationCaseId(path.get("translationCaseId"))
+                            .withTranslationCaseId(path.get("id"))
                             .build()),
             (request, serviceComponent) ->
                     serviceComponent.provideGetTranslationCaseActivity().handleRequest(request)
