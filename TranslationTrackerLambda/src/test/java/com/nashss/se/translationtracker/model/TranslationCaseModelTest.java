@@ -1,4 +1,4 @@
-package translationtracker;
+package com.nashss.se.translationtracker.model;
 
 import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
@@ -23,18 +23,11 @@ class TranslationCaseModelTest {
         String sourceTextTitle = "sourceTextTitle";
         String sourceTextAuthor = "sourceTextAuthor";
         String translatedTitle = "translatedTitle";
-        Double rate = 3.5;
-        String rateUnit = "NTD";
-        Integer count = 301;
-        String countUnit = "字";
-        Double grossPayment = 1053.5;
-        Double taxRate = 0.20;
         ProjectType projectType = ProjectType.ACADEMIC;
         String dueDate = "01/01/2023";
         String startDate = "28/12/2022";
         String endDate = "31/12/2022";
         Boolean openCase = false;
-        Boolean casePaid = true;
         Boolean rushJob = false;
         List<TranslationCaseUpdate> progressLog = new ArrayList<>(List.of(TranslationCaseUpdate.builder().build()));
         Double totalWorkingHours = 3.2;

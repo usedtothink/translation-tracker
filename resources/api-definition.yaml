@@ -16,7 +16,7 @@ tags:
 
 paths:
 
-  /translationCases:
+  /translationcases:
     post:
       tags:
         - TranslationCases
@@ -27,7 +27,7 @@ paths:
             schema:
               type: object
               properties:
-                translationClientId:
+                customerId:
                   type: string
                 caseNickname:
                   type: string
@@ -41,6 +41,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  customerId:
+                    type: string
                   translationCaseId:
                     type: string
                   translationClientId:
@@ -91,6 +93,8 @@ paths:
                     type: array
                     items:
                       properties:
+                        customerId:
+                          type: string
                         translationCaseId:
                           type: string
                         translationClientId:
@@ -124,13 +128,13 @@ paths:
                         wordsPerHour:
                           type: number
 
-  /translationCases/{id}:
+  /translationcases/{translationCaseId}:
     get:
       tags:
         - TranslationCases
       summary: Get an existing translation case (GetTranslationCaseLambda)
       parameters:
-        - name: id
+        - name: translationCaseId
           in: path
           description: ID of translation case to retrieve
           required: true
@@ -144,6 +148,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  customerId:
+                    type: string
                   translationCaseId:
                     type: string
                   translationClientId:
@@ -184,7 +190,7 @@ paths:
         -TranslationCases
       summary: Update an existing translation case (UpdateTranslationCaseLambda)
       parameters:
-        - name: id
+        - name: translationCaseId
           in: path
           description: ID of translation case to retrieve
           required: true
@@ -194,7 +200,7 @@ paths:
         content:
           application/json:
             schema:
-              caseNickname:
+              customerId:
                 type: string
               projectType:
                 type: string
@@ -226,6 +232,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  customerId:
+                    type: string
                   translationCaseId:
                     type: string
                   translationClientId:
@@ -266,7 +274,7 @@ paths:
         - TranslationCases
       summary: Archive an existing translation case (ArchiveTranslationCaseLambda)
       parameters:
-        - name: id
+        - name: translationCaseId
           in: path
           description: ID of translation case to archive
           required: true
@@ -280,6 +288,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  customerId:
+                    type: string
                   translationCaseId:
                     type: string
                   translationClientId:
@@ -317,7 +327,7 @@ paths:
 
 
 
-  /translationClients:
+  /translationclients:
     post:
       tags:
         - TranslationClients
@@ -328,6 +338,8 @@ paths:
             schema:
               type: object
               properties:
+                customerId:
+                  type: string
                 translationClientName:
                   type: string
                 translationClientType:
@@ -340,6 +352,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  customerId:
+                    type: string
                   translationClientId:
                     type: string
                   translationClientName:
@@ -366,6 +380,8 @@ paths:
                     type: array
                     items:
                       properties:
+                        customerId:
+                          type: string
                         translationClientId:
                           type: string
                         translationClientName:
@@ -375,13 +391,13 @@ paths:
                         mostRecentActivity:
                           type: string
 
-  /translationClients/{id}:
+  /translationclients/{translationClientId}:
     get:
       tags:
         - TranslationClients
       summary: Get an existing translation client (GetTranslationClientsLambda)
       parameters:
-        - name: id
+        - name: translationClientId
           in: path
           description: ID of translation client to retrieve
           required: true
@@ -395,6 +411,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  customerId:
+                    type: string
                   translationClientId:
                     type: string
                   translationClientName:
@@ -411,7 +429,7 @@ paths:
         -TranslationClients
       summary: Update an existing translation client (UpdateTranslationClientLambda)
       parameters:
-        - name: id
+        - name: translationClientId
           in: path
           description: ID of translation client to retrieve
           required: true
@@ -421,6 +439,8 @@ paths:
         content:
           application/json:
             schema:
+              customerId:
+                type: string
               translationClientName:
                 type: string
               translationClientType:
@@ -435,6 +455,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  customerId:
+                    type: string
                   translationClientId:
                     type: string
                   translationClientName:
@@ -451,7 +473,7 @@ paths:
         - TranslationClients
       summary: Archive an existing translation client (ArchiveTranslationClientLambda)
       parameters:
-        - name: id
+        - name: translationClientId
           in: path
           description: ID of translation client to archive
           required: true
@@ -465,6 +487,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  customerId:
+                    type: string
                   translationClientId:
                     type: string
                   translationClientName:
@@ -475,19 +499,3 @@ paths:
                     type: string
         "500":
           description: "Invalid input parameters"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

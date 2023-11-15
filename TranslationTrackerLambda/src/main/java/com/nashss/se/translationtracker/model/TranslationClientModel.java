@@ -6,18 +6,23 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class TranslationClientModel {
+    private String customerId;
     private String translationClientId;
     private String translationClientName;
     private TranslationClientType translationClientType;
     private String mostRecentActivity;
 
-    private TranslationClientModel(String translationClientId,
-                                   String translationClientName,
+    private TranslationClientModel(String customerId, String translationClientId, String translationClientName,
                                    TranslationClientType translationClientType) {
+        this.customerId = customerId;
         this.translationClientId = translationClientId;
         this.translationClientName = translationClientName;
         this.translationClientType = translationClientType;
         this.mostRecentActivity = ZonedDateTime.now().toString();
+    }
+
+    public String getCustomerId() {
+        return customerId;
     }
 
     public String getTranslationClientId() {
@@ -45,7 +50,8 @@ public class TranslationClientModel {
             return false;
         }
         TranslationClientModel that = (TranslationClientModel) o;
-        return Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
+        return Objects.equals(getCustomerId(), that.getCustomerId()) &&
+                Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
                 Objects.equals(getTranslationClientType(), that.getTranslationClientType()) &&
                 Objects.equals(getMostRecentActivity(), that.getMostRecentActivity());
@@ -53,8 +59,8 @@ public class TranslationClientModel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTranslationClientId(),
-                getTranslationClientName(), getTranslationClientType(), getMostRecentActivity());
+        return Objects.hash(getCustomerId(), getTranslationClientId(), getTranslationClientName(),
+                getTranslationClientType(), getMostRecentActivity());
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -63,9 +69,15 @@ public class TranslationClientModel {
     }
 
     public static class Builder {
+        private String customerId;
         private String translationClientId;
         private String translationClientName;
         private TranslationClientType translationClientType;
+
+        public Builder withCustomerId(String customerId) {
+            this.customerId = customerId;
+            return this;
+        }
 
         public Builder withTranslationClientId(String translationClientId){
             this.translationClientId = translationClientId;
@@ -83,7 +95,8 @@ public class TranslationClientModel {
         }
 
         public TranslationClientModel build() {
-            return new TranslationClientModel(translationClientId, translationClientName, translationClientType);
+            return new TranslationClientModel(customerId, translationClientId, translationClientName,
+                    translationClientType);
         }
 
     }

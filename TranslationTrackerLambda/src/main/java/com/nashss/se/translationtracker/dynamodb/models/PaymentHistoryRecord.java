@@ -197,7 +197,6 @@ public class PaymentHistoryRecord {
     }
 
     public static class Builder {
-        private String paymentHistoryId;
         private String translationCaseId;
         private String translationClientId;
         private Boolean casePaid;

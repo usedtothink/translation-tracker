@@ -24,7 +24,6 @@ module.exports = {
   },
   entry: {
     createTranslationCase: path.resolve(__dirname, 'src', 'pages', 'createTranslationCase.js'),
-    viewTranslationCase: path.resolve(__dirname, 'src', 'pages', 'viewTranslationCase.js')
   },
   output: {
     path: path.resolve(__dirname, 'build', 'assets'),

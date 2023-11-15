@@ -1,4 +1,4 @@
-import MusicPlaylistClient from '../api/translationTrackerClient';
+import TranslationTrackerClient from '../api/translationTrackerClient';
 import BindingClass from "../util/bindingClass";
 
 /**
@@ -10,11 +10,11 @@ export default class Header extends BindingClass {
 
         const methodsToBind = [
             'addHeaderToPage', 'createSiteTitle', 'createUserInfoForHeader',
-            'createLoginButton', 'createLoginButton', 'createLogoutButton'
+            'createLoginButton', 'createLogoutButton'
         ];
         this.bindClassMethods(methodsToBind, this);
 
-        this.client = new MusicPlaylistClient();
+        this.client = new TranslationTrackerClient();
     }
 
     /**

@@ -4,15 +4,27 @@ import com.nashss.se.translationtracker.types.TranslationClientType;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
 
 import java.util.Objects;
 
+@DynamoDBTable(tableName = "translation_clients")
 public class TranslationClient {
+    private String customerId;
     private String translationClientId;
     private String translationClientName;
     private TranslationClientType translationClientType;
     private String mostRecentActivity;
+
+    @DynamoDBAttribute(attributeName =  "customerId")
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
 
     @DynamoDBHashKey(attributeName = "translationClientID")
     public String getTranslationClientId() {
@@ -60,7 +72,8 @@ public class TranslationClient {
             return false;
         }
         TranslationClient that = (TranslationClient) o;
-        return Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
+        return Objects.equals(getCustomerId(), that.getCustomerId()) &&
+                Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
                 getTranslationClientType() == that.getTranslationClientType() &&
                 Objects.equals(getMostRecentActivity(), that.getMostRecentActivity());
@@ -68,7 +81,7 @@ public class TranslationClient {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTranslationClientId(), getTranslationClientName(), getTranslationClientType(),
-                getMostRecentActivity());
+        return Objects.hash(getCustomerId(), getTranslationClientId(), getTranslationClientName(),
+                getTranslationClientType(), getMostRecentActivity());
     }
 }
