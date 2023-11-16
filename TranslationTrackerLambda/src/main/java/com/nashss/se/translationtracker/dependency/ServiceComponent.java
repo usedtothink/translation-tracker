@@ -1,8 +1,8 @@
 package com.nashss.se.translationtracker.dependency;
 
 import com.nashss.se.translationtracker.activity.CreateTranslationCaseActivity;
-
 import com.nashss.se.translationtracker.activity.GetTranslationCaseActivity;
+import com.nashss.se.translationtracker.activity.UpdateTranslationCaseActivity;
 
 import dagger.Component;
 
@@ -26,4 +26,10 @@ public interface ServiceComponent {
      * @return GetTranslationCaseActivity
      */
     GetTranslationCaseActivity provideGetTranslationCaseActivity();
+
+    /**
+     * Provides the relevant activity.
+     * @return UpdateTranslationCaseActivity
+     */
+    UpdateTranslationCaseActivity provideUpdateTranslationCaseActivity();
 }

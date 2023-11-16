@@ -5,7 +5,11 @@ import com.nashss.se.translationtracker.activity.results.UpdateTranslationCaseRe
 import com.nashss.se.translationtracker.converters.ModelConverter;
 import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
+import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -79,8 +83,14 @@ public class UpdateTranslationCaseActivity {
             translationCase.setRushJob(updateTranslationCaseRequest.getRushJob());
         }
 
-        if (updateTranslationCaseRequest.getProgressLog() != null) {
-            translationCase.setProgressLog(updateTranslationCaseRequest.getProgressLog());
+        if (updateTranslationCaseRequest.getProgressUpdate() != null) {
+            List<TranslationCaseUpdate> currentProgressLog = translationCase.getProgressLog();
+            if (currentProgressLog != null) {
+                currentProgressLog.add(updateTranslationCaseRequest.getProgressUpdate());
+            } else {
+                translationCase.setProgressLog(new ArrayList<>(List.of(updateTranslationCaseRequest
+                                                                            .getProgressUpdate())));
+            }
         }
 
         if (updateTranslationCaseRequest.getTotalWorkingHours() != null) {

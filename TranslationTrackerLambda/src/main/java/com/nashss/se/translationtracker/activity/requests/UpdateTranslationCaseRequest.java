@@ -6,9 +6,6 @@ import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @JsonDeserialize(builder = UpdateTranslationCaseRequest.class)
 public class UpdateTranslationCaseRequest {
     private String customerId;
@@ -21,7 +18,7 @@ public class UpdateTranslationCaseRequest {
     private final String endDate;
     private final Boolean openCase;
     private final Boolean rushJob;
-    private final List<TranslationCaseUpdate> progressLog;
+    private final TranslationCaseUpdate progressUpdate;
     private final Double totalWorkingHours;
     private final Double wordsPerHour;
     private final PaymentHistoryRecord paymentRecord;
@@ -29,7 +26,7 @@ public class UpdateTranslationCaseRequest {
     private UpdateTranslationCaseRequest(String customerId, String translationCaseId, String sourceTextTitle,
                                          String sourceTextAuthor, String translatedTitle, String dueDate,
                                          String startDate, String endDate, Boolean openCase, Boolean rushJob,
-                                         List<TranslationCaseUpdate> progressLog, Double totalWorkingHours,
+                                         TranslationCaseUpdate progressUpdate, Double totalWorkingHours,
                                          Double wordsPerHour, PaymentHistoryRecord paymentRecord) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
@@ -41,20 +38,10 @@ public class UpdateTranslationCaseRequest {
         this.endDate = endDate;
         this.openCase = openCase;
         this.rushJob = rushJob;
-        if (progressLog != null) {
-            this.progressLog = progressLog.stream()
-                    .map(TranslationCaseUpdate::defensiveCopyTranslationCaseUpdate)
-                    .collect(Collectors.toList());
-        } else {
-            this.progressLog = progressLog;
-        }
+        this.progressUpdate = progressUpdate;
         this.totalWorkingHours = totalWorkingHours;
         this.wordsPerHour = wordsPerHour;
-        if (paymentRecord != null) {
-            this.paymentRecord = PaymentHistoryRecord.defensiveCopyPaymentHistory(paymentRecord);
-        } else {
-            this.paymentRecord = paymentRecord;
-        }
+        this.paymentRecord = paymentRecord;
     }
 
     public String getCustomerId() {
@@ -97,8 +84,8 @@ public class UpdateTranslationCaseRequest {
         return rushJob;
     }
 
-    public List<TranslationCaseUpdate> getProgressLog() {
-        return progressLog;
+    public TranslationCaseUpdate getProgressUpdate() {
+        return progressUpdate;
     }
 
     public Double getTotalWorkingHours() {
@@ -126,7 +113,7 @@ public class UpdateTranslationCaseRequest {
                 ", endDate='" + endDate + '\'' +
                 ", openCase=" + openCase +
                 ", rushJob=" + rushJob +
-                ", progressLog=" + progressLog +
+                ", progressUpdate=" + progressUpdate +
                 ", totalWorkingHours=" + totalWorkingHours +
                 ", wordsPerHour=" + wordsPerHour +
                 ", paymentRecord=" + paymentRecord +
@@ -150,7 +137,7 @@ public class UpdateTranslationCaseRequest {
         private String endDate;
         private Boolean openCase;
         private Boolean rushJob;
-        private List<TranslationCaseUpdate> progressLog;
+        private TranslationCaseUpdate progressUpdate;
         private Double totalWorkingHours;
         private Double wordsPerHour;
         private PaymentHistoryRecord paymentRecord;
@@ -205,8 +192,8 @@ public class UpdateTranslationCaseRequest {
             return this;
         }
 
-        public Builder withProgressLog(List<TranslationCaseUpdate> progressLog) {
-            this.progressLog = progressLog;
+        public Builder withProgressUpdate(TranslationCaseUpdate progressUpdate) {
+            this.progressUpdate = progressUpdate;
             return this;
         }
 
@@ -227,7 +214,7 @@ public class UpdateTranslationCaseRequest {
 
         public UpdateTranslationCaseRequest build() {
             return new UpdateTranslationCaseRequest(customerId, translationCaseId, sourceTextTitle, sourceTextAuthor,
-                    translatedTitle, dueDate, startDate, endDate, openCase, rushJob, progressLog,
+                    translatedTitle, dueDate, startDate, endDate, openCase, rushJob, progressUpdate,
                     totalWorkingHours, wordsPerHour, paymentRecord);
         }
     }

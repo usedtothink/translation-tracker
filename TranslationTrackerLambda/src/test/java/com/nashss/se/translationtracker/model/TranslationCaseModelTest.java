@@ -17,6 +17,7 @@ class TranslationCaseModelTest {
     @Test
     public void basicTestForTranslationCaseModel() {
         // GIVEN
+        String customerId = "customerId";
         String translationCaseId = "translationCaseId";
         String translationClientId = "translationClientId";
         String caseNickname = "caseNickname";
@@ -35,6 +36,7 @@ class TranslationCaseModelTest {
         PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();
 
         TranslationCaseModel model = TranslationCaseModel.builder()
+                .withCustomerId(customerId)
                 .withTranslationCaseId(translationCaseId)
                 .withTranslationClientId(translationClientId)
                 .withCaseNickname(caseNickname)
@@ -54,6 +56,7 @@ class TranslationCaseModelTest {
                 .build();
 
         // WHEN & THEN
+        assertEquals(customerId, model.getCustomerId());
         assertEquals(translationCaseId, model.getTranslationCaseId());
         assertEquals(translationClientId, model.getTranslationClientId());
         assertEquals(caseNickname, model.getCaseNickname());
