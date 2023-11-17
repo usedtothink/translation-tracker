@@ -20,12 +20,17 @@ public class UpdateTranslationCaseLambda
                 return input.fromUserClaims(claims ->
                         UpdateTranslationCaseRequest.builder()
                             .withCustomerId(claims.get("email"))
+                                // The TranslationCaseId is going to come in
+                                // through the front end including it in the body
                             .withTranslationCaseId(unauthenticatedRequest.getTranslationCaseId())
+                            .withTranslationClientId(unauthenticatedRequest.getTranslationClientId())
+                            .withCaseNickname(unauthenticatedRequest.getCaseNickname())
                             .withSourceTextTitle(unauthenticatedRequest.getSourceTextTitle())
                             .withSourceTextAuthor(unauthenticatedRequest.getSourceTextAuthor())
                             .withTranslatedTitle(unauthenticatedRequest.getTranslatedTitle())
                             .withDueDate(unauthenticatedRequest.getDueDate())
                             .withStartDate(unauthenticatedRequest.getStartDate())
+                            .withProjectType(unauthenticatedRequest.getProjectType())
                             .withEndDate(unauthenticatedRequest.getEndDate())
                             .withOpenCase(unauthenticatedRequest.getOpenCase())
                             .withRushJob(unauthenticatedRequest.getRushJob())

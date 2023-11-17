@@ -5,14 +5,18 @@ import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.nashss.se.translationtracker.types.ProjectType;
 
 @JsonDeserialize(builder = UpdateTranslationCaseRequest.class)
 public class UpdateTranslationCaseRequest {
-    private String customerId;
+    private final String customerId;
     private final String translationCaseId;
+    private final String translationClientId;
+    private final String caseNickname;
     private final String sourceTextTitle;
     private final String sourceTextAuthor;
     private final String translatedTitle;
+    private final ProjectType projectType;
     private final String dueDate;
     private final String startDate;
     private final String endDate;
@@ -23,16 +27,20 @@ public class UpdateTranslationCaseRequest {
     private final Double wordsPerHour;
     private final PaymentHistoryRecord paymentRecord;
 
-    private UpdateTranslationCaseRequest(String customerId, String translationCaseId, String sourceTextTitle,
-                                         String sourceTextAuthor, String translatedTitle, String dueDate,
-                                         String startDate, String endDate, Boolean openCase, Boolean rushJob,
-                                         TranslationCaseUpdate progressUpdate, Double totalWorkingHours,
-                                         Double wordsPerHour, PaymentHistoryRecord paymentRecord) {
+    private UpdateTranslationCaseRequest(String customerId, String translationCaseId, String translationClientId,
+                                         String caseNickname, String sourceTextTitle, String sourceTextAuthor,
+                                         String translatedTitle, ProjectType projectType, String dueDate, String startDate,
+                                         String endDate, Boolean openCase, Boolean rushJob,
+                                         TranslationCaseUpdate progressUpdate, Double totalWorkingHours, Double wordsPerHour,
+                                         PaymentHistoryRecord paymentRecord) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
+        this.translationClientId = translationClientId;
+        this.caseNickname = caseNickname;
         this.sourceTextTitle = sourceTextTitle;
         this.sourceTextAuthor = sourceTextAuthor;
         this.translatedTitle = translatedTitle;
+        this.projectType = projectType;
         this.dueDate = dueDate;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -52,6 +60,14 @@ public class UpdateTranslationCaseRequest {
         return translationCaseId;
     }
 
+    public String getTranslationClientId() {
+        return translationClientId;
+    }
+
+    public String getCaseNickname() {
+        return caseNickname;
+    }
+
     public String getSourceTextTitle() {
         return sourceTextTitle;
     }
@@ -62,6 +78,10 @@ public class UpdateTranslationCaseRequest {
 
     public String getTranslatedTitle() {
         return translatedTitle;
+    }
+
+    public ProjectType getProjectType() {
+        return projectType;
     }
 
     public String getDueDate() {
@@ -129,9 +149,12 @@ public class UpdateTranslationCaseRequest {
     public static class Builder {
         private String customerId;
         private String translationCaseId;
+        private String translationClientId;
+        private String caseNickname;
         private String sourceTextTitle;
         private String sourceTextAuthor;
         private String translatedTitle;
+        private ProjectType projectType;
         private String dueDate;
         private String startDate;
         private String endDate;
@@ -152,6 +175,16 @@ public class UpdateTranslationCaseRequest {
             return this;
         }
 
+        public Builder withTranslationClientId(String translationClientId) {
+            this.translationClientId = translationClientId;
+            return this;
+        }
+
+        public Builder withCaseNickname(String caseNickname) {
+            this.caseNickname = caseNickname;
+            return this;
+        }
+
         public Builder withSourceTextTitle(String sourceTextTitle) {
             this.sourceTextTitle = sourceTextTitle;
             return this;
@@ -164,6 +197,11 @@ public class UpdateTranslationCaseRequest {
 
         public Builder withTranslatedTitle(String translatedTitle) {
             this.translatedTitle = translatedTitle;
+            return this;
+        }
+
+        public Builder withProjectType(ProjectType projectType) {
+            this.projectType = projectType;
             return this;
         }
 
@@ -213,9 +251,9 @@ public class UpdateTranslationCaseRequest {
         }
 
         public UpdateTranslationCaseRequest build() {
-            return new UpdateTranslationCaseRequest(customerId, translationCaseId, sourceTextTitle, sourceTextAuthor,
-                    translatedTitle, dueDate, startDate, endDate, openCase, rushJob, progressUpdate,
-                    totalWorkingHours, wordsPerHour, paymentRecord);
+            return new UpdateTranslationCaseRequest(customerId, translationCaseId, translationClientId, caseNickname,
+                    sourceTextTitle, sourceTextAuthor, translatedTitle, projectType, dueDate, startDate, endDate,
+                    openCase, rushJob, progressUpdate, totalWorkingHours, wordsPerHour, paymentRecord);
         }
     }
 }

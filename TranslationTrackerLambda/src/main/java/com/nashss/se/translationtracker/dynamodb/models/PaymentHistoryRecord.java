@@ -1,5 +1,8 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.nashss.se.translationtracker.activity.requests.UpdateTranslationCaseRequest;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -7,6 +10,7 @@ import java.util.Objects;
 /**
  * Represents a payment history record.
  */
+@JsonDeserialize(builder = PaymentHistoryRecord.class)
 public class PaymentHistoryRecord {
     private final String paymentHistoryId;
     private final String translationCaseId;

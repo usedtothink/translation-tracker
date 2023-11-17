@@ -19,7 +19,7 @@ public class LambdaRequest<T> extends APIGatewayProxyRequestEvent {
     protected static final ObjectMapper MAPPER = new ObjectMapper();
 
     /**
-     * Dserialize a T (aka 'requestClass`) from the body of the request.
+     * Dserialize a T (aka `requestClass`) from the body of the request.
      * @param requestClass The type that should be created from the body of this LambdaRequest
      * @return A new instance of T that contains data from the request body
      */
