@@ -42,6 +42,7 @@ public class CreateTranslationCaseActivity {
     public CreateTranslationCaseResult handleRequest(final CreateTranslationCaseRequest
             createTranslationCaseRequest) {
         TranslationCase newTranslationCase = new TranslationCase();
+        newTranslationCase.setCustomerId(createTranslationCaseRequest.getCustomerId());
         newTranslationCase.setTranslationCaseId(createTranslationCaseRequest.getTranslationCaseId());
         newTranslationCase.setProjectType(ProjectType.valueOf(createTranslationCaseRequest.getProjectType()));
         newTranslationCase.setCaseNickname(createTranslationCaseRequest.getCaseNickname());

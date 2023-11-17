@@ -24,6 +24,7 @@ public class ModelConverter {
         }
 
         return TranslationCaseModel.builder()
+                .withCustomerId(translationCase.getCustomerId())
                 .withTranslationCaseId(translationCase.getTranslationCaseId())
                 .withTranslationClientId(translationCase.getTranslationClientId())
                 .withCaseNickname(translationCase.getCaseNickname())
