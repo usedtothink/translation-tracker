@@ -1,7 +1,7 @@
 package com.nashss.se.translationtracker.converters;
 
+import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
-import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class ModelConverter {
      * @return the converted translation case
      */
     public TranslationCaseModel toTranslationCaseModel(TranslationCase translationCase) {
-        List<TranslationCaseUpdate> progress = null;
+        List<ProgressUpdate> progress = null;
         if (translationCase.getProgressLog() != null) {
             progress = new ArrayList<>(translationCase.getProgressLog());
         }

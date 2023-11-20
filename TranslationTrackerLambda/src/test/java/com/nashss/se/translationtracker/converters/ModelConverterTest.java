@@ -2,7 +2,7 @@ package com.nashss.se.translationtracker.converters;
 
 import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
-import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
+import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
 import com.nashss.se.translationtracker.types.ProjectType;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 class ModelConverterTest {
 
@@ -28,7 +27,7 @@ class ModelConverterTest {
     private String endDate = "31/12/2022";
     private Boolean openCase = false;
     private Boolean rushJob = false;
-    private List<TranslationCaseUpdate> progressLog = new ArrayList<>(List.of(TranslationCaseUpdate.builder().build()));
+    private List<ProgressUpdate> progressLog = new ArrayList<>(List.of(ProgressUpdate.builder().build()));
     private Double totalWorkingHours = 3.2;
     private Double wordsPerHour = 400.3;
     private PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();

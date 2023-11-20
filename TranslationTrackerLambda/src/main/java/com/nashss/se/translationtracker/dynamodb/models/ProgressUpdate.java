@@ -1,12 +1,11 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.nashss.se.translationtracker.activity.requests.UpdateTranslationCaseRequest;
 
 import java.util.Objects;
 
-@JsonDeserialize(builder = TranslationCaseUpdate.class)
-public final class TranslationCaseUpdate {
+@JsonDeserialize(builder = ProgressUpdate.class)
+public final class ProgressUpdate {
 
     private final Integer wordCount;
     private final String startDate;
@@ -15,8 +14,8 @@ public final class TranslationCaseUpdate {
     private final String endTime;
     private final String notes;
 
-    private TranslationCaseUpdate(Integer wordCount, String startDate, String endDate,
-                                  String startTime, String endTime, String notes) {
+    private ProgressUpdate(Integer wordCount, String startDate, String endDate,
+                           String startTime, String endTime, String notes) {
         this.wordCount = wordCount;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -54,8 +53,8 @@ public final class TranslationCaseUpdate {
      * @param original the original TranslationCaseUpdate to be copied.
      * @return the new, copied TranslationCaseUpdate.
      */
-    public static TranslationCaseUpdate defensiveCopyTranslationCaseUpdate(TranslationCaseUpdate original) {
-        return TranslationCaseUpdate.builder()
+    public static ProgressUpdate defensiveCopyTranslationCaseUpdate(ProgressUpdate original) {
+        return ProgressUpdate.builder()
                 .withWordCount(original.getWordCount())
                 .withStartDate(original.getStartDate())
                 .withEndDate(original.getEndDate())
@@ -73,7 +72,7 @@ public final class TranslationCaseUpdate {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TranslationCaseUpdate that = (TranslationCaseUpdate) o;
+        ProgressUpdate that = (ProgressUpdate) o;
         return Objects.equals(getWordCount(), that.getWordCount()) &&
                 Objects.equals(getStartDate(), that.getStartDate()) &&
                 Objects.equals(getEndDate(), that.getEndDate()) &&
@@ -131,8 +130,8 @@ public final class TranslationCaseUpdate {
             return this;
         }
 
-        public TranslationCaseUpdate build() {
-            return new TranslationCaseUpdate(wordCount, startDate, endDate, startTime,
+        public ProgressUpdate build() {
+            return new ProgressUpdate(wordCount, startDate, endDate, startTime,
                     endTime, notes);
         }
 

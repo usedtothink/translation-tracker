@@ -1,12 +1,11 @@
 package com.nashss.se.translationtracker.activity;
 
-import com.amazonaws.services.dynamodbv2.model.Get;
 import com.nashss.se.translationtracker.activity.requests.GetTranslationCaseRequest;
 import com.nashss.se.translationtracker.activity.results.GetTranslationCaseResult;
 import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
 import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
-import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
+import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.types.ProjectType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ public class GetTranslationCaseActivityTest {
     private String endDate = "31/12/2022";
     private Boolean openCase = false;
     private Boolean rushJob = false;
-    private List<TranslationCaseUpdate> progressLog = new ArrayList<>(List.of(TranslationCaseUpdate.builder().build()));
+    private List<ProgressUpdate> progressLog = new ArrayList<>(List.of(ProgressUpdate.builder().build()));
     private Double totalWorkingHours = 3.2;
     private Double wordsPerHour = 400.3;
     private PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();

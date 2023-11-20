@@ -1,8 +1,7 @@
 package com.nashss.se.translationtracker.model;
 
 import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
-import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
-import com.nashss.se.translationtracker.model.TranslationCaseModel;
+import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.types.ProjectType;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +29,7 @@ class TranslationCaseModelTest {
         String endDate = "31/12/2022";
         Boolean openCase = false;
         Boolean rushJob = false;
-        List<TranslationCaseUpdate> progressLog = new ArrayList<>(List.of(TranslationCaseUpdate.builder().build()));
+        List<ProgressUpdate> progressLog = new ArrayList<>(List.of(ProgressUpdate.builder().build()));
         Double totalWorkingHours = 3.2;
         Double wordsPerHour = 400.3;
         PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();

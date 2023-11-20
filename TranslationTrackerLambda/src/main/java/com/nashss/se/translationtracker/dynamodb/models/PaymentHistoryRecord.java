@@ -1,7 +1,6 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.nashss.se.translationtracker.activity.requests.UpdateTranslationCaseRequest;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -31,7 +31,7 @@ public class TranslationCase {
     private String endDate;
     private Boolean openCase;
     private Boolean rushJob;
-    private List<TranslationCaseUpdate> progressLog;
+    private List<ProgressUpdate> progressLog;
     private Double totalWorkingHours;
     private Double wordsPerHour;
     private PaymentHistoryRecord paymentRecord;
@@ -156,11 +156,11 @@ public class TranslationCase {
 
     @DynamoDBTypeConverted(converter = TranslationCaseUpdateConverter.class)
     @DynamoDBAttribute(attributeName = "progressLog")
-    public List<TranslationCaseUpdate> getProgressLog() {
+    public List<ProgressUpdate> getProgressLog() {
         return progressLog;
     }
 
-    public void setProgressLog(List<TranslationCaseUpdate> progressLog) {
+    public void setProgressLog(List<ProgressUpdate> progressLog) {
         this.progressLog = progressLog;
     }
 
