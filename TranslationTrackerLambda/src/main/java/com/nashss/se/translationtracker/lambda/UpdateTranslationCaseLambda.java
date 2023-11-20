@@ -24,7 +24,7 @@ public class UpdateTranslationCaseLambda
                             // through the front end including it in the body
                             .withTranslationCaseId(unauthenticatedRequest.getTranslationCaseId())
                             .withSourceTextTitle(unauthenticatedRequest.getSourceTextTitle())
-/*                            .withSourceTextAuthor(unauthenticatedRequest.getSourceTextAuthor())
+                            .withSourceTextAuthor(unauthenticatedRequest.getSourceTextAuthor())
                             .withTranslatedTitle(unauthenticatedRequest.getTranslatedTitle())
                             .withDueDate(unauthenticatedRequest.getDueDate())
                             .withStartDate(unauthenticatedRequest.getStartDate())
@@ -32,7 +32,7 @@ public class UpdateTranslationCaseLambda
                             .withOpenCase(unauthenticatedRequest.getOpenCase())
                             .withRushJob(unauthenticatedRequest.getRushJob())
                             .withTotalWorkingHours(unauthenticatedRequest.getTotalWorkingHours())
-                            .withWordsPerHour(unauthenticatedRequest.getWordsPerHour())*/
+                            .withWordsPerHour(unauthenticatedRequest.getWordsPerHour())
                             .build());
             },
             (request, serviceComponent) ->

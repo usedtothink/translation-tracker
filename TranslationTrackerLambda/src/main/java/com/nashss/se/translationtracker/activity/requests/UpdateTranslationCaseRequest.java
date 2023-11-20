@@ -3,12 +3,11 @@ package com.nashss.se.translationtracker.activity.requests;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
-@JsonDeserialize(builder = UpdateTranslationCaseRequest.class)
+@JsonDeserialize(builder = UpdateTranslationCaseRequest.Builder.class)
 public class UpdateTranslationCaseRequest {
     private final String customerId;
     private final String translationCaseId;
     private final String sourceTextTitle;
-/*
     private final String sourceTextAuthor;
     private final String translatedTitle;
     private final String dueDate;
@@ -18,17 +17,15 @@ public class UpdateTranslationCaseRequest {
     private final Boolean rushJob;
     private final Double totalWorkingHours;
     private final Double wordsPerHour;
-*/
 
-/*    private UpdateTranslationCaseRequest(String customerId, String translationCaseId, String sourceTextTitle,
+    private UpdateTranslationCaseRequest(String customerId, String translationCaseId, String sourceTextTitle,
                                          String sourceTextAuthor, String translatedTitle, String dueDate,
                                          String startDate, String endDate, Boolean openCase, Boolean rushJob,
-                                         Double totalWorkingHours, Double wordsPerHour) {*/
-private UpdateTranslationCaseRequest(String customerId, String translationCaseId, String sourceTextTitle) {
+                                         Double totalWorkingHours, Double wordsPerHour) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
         this.sourceTextTitle = sourceTextTitle;
-/*        this.sourceTextAuthor = sourceTextAuthor;
+        this.sourceTextAuthor = sourceTextAuthor;
         this.translatedTitle = translatedTitle;
         this.dueDate = dueDate;
         this.startDate = startDate;
@@ -36,7 +33,7 @@ private UpdateTranslationCaseRequest(String customerId, String translationCaseId
         this.openCase = openCase;
         this.rushJob = rushJob;
         this.totalWorkingHours = totalWorkingHours;
-        this.wordsPerHour = wordsPerHour;*/
+        this.wordsPerHour = wordsPerHour;
     }
 
     public String getCustomerId() {
@@ -50,7 +47,6 @@ private UpdateTranslationCaseRequest(String customerId, String translationCaseId
     public String getSourceTextTitle() {
         return sourceTextTitle;
     }
-/*
 
     public String getSourceTextAuthor() {
         return sourceTextAuthor;
@@ -87,7 +83,6 @@ private UpdateTranslationCaseRequest(String customerId, String translationCaseId
     public Double getWordsPerHour() {
         return wordsPerHour;
     }
-*/
 
 
     @Override
@@ -96,7 +91,7 @@ private UpdateTranslationCaseRequest(String customerId, String translationCaseId
                 "customerId='" + customerId + '\'' +
                 ", translationCaseId='" + translationCaseId + '\'' +
                 ", sourceTextTitle='" + sourceTextTitle + '\'' +
-/*                ", sourceTextAuthor='" + sourceTextAuthor + '\'' +
+                ", sourceTextAuthor='" + sourceTextAuthor + '\'' +
                 ", translatedTitle='" + translatedTitle + '\'' +
                 ", dueDate='" + dueDate + '\'' +
                 ", startDate='" + startDate + '\'' +
@@ -104,7 +99,7 @@ private UpdateTranslationCaseRequest(String customerId, String translationCaseId
                 ", openCase=" + openCase +
                 ", rushJob=" + rushJob +
                 ", totalWorkingHours=" + totalWorkingHours +
-                ", wordsPerHour=" + wordsPerHour +*/
+                ", wordsPerHour=" + wordsPerHour +
                 " }";
     }
 
@@ -118,7 +113,6 @@ private UpdateTranslationCaseRequest(String customerId, String translationCaseId
         private String customerId;
         private String translationCaseId;
         private String sourceTextTitle;
-/*
         private String sourceTextAuthor;
         private String translatedTitle;
         private String dueDate;
@@ -128,7 +122,6 @@ private UpdateTranslationCaseRequest(String customerId, String translationCaseId
         private Boolean rushJob;
         private Double totalWorkingHours;
         private Double wordsPerHour;
-*/
 
         public Builder withCustomerId(String customerId) {
             this.customerId = customerId;
@@ -144,7 +137,6 @@ private UpdateTranslationCaseRequest(String customerId, String translationCaseId
             this.sourceTextTitle = sourceTextTitle;
             return this;
         }
-/*
 
         public Builder withSourceTextAuthor(String sourceTextAuthor) {
             this.sourceTextAuthor = sourceTextAuthor;
@@ -190,15 +182,10 @@ private UpdateTranslationCaseRequest(String customerId, String translationCaseId
             this.wordsPerHour = wordsPerHour;
             return this;
         }
-*/
-
-/*        public UpdateTranslationCaseRequest build() {
-            return new UpdateTranslationCaseRequest(customerId, translationCaseId, sourceTextTitle, sourceTextAuthor,
-                    translatedTitle, dueDate, startDate, endDate, openCase, rushJob, totalWorkingHours, wordsPerHour);
-        }*/
 
         public UpdateTranslationCaseRequest build() {
-            return new UpdateTranslationCaseRequest(customerId, translationCaseId, sourceTextTitle);
+            return new UpdateTranslationCaseRequest(customerId, translationCaseId, sourceTextTitle, sourceTextAuthor,
+                    translatedTitle, dueDate, startDate, endDate, openCase, rushJob, totalWorkingHours, wordsPerHour);
         }
     }
 }

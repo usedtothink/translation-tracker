@@ -51,7 +51,6 @@ public class UpdateTranslationCaseActivity {
             translationCase.setSourceTextTitle(updateTranslationCaseRequest.getSourceTextTitle());
         }
 
-/*
         if (updateTranslationCaseRequest.getSourceTextAuthor() != null) {
             translationCase.setSourceTextAuthor(updateTranslationCaseRequest.getSourceTextAuthor());
         }
@@ -88,7 +87,8 @@ public class UpdateTranslationCaseActivity {
             translationCase.setWordsPerHour(updateTranslationCaseRequest.getWordsPerHour());
         }
 
-*/
+        caseDao.saveTranslationCase(translationCase);
+
         return UpdateTranslationCaseResult.builder()
                 .withTranslationCase(new ModelConverter().toTranslationCaseModel(translationCase))
                 .build();
