@@ -20,7 +20,7 @@ public class CreateTranslationCaseLambda
                         CreateTranslationCaseRequest.builder()
                                 .withCaseNickname(unauthenticatedRequest.getCaseNickname())
                                 .withProjectType(unauthenticatedRequest.getProjectType())
-                                .withCustomerId(unauthenticatedRequest.getCustomerId())
+                                .withCustomerId(claims.get("email"))
                                 .build());
             },
             (request, serviceComponent) ->

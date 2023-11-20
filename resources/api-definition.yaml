@@ -75,6 +75,8 @@ paths:
                     type: number
                   wordsPerHour:
                     type: number
+                  paymentHistory:
+                    type: string
 
     get:
       tags:
@@ -127,6 +129,8 @@ paths:
                           type: number
                         wordsPerHour:
                           type: number
+                        paymentHistory:
+                          type: string
 
   /translationcases/{translationCaseId}:
     get:
@@ -182,6 +186,8 @@ paths:
                     type: number
                   wordsPerHour:
                     type: number
+                  paymentHistory:
+                    type: string
         "500":
           description: "Invalid input parameters"
 
@@ -202,28 +208,11 @@ paths:
             schema:
               customerId:
                 type: string
-              projectType:
-                type: string
-              mostRecentActivity:
+              translationCaseId:
                 type: string
               sourceTextTitle:
                 type: string
-              sourceTextAuthor:
-                type: string
-              translatedTitle:
-                type: string
-              dueDate:
-                type: string
-              startDate:
-                type: string
-              endDate:
-                type: string
-              openCase:
-                type: boolean
-              rushJob:
-                type: boolean
-              progressLog:
-                type: string
+
       responses:
         "200":
           description: UpdateTranslationCaseResponse
@@ -240,15 +229,13 @@ paths:
                     type: string
                   caseNickname:
                     type: string
-                  projectType:
-                    type: string
-                  mostRecentActivity:
-                    type: string
                   sourceTextTitle:
                     type: string
                   sourceTextAuthor:
                     type: string
                   translatedTitle:
+                    type: string
+                  projectType:
                     type: string
                   dueDate:
                     type: string
@@ -266,6 +253,8 @@ paths:
                     type: number
                   wordsPerHour:
                     type: number
+                  paymentHistory:
+                    type: string
         "500":
           description: "Invalid input parameters"
 

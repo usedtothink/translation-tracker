@@ -1,8 +1,7 @@
 package com.nashss.se.translationtracker.model;
 
 import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
-import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
-import com.nashss.se.translationtracker.model.TranslationCaseModel;
+import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.types.ProjectType;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +16,7 @@ class TranslationCaseModelTest {
     @Test
     public void basicTestForTranslationCaseModel() {
         // GIVEN
+        String customerId = "customerId";
         String translationCaseId = "translationCaseId";
         String translationClientId = "translationClientId";
         String caseNickname = "caseNickname";
@@ -29,12 +29,13 @@ class TranslationCaseModelTest {
         String endDate = "31/12/2022";
         Boolean openCase = false;
         Boolean rushJob = false;
-        List<TranslationCaseUpdate> progressLog = new ArrayList<>(List.of(TranslationCaseUpdate.builder().build()));
+        List<ProgressUpdate> progressLog = new ArrayList<>(List.of(ProgressUpdate.builder().build()));
         Double totalWorkingHours = 3.2;
         Double wordsPerHour = 400.3;
         PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();
 
         TranslationCaseModel model = TranslationCaseModel.builder()
+                .withCustomerId(customerId)
                 .withTranslationCaseId(translationCaseId)
                 .withTranslationClientId(translationClientId)
                 .withCaseNickname(caseNickname)
@@ -54,6 +55,7 @@ class TranslationCaseModelTest {
                 .build();
 
         // WHEN & THEN
+        assertEquals(customerId, model.getCustomerId());
         assertEquals(translationCaseId, model.getTranslationCaseId());
         assertEquals(translationClientId, model.getTranslationClientId());
         assertEquals(caseNickname, model.getCaseNickname());

@@ -1,7 +1,7 @@
 package com.nashss.se.translationtracker.model;
 
 import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
-import com.nashss.se.translationtracker.dynamodb.models.TranslationCaseUpdate;
+import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.types.ProjectType;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class TranslationCaseModel {
     private String endDate;
     private Boolean openCase;
     private Boolean rushJob;
-    private List<TranslationCaseUpdate> progressLog;
+    private List<ProgressUpdate> progressLog;
     private Double totalWorkingHours;
     private Double wordsPerHour;
     private PaymentHistoryRecord paymentRecord;
@@ -32,7 +32,7 @@ public class TranslationCaseModel {
                                  String caseNickname, String sourceTextTitle, String sourceTextAuthor,
                                  String translatedTitle, ProjectType projectType, String dueDate, String startDate,
                                  String endDate, Boolean openCase, Boolean rushJob,
-                                 List<TranslationCaseUpdate> progressLog, Double totalWorkingHours, Double wordsPerHour,
+                                 List<ProgressUpdate> progressLog, Double totalWorkingHours, Double wordsPerHour,
                                  PaymentHistoryRecord paymentRecord) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
@@ -49,7 +49,7 @@ public class TranslationCaseModel {
         this.rushJob = rushJob;
         if (progressLog != null) {
             this.progressLog = progressLog.stream()
-                                            .map(TranslationCaseUpdate::defensiveCopyTranslationCaseUpdate)
+                                            .map(ProgressUpdate::defensiveCopyTranslationCaseUpdate)
                                             .collect(Collectors.toList());
         } else {
             this.progressLog = new ArrayList<>();
@@ -118,9 +118,9 @@ public class TranslationCaseModel {
         return rushJob;
     }
 
-    public List<TranslationCaseUpdate> getProgressLog() {
+    public List<ProgressUpdate> getProgressLog() {
         return progressLog.stream()
-                .map(TranslationCaseUpdate::defensiveCopyTranslationCaseUpdate)
+                .map(ProgressUpdate::defensiveCopyTranslationCaseUpdate)
                 .collect(Collectors.toList());
     }
 
@@ -191,7 +191,7 @@ public class TranslationCaseModel {
         private String endDate;
         private Boolean openCase;
         private Boolean rushJob;
-        private List<TranslationCaseUpdate> progressLog;
+        private List<ProgressUpdate> progressLog;
         private Double totalWorkingHours;
         private Double wordsPerHour;
         private PaymentHistoryRecord paymentRecord;
@@ -248,7 +248,7 @@ public class TranslationCaseModel {
             this.rushJob = rushJob;
             return this;
         }
-        public Builder withProgressLog(List<TranslationCaseUpdate> progressLog){
+        public Builder withProgressLog(List<ProgressUpdate> progressLog){
             this.progressLog = progressLog;
             return this;
         }
