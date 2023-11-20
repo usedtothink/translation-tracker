@@ -23,6 +23,7 @@ public class UpdateTranslationCaseLambda
                             // The TranslationCaseId is going to come in
                             // through the front end including it in the body
                             .withTranslationCaseId(unauthenticatedRequest.getTranslationCaseId())
+                            .withTranslationClientId(unauthenticatedRequest.getTranslationClientId())
                             .withSourceTextTitle(unauthenticatedRequest.getSourceTextTitle())
                             .withSourceTextAuthor(unauthenticatedRequest.getSourceTextAuthor())
                             .withTranslatedTitle(unauthenticatedRequest.getTranslatedTitle())

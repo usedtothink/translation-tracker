@@ -47,6 +47,10 @@ public class UpdateTranslationCaseActivity {
             throw new SecurityException("You must own a translation case to update it.");
         }
 
+        if (updateTranslationCaseRequest.getTranslationClientId() != null) {
+            translationCase.setTranslationClientId(updateTranslationCaseRequest.getTranslationClientId());
+        }
+
         if (updateTranslationCaseRequest.getSourceTextTitle() != null) {
             translationCase.setSourceTextTitle(updateTranslationCaseRequest.getSourceTextTitle());
         }

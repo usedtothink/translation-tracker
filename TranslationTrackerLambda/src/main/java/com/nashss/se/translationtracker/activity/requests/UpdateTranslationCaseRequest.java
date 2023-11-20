@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 public class UpdateTranslationCaseRequest {
     private final String customerId;
     private final String translationCaseId;
+    private final String translationClientId;
     private final String sourceTextTitle;
     private final String sourceTextAuthor;
     private final String translatedTitle;
@@ -18,12 +19,13 @@ public class UpdateTranslationCaseRequest {
     private final Double totalWorkingHours;
     private final Double wordsPerHour;
 
-    private UpdateTranslationCaseRequest(String customerId, String translationCaseId, String sourceTextTitle,
-                                         String sourceTextAuthor, String translatedTitle, String dueDate,
-                                         String startDate, String endDate, Boolean openCase, Boolean rushJob,
-                                         Double totalWorkingHours, Double wordsPerHour) {
+    private UpdateTranslationCaseRequest(String customerId, String translationCaseId, String translationClientId,
+                                         String sourceTextTitle, String sourceTextAuthor, String translatedTitle,
+                                         String dueDate, String startDate, String endDate, Boolean openCase,
+                                         Boolean rushJob, Double totalWorkingHours, Double wordsPerHour) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
+        this.translationClientId = translationClientId;
         this.sourceTextTitle = sourceTextTitle;
         this.sourceTextAuthor = sourceTextAuthor;
         this.translatedTitle = translatedTitle;
@@ -42,6 +44,10 @@ public class UpdateTranslationCaseRequest {
 
     public String getTranslationCaseId() {
         return translationCaseId;
+    }
+
+    public String getTranslationClientId() {
+        return translationClientId;
     }
 
     public String getSourceTextTitle() {
@@ -90,6 +96,7 @@ public class UpdateTranslationCaseRequest {
         return "UpdateTranslationCaseRequest{ " +
                 "customerId='" + customerId + '\'' +
                 ", translationCaseId='" + translationCaseId + '\'' +
+                ", translationClientId='" + translationClientId + '\'' +
                 ", sourceTextTitle='" + sourceTextTitle + '\'' +
                 ", sourceTextAuthor='" + sourceTextAuthor + '\'' +
                 ", translatedTitle='" + translatedTitle + '\'' +
@@ -112,6 +119,7 @@ public class UpdateTranslationCaseRequest {
     public static class Builder {
         private String customerId;
         private String translationCaseId;
+        private String translationClientId;
         private String sourceTextTitle;
         private String sourceTextAuthor;
         private String translatedTitle;
@@ -130,6 +138,11 @@ public class UpdateTranslationCaseRequest {
 
         public Builder withTranslationCaseId(String translationCaseId) {
             this.translationCaseId = translationCaseId;
+            return this;
+        }
+
+        public Builder withTranslationClientId(String translationClientId) {
+            this.translationClientId = translationClientId;
             return this;
         }
 
@@ -184,8 +197,9 @@ public class UpdateTranslationCaseRequest {
         }
 
         public UpdateTranslationCaseRequest build() {
-            return new UpdateTranslationCaseRequest(customerId, translationCaseId, sourceTextTitle, sourceTextAuthor,
-                    translatedTitle, dueDate, startDate, endDate, openCase, rushJob, totalWorkingHours, wordsPerHour);
+            return new UpdateTranslationCaseRequest(customerId, translationCaseId, translationClientId, sourceTextTitle,
+                    sourceTextAuthor, translatedTitle, dueDate, startDate, endDate, openCase, rushJob,
+                    totalWorkingHours, wordsPerHour);
         }
     }
 }
