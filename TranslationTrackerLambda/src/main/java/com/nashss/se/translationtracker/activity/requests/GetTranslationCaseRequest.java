@@ -13,9 +13,9 @@ public class GetTranslationCaseRequest {
 
     @Override
     public String toString() {
-        return "GetTransalationCaseRequest{ " +
-                "TranslationCaseId= '" + translationCaseId + '\'' +
-                " }";
+        return "GetTransalationCaseRequest{" +
+                "TranslationCaseId='" + translationCaseId + '\'' +
+                '}';
     }
 
     //CHECKSTYLE:OFF:Builder
