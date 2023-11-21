@@ -1,12 +1,12 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
 import com.nashss.se.translationtracker.converters.PaymentHistoryRecordConverter;
 import com.nashss.se.translationtracker.converters.TranslationCaseUpdateConverter;
 import com.nashss.se.translationtracker.types.ProjectType;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;

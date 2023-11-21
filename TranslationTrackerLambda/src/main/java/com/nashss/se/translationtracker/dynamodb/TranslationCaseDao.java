@@ -1,27 +1,27 @@
 package com.nashss.se.translationtracker.dynamodb;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.exceptions.DuplicateCaseException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Accesses data for a translation case using {@link TranslationCase} to represent the model in DynamoDB.
  */
 @Singleton
 public class TranslationCaseDao {
-    private final DynamoDBMapper dynamoDbMapper;
     public static final String CUSTOMER_INDEX = "CustomerIdIndex";
+    private final DynamoDBMapper dynamoDbMapper;
 
     /**
      * Instantiates a PlaylistDao object.

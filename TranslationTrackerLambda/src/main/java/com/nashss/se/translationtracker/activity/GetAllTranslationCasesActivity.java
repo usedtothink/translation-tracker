@@ -7,8 +7,9 @@ import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
 
-import javax.inject.Inject;
 import java.util.List;
+import javax.inject.Inject;
+
 
 /**
  * Implementation of the GetAllTranslationCasesActivity for Translation Tracker's GetAllTranslationCases API.
