@@ -19,30 +19,72 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 public class GetTranslationCaseActivityTest {
-    private String translationCaseId = "translationCaseId";
-    private String translationClientId = "translationClientId";
-    private String caseNickname = "caseNickname";
-    private String sourceTextTitle = "sourceTextTitle";
-    private String sourceTextAuthor = "sourceTextAuthor";
-    private String translatedTitle = "translatedTitle";
-    private ProjectType projectType = ProjectType.ACADEMIC;
-    private String dueDate = "01/01/2023";
-    private String startDate = "28/12/2022";
-    private String endDate = "31/12/2022";
-    private Boolean openCase = false;
-    private Boolean rushJob = false;
-    private List<ProgressUpdate> progressLog = new ArrayList<>(List.of(ProgressUpdate.builder().build()));
-    private Double totalWorkingHours = 3.2;
-    private Double wordsPerHour = 400.3;
-    private PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();
-    private TranslationCase translationCase = new TranslationCase();
 
     @Mock
     private TranslationCaseDao caseDao;
     private GetTranslationCaseActivity getTranslationCaseActivity;
+    private TranslationCase testTranslationCase;
 
     @BeforeEach
     void setup() {
+        testTranslationCase = getTestTranslationCase();
+        openMocks(this);
+        getTranslationCaseActivity = new GetTranslationCaseActivity(caseDao);
+    }
+
+    @Test
+    void handleRequest_savedTranslationCaseFound_returnsTranslationCaseModelInResult() {
+        // GIVEN
+        String expectedID = "ExpectedID";
+        testTranslationCase.setTranslationCaseId(expectedID);
+
+        when(caseDao.getTranslationCase(expectedID)).thenReturn(testTranslationCase);
+
+        GetTranslationCaseRequest request = GetTranslationCaseRequest.builder()
+                .withTranslationCaseId(expectedID)
+                .build();
+
+        // WHEN
+        GetTranslationCaseResult result = getTranslationCaseActivity.handleRequest(request);
+
+        // THEN
+        assertEquals(expectedID, result.getTranslationCase().getTranslationCaseId());
+        assertEquals(testTranslationCase.getTranslationClientId(), result.getTranslationCase().getTranslationClientId());
+        assertEquals(testTranslationCase.getCaseNickname(), result.getTranslationCase().getCaseNickname());
+        assertEquals(testTranslationCase.getSourceTextTitle(), result.getTranslationCase().getSourceTextTitle());
+        assertEquals(testTranslationCase.getSourceTextAuthor(), result.getTranslationCase().getSourceTextAuthor());
+        assertEquals(testTranslationCase.getTranslatedTitle(), result.getTranslationCase().getTranslatedTitle());
+        assertEquals(testTranslationCase.getProjectType(), result.getTranslationCase().getProjectType());
+        assertEquals(testTranslationCase.getDueDate(), result.getTranslationCase().getDueDate());
+        assertEquals(testTranslationCase.getStartDate(), result.getTranslationCase().getStartDate());
+        assertEquals(testTranslationCase.getEndDate(), result.getTranslationCase().getEndDate());
+        assertEquals(testTranslationCase.getOpenCase(), result.getTranslationCase().getOpenCase());
+        assertEquals(testTranslationCase.getRushJob(), result.getTranslationCase().getRushJob());
+        assertEquals(testTranslationCase.getProgressLog(), result.getTranslationCase().getProgressLog());
+        assertEquals(testTranslationCase.getTotalWorkingHours(), result.getTranslationCase().getTotalWorkingHours());
+        assertEquals(testTranslationCase.getWordsPerHour(), result.getTranslationCase().getWordsPerHour());
+        assertEquals(testTranslationCase.getPaymentRecord(), result.getTranslationCase().getPaymentRecord());
+    }
+
+    private TranslationCase getTestTranslationCase() {
+        String translationCaseId = "translationCaseId";
+        String translationClientId = "translationClientId";
+        String caseNickname = "caseNickname";
+        String sourceTextTitle = "sourceTextTitle";
+        String sourceTextAuthor = "sourceTextAuthor";
+        String translatedTitle = "translatedTitle";
+        ProjectType projectType = ProjectType.ACADEMIC;
+        String dueDate = "01/01/2023";
+        String startDate = "28/12/2022";
+        String endDate = "31/12/2022";
+        Boolean openCase = false;
+        Boolean rushJob = false;
+        List<ProgressUpdate> progressLog = new ArrayList<>(List.of(ProgressUpdate.builder().build()));
+        Double totalWorkingHours = 3.2;
+        Double wordsPerHour = 400.3;
+        PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();
+        TranslationCase translationCase = new TranslationCase();
+
         translationCase.setTranslationCaseId(translationCaseId);
         translationCase.setTranslationClientId(translationClientId);
         translationCase.setCaseNickname(caseNickname);
@@ -60,41 +102,6 @@ public class GetTranslationCaseActivityTest {
         translationCase.setWordsPerHour(wordsPerHour);
         translationCase.setPaymentRecord(paymentRecord);
 
-        openMocks(this);
-        getTranslationCaseActivity = new GetTranslationCaseActivity(caseDao);
-    }
-
-    @Test
-    void handleRequest_savedTranslationCaseFound_returnsTranslationCaseModelInResult() {
-        // GIVEN
-        String expectedID = "ExpectedID";
-        translationCase.setTranslationCaseId(expectedID);
-
-        when(caseDao.getTranslationCase(expectedID)).thenReturn(translationCase);
-
-        GetTranslationCaseRequest request = GetTranslationCaseRequest.builder()
-                .withTranslationCaseId(expectedID)
-                .build();
-
-        // WHEN
-        GetTranslationCaseResult result = getTranslationCaseActivity.handleRequest(request);
-
-        // THEN
-        assertEquals(expectedID, result.getTranslationCase().getTranslationCaseId());
-        assertEquals(translationClientId, result.getTranslationCase().getTranslationClientId());
-        assertEquals(caseNickname, result.getTranslationCase().getCaseNickname());
-        assertEquals(sourceTextTitle, result.getTranslationCase().getSourceTextTitle());
-        assertEquals(sourceTextAuthor, result.getTranslationCase().getSourceTextAuthor());
-        assertEquals(translatedTitle, result.getTranslationCase().getTranslatedTitle());
-        assertEquals(projectType, result.getTranslationCase().getProjectType());
-        assertEquals(dueDate, result.getTranslationCase().getDueDate());
-        assertEquals(startDate, result.getTranslationCase().getStartDate());
-        assertEquals(endDate, result.getTranslationCase().getEndDate());
-        assertEquals(openCase, result.getTranslationCase().getOpenCase());
-        assertEquals(rushJob, result.getTranslationCase().getRushJob());
-        assertEquals(progressLog, result.getTranslationCase().getProgressLog());
-        assertEquals(totalWorkingHours, result.getTranslationCase().getTotalWorkingHours());
-        assertEquals(wordsPerHour, result.getTranslationCase().getWordsPerHour());
-        assertEquals(paymentRecord, result.getTranslationCase().getPaymentRecord());
+        return translationCase;
     }
 }

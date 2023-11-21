@@ -5,6 +5,12 @@ import com.nashss.se.translationtracker.exceptions.DuplicateCaseException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,6 +20,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class TranslationCaseDao {
+    public static final String CUSTOMER_INDEX = "CustomerIdIndex";
     private final DynamoDBMapper dynamoDbMapper;
 
     /**
@@ -39,6 +46,23 @@ public class TranslationCaseDao {
             throw new TranslationCaseNotFoundException("Could not find translation case with id" + translationCaseId);
         }
         return translationCase;
+    }
+
+    /**
+     * Returns a list of {@link TranslationCase} corresponding to the customer id.
+     *
+     * @param customerId The customer ID.
+     * @return A list of stored TranslationCases, or null if none were found.
+     */
+    public List<TranslationCase> getAllTranslationCases(String customerId) {
+        Map<String, AttributeValue> valueMap = new HashMap<>();
+        valueMap.put(":customerId", new AttributeValue().withS(customerId));
+        DynamoDBQueryExpression<TranslationCase> queryExpression = new DynamoDBQueryExpression<TranslationCase>()
+                .withIndexName(CUSTOMER_INDEX)
+                .withConsistentRead(false)
+                .withKeyConditionExpression("customerId = :customerId")
+                .withExpressionAttributeValues(valueMap);
+        return dynamoDbMapper.query(TranslationCase.class, queryExpression);
     }
 
     /**
