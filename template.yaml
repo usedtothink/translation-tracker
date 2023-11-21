@@ -443,6 +443,18 @@ Resources:
             KeyType: "HASH"
         BillingMode: "PAY_PER_REQUEST"
         TableName: "translation_cases"
+        GlobalSecondaryIndexes:
+          - IndexName: "CustomerIdIndex"
+            KeySchema:
+              - AttributeName: "customerId"
+                KeyType: "HASH"
+            Projection:
+              ProjectionType: "INCLUDE"
+              NonKeyAttributes:
+                - "dueDate"
+                - "openCase"
+                - "projectType"
+                - "translatedTitle"
 
     TranslationClientsTable:
       Type: AWS::DynamoDB::Table
