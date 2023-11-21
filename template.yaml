@@ -438,6 +438,8 @@ Resources:
         AttributeDefinitions:
           - AttributeName: "translationCaseId"
             AttributeType: "S"
+          - AttributeName: "customerId"
+            AttributeType: "S"
         KeySchema:
           - AttributeName: "translationCaseId"
             KeyType: "HASH"
