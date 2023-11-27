@@ -24,9 +24,9 @@ public class TranslationCaseDao {
     private final DynamoDBMapper dynamoDbMapper;
 
     /**
-     * Instantiates a PlaylistDao object.
+     * Instantiates a TranslationCaseDao object.
      *
-     * @param dynamoDbMapper the {@link DynamoDBMapper} used to interact with the playlists table
+     * @param dynamoDbMapper the {@link DynamoDBMapper} used to interact with the translation case table.
      */
     @Inject
     public TranslationCaseDao(DynamoDBMapper dynamoDbMapper) {
@@ -85,11 +85,8 @@ public class TranslationCaseDao {
      * @throws DuplicateCaseException when the case nickname already exists.
      */
     public TranslationCase createTranslationCase(TranslationCase translationCase) {
-        if (dynamoDbMapper.load(TranslationCase.class, translationCase.getTranslationCaseId()) != null) {
-            throw new DuplicateCaseException("The case nickname " + translationCase.getCaseNickname() +
-                                                " already exists! Please choose a unique case nickname.");
-        }
-        this.dynamoDbMapper.save(translationCase);
+        // Update this to use a GSI to check for an existing translation case nickname
+        saveTranslationCase(translationCase);
         return translationCase;
     }
 
@@ -99,7 +96,7 @@ public class TranslationCaseDao {
      * @param customerId The id of the customer attempting to archive the case.
      * @param translationCaseId The id of the translation case to archive.
      * @return The TranslationCase object that was archived.
-     * @throws TranslationCaseNotFoundException if no case with the given id is found.
+     * @throws TranslationCaseNotFoundException if no translation case with the given id is found.
      * @throws SecurityException if the customerId does not match the customerId of the given case.
      */
     public TranslationCase archiveTranslationCase(String customerId, String translationCaseId) {
