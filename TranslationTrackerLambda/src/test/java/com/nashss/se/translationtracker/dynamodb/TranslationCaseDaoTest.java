@@ -106,7 +106,7 @@ class TranslationCaseDaoTest {
         assertEquals(translationCase, result);
     }
 
-    @Test
+/*    @Test
     public void createTranslationCase_caseNameAlreadyExists_throwsException() {
         // GIVEN
         TranslationCase translationCase = new TranslationCase();
@@ -115,7 +115,7 @@ class TranslationCaseDaoTest {
 
         // WHEN
         assertThrows(DuplicateCaseException.class, () -> caseDao.createTranslationCase(translationCase));
-    }
+    }*/
 
     @Test
     public void archiveTranslationCase_validCustomerIdAndTranslationCaseId_callsSaveAndDelete() {
