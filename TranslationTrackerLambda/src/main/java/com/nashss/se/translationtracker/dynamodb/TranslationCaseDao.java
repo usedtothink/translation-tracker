@@ -37,7 +37,8 @@ public class TranslationCaseDao {
      * Returns the {@link TranslationCase} corresponding to the specified id.
      *
      * @param translationCaseId The TranslationCase ID.
-     * @return The stored TranslationCase, or null if none was found.
+     * @return The stored TranslationCase.
+     * @throws TranslationCaseNotFoundException if a translation case with the given id does not exist.
      */
     public TranslationCase getTranslationCase(String translationCaseId) {
         TranslationCase translationCase = this.dynamoDbMapper.load(TranslationCase.class, translationCaseId);
@@ -89,6 +90,34 @@ public class TranslationCaseDao {
                                                 " already exists! Please choose a unique case nickname.");
         }
         this.dynamoDbMapper.save(translationCase);
+        return translationCase;
+    }
+
+    /**
+     * Archives the given translation case.
+     *
+     * @param customerId The id of the customer attempting to archive the case.
+     * @param translationCaseId The id of the translation case to archive.
+     * @return The TranslationCase object that was archived.
+     * @throws TranslationCaseNotFoundException if no case with the given id is found.
+     * @throws SecurityException if the customerId does not match the customerId of the given case.
+     */
+    public TranslationCase archiveTranslationCase(String customerId, String translationCaseId) {
+        TranslationCase translationCase = this.dynamoDbMapper.load(TranslationCase.class, translationCaseId);
+
+        if (translationCase == null) {
+            throw new TranslationCaseNotFoundException("Could not find translation case with id" + translationCaseId);
+        }
+
+        if (!translationCase.getCustomerId().equals(customerId)) {
+            throw new SecurityException("CustomerId does not match, users may only archive cases they own.");
+        }
+
+        translationCase.setTranslationCaseId("archived" + translationCaseId);
+        saveTranslationCase(translationCase);
+
+        translationCase.setTranslationCaseId(translationCaseId);
+        this.dynamoDbMapper.delete(translationCase);
         return translationCase;
     }
 }

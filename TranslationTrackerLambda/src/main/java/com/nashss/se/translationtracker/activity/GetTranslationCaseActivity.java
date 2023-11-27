@@ -18,7 +18,7 @@ public class GetTranslationCaseActivity {
     private final TranslationCaseDao caseDao;
 
     /**
-     * Instantiates a new GetTranslationCase Activity object.
+     * Instantiates a new GetTranslationCaseActivity object.
      * 
      * @param caseDao TranslationCaseDao to access the translation case table. 
      */
