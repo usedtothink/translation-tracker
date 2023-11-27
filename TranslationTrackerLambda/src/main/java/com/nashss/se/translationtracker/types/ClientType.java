@@ -1,6 +1,6 @@
 package com.nashss.se.translationtracker.types;
 
-public enum TranslationClientType {
+public enum ClientType {
     BUSINESS,
     CAMPAIGN,
     COMMERCIAL,

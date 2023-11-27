@@ -1,6 +1,6 @@
 package com.nashss.se.translationtracker.model;
 
-import com.nashss.se.translationtracker.types.TranslationClientType;
+import com.nashss.se.translationtracker.types.ClientType;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -9,15 +9,15 @@ public class TranslationClientModel {
     private String customerId;
     private String translationClientId;
     private String translationClientName;
-    private TranslationClientType translationClientType;
+    private ClientType clientType;
     private String mostRecentActivity;
 
     private TranslationClientModel(String customerId, String translationClientId, String translationClientName,
-                                   TranslationClientType translationClientType) {
+                                   ClientType clientType) {
         this.customerId = customerId;
         this.translationClientId = translationClientId;
         this.translationClientName = translationClientName;
-        this.translationClientType = translationClientType;
+        this.clientType = clientType;
         this.mostRecentActivity = ZonedDateTime.now().toString();
     }
 
@@ -33,8 +33,8 @@ public class TranslationClientModel {
         return translationClientName;
     }
 
-    public TranslationClientType getTranslationClientType() {
-        return translationClientType;
+    public ClientType getTranslationClientType() {
+        return clientType;
     }
 
     public String getMostRecentActivity() {
@@ -72,7 +72,7 @@ public class TranslationClientModel {
         private String customerId;
         private String translationClientId;
         private String translationClientName;
-        private TranslationClientType translationClientType;
+        private ClientType clientType;
 
         public Builder withCustomerId(String customerId) {
             this.customerId = customerId;
@@ -89,14 +89,14 @@ public class TranslationClientModel {
             return this;
         }
 
-        public Builder withTranslationClientType(TranslationClientType translationClientType) {
-            this.translationClientType = translationClientType;
+        public Builder withTranslationClientType(ClientType clientType) {
+            this.clientType = clientType;
             return this;
         }
 
         public TranslationClientModel build() {
             return new TranslationClientModel(customerId, translationClientId, translationClientName,
-                    translationClientType);
+                    clientType);
         }
 
     }
