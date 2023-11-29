@@ -87,7 +87,7 @@ class UpdateTranslationCaseActivityTest {
     }
 
     @Test
-    void handleRequest_customerIdWrong_throwsException() {
+    void handleRequest_wrongCustomerId_throwsException() {
         // GIVEN
         UpdateTranslationCaseRequest request = UpdateTranslationCaseRequest.builder()
                 .withCustomerId("NewCustomerId")
@@ -100,7 +100,6 @@ class UpdateTranslationCaseActivityTest {
     }
 
     private TranslationCase getTestTranslationCase() {
-        String customerId = "customerId";
         String translationClientId = "translationClientId";
         String caseNickname = "caseNickname";
         String sourceTextTitle = "sourceTextTitle";

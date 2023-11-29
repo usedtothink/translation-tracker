@@ -380,18 +380,21 @@ paths:
                         mostRecentActivity:
                           type: string
 
-  /translationclients/{translationClientId}:
+  /translationclients/client:
     get:
       tags:
         - TranslationClients
       summary: Get an existing translation client (GetTranslationClientsLambda)
-      parameters:
-        - name: translationClientId
-          in: path
-          description: ID of translation client to retrieve
-          required: true
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: string
+                translationClientId:
+                  type: string
       responses:
         "200":
           description: GetTranslationClientResponse
@@ -407,8 +410,6 @@ paths:
                   translationClientName:
                     type: string
                   translationClientType:
-                    type: string
-                  mostRecentActivity:
                     type: string
         "500":
           description: "Invalid input parameters"

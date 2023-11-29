@@ -1,5 +1,8 @@
 package com.nashss.se.translationtracker.activity.requests;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+@JsonDeserialize(builder = GetTranslationCaseRequest.Builder.class)
 public class GetTranslationCaseRequest {
     private final String translationCaseId;
 

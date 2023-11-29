@@ -35,7 +35,7 @@ public class GetTranslationCaseActivity {
      * If the translation case does not exist, this should throw a TranslationCaseNotFoundException.
      *
      * @param getTranslationCaseRequest request object containing the translation case ID.
-     * @return getTranslationCaseResult result object containing the API defined {@link TranslationCaseModel}
+     * @return GetTranslationCaseResult result object containing the API defined {@link TranslationCaseModel}
      */
     public GetTranslationCaseResult handleRequest(final GetTranslationCaseRequest getTranslationCaseRequest) {
         String requestedId = getTranslationCaseRequest.getTranslationCaseId();

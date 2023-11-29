@@ -2,7 +2,6 @@ package com.nashss.se.translationtracker.model;
 
 import com.nashss.se.translationtracker.types.ClientType;
 
-import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class TranslationClientModel {

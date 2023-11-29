@@ -5,6 +5,7 @@ import com.nashss.se.translationtracker.activity.CreateTranslationCaseActivity;
 import com.nashss.se.translationtracker.activity.CreateTranslationClientActivity;
 import com.nashss.se.translationtracker.activity.GetAllTranslationCasesActivity;
 import com.nashss.se.translationtracker.activity.GetTranslationCaseActivity;
+import com.nashss.se.translationtracker.activity.GetTranslationClientActivity;
 import com.nashss.se.translationtracker.activity.UpdateTranslationCaseActivity;
 
 import dagger.Component;
@@ -50,7 +51,13 @@ public interface ServiceComponent {
 
     /**
      * Provides the relevant activity.
-     * @return CreeateTranslationClientActivity
+     * @return CreateTranslationClientActivity
      */
     CreateTranslationClientActivity provideCreateTranslationClientActivity();
+
+    /**
+     * Provides the relevant activity.
+     * @return GetTranslationClientActivity
+     */
+    GetTranslationClientActivity provideGetTranslationClientActivity();
 }
