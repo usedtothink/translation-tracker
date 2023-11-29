@@ -25,7 +25,7 @@ public class TranslationClient {
         this.customerId = customerId;
     }
 
-    @DynamoDBHashKey(attributeName = "translationClientID")
+    @DynamoDBHashKey(attributeName = "translationClientId")
     public String getTranslationClientId() {
         return translationClientId;
     }

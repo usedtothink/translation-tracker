@@ -10,7 +10,6 @@ public class TranslationClientModel {
     private String translationClientId;
     private String translationClientName;
     private ClientType clientType;
-    private String mostRecentActivity;
 
     private TranslationClientModel(String customerId, String translationClientId, String translationClientName,
                                    ClientType clientType) {
@@ -18,7 +17,6 @@ public class TranslationClientModel {
         this.translationClientId = translationClientId;
         this.translationClientName = translationClientName;
         this.clientType = clientType;
-        this.mostRecentActivity = ZonedDateTime.now().toString();
     }
 
     public String getCustomerId() {
@@ -37,10 +35,6 @@ public class TranslationClientModel {
         return clientType;
     }
 
-    public String getMostRecentActivity() {
-        return mostRecentActivity;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -53,14 +47,13 @@ public class TranslationClientModel {
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
-                Objects.equals(getTranslationClientType(), that.getTranslationClientType()) &&
-                Objects.equals(getMostRecentActivity(), that.getMostRecentActivity());
+                Objects.equals(getTranslationClientType(), that.getTranslationClientType());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getCustomerId(), getTranslationClientId(), getTranslationClientName(),
-                getTranslationClientType(), getMostRecentActivity());
+                getTranslationClientType());
     }
 
     //CHECKSTYLE:OFF:Builder

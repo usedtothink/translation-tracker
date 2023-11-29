@@ -32,12 +32,14 @@ class CreateTranslationCaseActivityTest {
     @Test
     void handleRequest_createsAndSavesTranslationCase() {
         // GIVEN
+        String expectedCustomerId = "expectedCustomer";
         String expectedCaseNickname = "expectedNickname";
         ProjectType expectedProjectType = ProjectType.ACADEMIC;
 
         CreateTranslationCaseRequest request = CreateTranslationCaseRequest.builder()
                 .withCaseNickname(expectedCaseNickname)
                 .withProjectType(expectedProjectType.name())
+                .withCustomerId(expectedCustomerId)
                 .build();
 
         // WHEN
@@ -47,6 +49,7 @@ class CreateTranslationCaseActivityTest {
         verify(caseDao).createTranslationCase(any(TranslationCase.class));
 
         assertNotNull(result.getTranslationCase().getTranslationCaseId());
+        assertEquals(expectedCustomerId, result.getTranslationCase().getCustomerId());
         assertEquals(expectedCaseNickname, result.getTranslationCase().getCaseNickname());
         assertEquals(expectedProjectType, result.getTranslationCase().getProjectType());
     }
