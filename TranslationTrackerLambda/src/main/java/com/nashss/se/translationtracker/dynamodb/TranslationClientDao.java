@@ -32,12 +32,16 @@ public class TranslationClientDao {
      * @return The stored TranslationClient.
      * @throws TranslationClientNotFoundException if a translation client with the given id does not exist.
      */
-    public TranslationClient getTranslationClient(String translationClientId) {
+    public TranslationClient getTranslationClient(String customerId, String translationClientId) {
         TranslationClient translationClient = this.dynamoDbMapper.load(TranslationClient.class, translationClientId);
 
         if (translationClient == null) {
             throw new TranslationClientNotFoundException("Could not find translation client with id" +
                     translationClientId);
+        }
+
+        if (!translationClient.getCustomerId().equals(customerId)) {
+            throw new SecurityException("CustomerId does not match, users may only retrieve cases they own.");
         }
         return translationClient;
     }

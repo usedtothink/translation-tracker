@@ -7,10 +7,10 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 @JsonDeserialize(builder = CreateTranslationClientRequest.Builder.class)
 public class CreateTranslationClientRequest {
-    private String customerId;
-    private String translationClientId;
-    private String translationClientName;
-    private String translationClientType;
+    private final String customerId;
+    private final String translationClientId;
+    private final String translationClientName;
+    private final String translationClientType;
 
     private CreateTranslationClientRequest(String customerId, String translationClientName,
                                            String translationClientType) {
