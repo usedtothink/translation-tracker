@@ -76,8 +76,14 @@ public class TranslationCaseDao {
      *
      * @param translationCase The translation case to save.
      * @return The TranslationCase object that was saved.
+     * @throws SecurityException if the customerId on the existing translation case does not match the update.
      */
     public TranslationCase saveTranslationCase(TranslationCase translationCase) {
+        TranslationCase existingCase = dynamoDbMapper.load(TranslationCase.class,
+                translationCase.getTranslationCaseId());
+        if (existingCase != null && !existingCase.getCustomerId().equals(translationCase.getCustomerId())) {
+            throw new SecurityException("CustomerId does not match, users may only update cases they own.");
+        }
         this.dynamoDbMapper.save(translationCase);
         return translationCase;
     }
