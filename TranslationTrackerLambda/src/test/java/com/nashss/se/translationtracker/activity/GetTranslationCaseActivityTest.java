@@ -38,7 +38,8 @@ public class GetTranslationCaseActivityTest {
         String expectedID = "ExpectedID";
         testTranslationCase.setTranslationCaseId(expectedID);
 
-        when(caseDao.getTranslationCase(expectedID)).thenReturn(testTranslationCase);
+        when(caseDao.getTranslationCase(testTranslationCase.getCustomerId(), expectedID))
+                .thenReturn(testTranslationCase);
 
         GetTranslationCaseRequest request = GetTranslationCaseRequest.builder()
                 .withTranslationCaseId(expectedID)

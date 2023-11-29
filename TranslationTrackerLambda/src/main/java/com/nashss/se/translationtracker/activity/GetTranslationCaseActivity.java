@@ -39,7 +39,8 @@ public class GetTranslationCaseActivity {
      */
     public GetTranslationCaseResult handleRequest(final GetTranslationCaseRequest getTranslationCaseRequest) {
         String requestedId = getTranslationCaseRequest.getTranslationCaseId();
-        TranslationCase translationCase = caseDao.getTranslationCase(requestedId);
+        String customerId = getTranslationCaseRequest.getCustomerId();
+        TranslationCase translationCase = caseDao.getTranslationCase(customerId, requestedId);
         TranslationCaseModel translationCaseModel = new ModelConverter().toTranslationCaseModel(translationCase);
 
         return GetTranslationCaseResult.builder()

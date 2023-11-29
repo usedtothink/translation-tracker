@@ -40,12 +40,17 @@ public class TranslationCaseDao {
      * @return The stored TranslationCase.
      * @throws TranslationCaseNotFoundException if a translation case with the given id does not exist.
      */
-    public TranslationCase getTranslationCase(String translationCaseId) {
+    public TranslationCase getTranslationCase(String customerId, String translationCaseId) {
         TranslationCase translationCase = this.dynamoDbMapper.load(TranslationCase.class, translationCaseId);
 
         if (translationCase == null) {
-            throw new TranslationCaseNotFoundException("Could not find translation case with id" + translationCaseId);
+            throw new TranslationCaseNotFoundException("Could not find translation case with id " + translationCaseId);
         }
+
+        if (!translationCase.getCustomerId().equals(customerId)) {
+            throw new SecurityException("CustomerId does not match, users may only retrieve cases they own.");
+        }
+
         return translationCase;
     }
 
@@ -71,8 +76,14 @@ public class TranslationCaseDao {
      *
      * @param translationCase The translation case to save.
      * @return The TranslationCase object that was saved.
+     * @throws SecurityException if the customerId on the existing translation case does not match the update.
      */
     public TranslationCase saveTranslationCase(TranslationCase translationCase) {
+        TranslationCase existingCase = dynamoDbMapper.load(TranslationCase.class,
+                translationCase.getTranslationCaseId());
+        if (existingCase != null && !existingCase.getCustomerId().equals(translationCase.getCustomerId())) {
+            throw new SecurityException("CustomerId does not match, users may only update cases they own.");
+        }
         this.dynamoDbMapper.save(translationCase);
         return translationCase;
     }

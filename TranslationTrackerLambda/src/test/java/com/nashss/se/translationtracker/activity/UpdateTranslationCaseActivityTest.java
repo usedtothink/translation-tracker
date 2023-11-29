@@ -65,7 +65,7 @@ class UpdateTranslationCaseActivityTest {
                 .withWordsPerHour(wordsPerHour)
                 .build();
 
-        when(caseDao.getTranslationCase(TRANSLATION_CASE_ID)).thenReturn(testTranslationCase);
+        when(caseDao.getTranslationCase(CUSTOMER_ID, TRANSLATION_CASE_ID)).thenReturn(testTranslationCase);
 
         // WHEN
         UpdateTranslationCaseResult result = updateTranslationCaseActivity.handleRequest(request);
@@ -89,11 +89,12 @@ class UpdateTranslationCaseActivityTest {
     @Test
     void handleRequest_wrongCustomerId_throwsException() {
         // GIVEN
+        String wrongId = "wrongId";
         UpdateTranslationCaseRequest request = UpdateTranslationCaseRequest.builder()
-                .withCustomerId("NewCustomerId")
+                .withCustomerId(wrongId)
                 .withTranslationCaseId(TRANSLATION_CASE_ID)
                 .build();
-        when(caseDao.getTranslationCase(TRANSLATION_CASE_ID)).thenReturn(testTranslationCase);
+        when(caseDao.getTranslationCase(wrongId, TRANSLATION_CASE_ID)).thenReturn(testTranslationCase);
 
         // WHEN & THEN
         assertThrows(SecurityException.class, () -> updateTranslationCaseActivity.handleRequest(request));

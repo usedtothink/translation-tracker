@@ -9,15 +9,20 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 public class GetTranslationCaseLambda
         extends LambdaActivityRunner<GetTranslationCaseRequest, GetTranslationCaseResult>
-        implements RequestHandler<LambdaRequest<GetTranslationCaseRequest>, LambdaResponse> {
+        implements RequestHandler<AuthenticatedLambdaRequest<GetTranslationCaseRequest>, LambdaResponse> {
 
     @Override
-    public LambdaResponse handleRequest(LambdaRequest<GetTranslationCaseRequest> input, Context context) {
+    public LambdaResponse handleRequest(AuthenticatedLambdaRequest<GetTranslationCaseRequest> input, Context context) {
         return super.runActivity(
-            () -> input.fromPath(path ->
-                    GetTranslationCaseRequest.builder()
-                            .withTranslationCaseId(path.get("id"))
-                            .build()),
+            () -> {
+                GetTranslationCaseRequest unauthenticatedRequest =
+                        input.fromBody(GetTranslationCaseRequest.class);
+                return input.fromUserClaims(claims ->
+                        GetTranslationCaseRequest.builder()
+                                .withTranslationCaseId(unauthenticatedRequest.getTranslationCaseId())
+                                .withCustomerId(claims.get("email"))
+                                .build());
+            },
             (request, serviceComponent) ->
                     serviceComponent.provideGetTranslationCaseActivity().handleRequest(request)
         );
