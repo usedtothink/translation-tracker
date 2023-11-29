@@ -1,6 +1,6 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
-import com.nashss.se.translationtracker.types.TranslationClientType;
+import com.nashss.se.translationtracker.types.ClientType;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
@@ -14,8 +14,7 @@ public class TranslationClient {
     private String customerId;
     private String translationClientId;
     private String translationClientName;
-    private TranslationClientType translationClientType;
-    private String mostRecentActivity;
+    private ClientType translationClientType;
 
     @DynamoDBAttribute(attributeName =  "customerId")
     public String getCustomerId() {
@@ -26,7 +25,7 @@ public class TranslationClient {
         this.customerId = customerId;
     }
 
-    @DynamoDBHashKey(attributeName = "translationClientID")
+    @DynamoDBHashKey(attributeName = "translationClientId")
     public String getTranslationClientId() {
         return translationClientId;
     }
@@ -46,21 +45,12 @@ public class TranslationClient {
 
     @DynamoDBTypeConvertedEnum
     @DynamoDBAttribute(attributeName = "translationClientType")
-    public TranslationClientType getTranslationClientType() {
+    public ClientType getTranslationClientType() {
         return translationClientType;
     }
 
-    public void setTranslationClientType(TranslationClientType translationClientType) {
+    public void setTranslationClientType(ClientType translationClientType) {
         this.translationClientType = translationClientType;
-    }
-
-    @DynamoDBAttribute(attributeName = "mostRecentActivity")
-    public String getMostRecentActivity() {
-        return mostRecentActivity;
-    }
-
-    public void setMostRecentActivity(String mostRecentActivity) {
-        this.mostRecentActivity = mostRecentActivity;
     }
 
     @Override
@@ -75,13 +65,12 @@ public class TranslationClient {
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
-                getTranslationClientType() == that.getTranslationClientType() &&
-                Objects.equals(getMostRecentActivity(), that.getMostRecentActivity());
+                getTranslationClientType() == that.getTranslationClientType();
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getCustomerId(), getTranslationClientId(), getTranslationClientName(),
-                getTranslationClientType(), getMostRecentActivity());
+                getTranslationClientType());
     }
 }

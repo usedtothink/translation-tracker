@@ -13,7 +13,7 @@ import javax.inject.Inject;
 /**
  * Implementation of the CreateTranslationCaseActivity for the TranslationTracker's CreateTranslationCase API.
  * <p>
- * This API allows the customer to create a new translation case that is linked to a translation client.
+ * This API allows the customer to create a new translation case.
  */
 
 public class CreateTranslationCaseActivity {
@@ -30,7 +30,7 @@ public class CreateTranslationCaseActivity {
     }
     /**
      * This method handles the incoming request by persisting a new translation case
-     * with the provided case nickname and translation client ID from the request.
+     * with the provided customer ID, case nickname and project type from the request.
      * <p>
      * Then it returns the newly created translation case.
      * <p>

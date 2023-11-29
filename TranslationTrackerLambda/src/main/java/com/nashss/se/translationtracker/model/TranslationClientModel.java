@@ -1,6 +1,6 @@
 package com.nashss.se.translationtracker.model;
 
-import com.nashss.se.translationtracker.types.TranslationClientType;
+import com.nashss.se.translationtracker.types.ClientType;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -9,16 +9,14 @@ public class TranslationClientModel {
     private String customerId;
     private String translationClientId;
     private String translationClientName;
-    private TranslationClientType translationClientType;
-    private String mostRecentActivity;
+    private ClientType clientType;
 
     private TranslationClientModel(String customerId, String translationClientId, String translationClientName,
-                                   TranslationClientType translationClientType) {
+                                   ClientType clientType) {
         this.customerId = customerId;
         this.translationClientId = translationClientId;
         this.translationClientName = translationClientName;
-        this.translationClientType = translationClientType;
-        this.mostRecentActivity = ZonedDateTime.now().toString();
+        this.clientType = clientType;
     }
 
     public String getCustomerId() {
@@ -33,12 +31,8 @@ public class TranslationClientModel {
         return translationClientName;
     }
 
-    public TranslationClientType getTranslationClientType() {
-        return translationClientType;
-    }
-
-    public String getMostRecentActivity() {
-        return mostRecentActivity;
+    public ClientType getTranslationClientType() {
+        return clientType;
     }
 
     @Override
@@ -53,14 +47,13 @@ public class TranslationClientModel {
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
-                Objects.equals(getTranslationClientType(), that.getTranslationClientType()) &&
-                Objects.equals(getMostRecentActivity(), that.getMostRecentActivity());
+                Objects.equals(getTranslationClientType(), that.getTranslationClientType());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getCustomerId(), getTranslationClientId(), getTranslationClientName(),
-                getTranslationClientType(), getMostRecentActivity());
+                getTranslationClientType());
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -72,7 +65,7 @@ public class TranslationClientModel {
         private String customerId;
         private String translationClientId;
         private String translationClientName;
-        private TranslationClientType translationClientType;
+        private ClientType clientType;
 
         public Builder withCustomerId(String customerId) {
             this.customerId = customerId;
@@ -89,14 +82,14 @@ public class TranslationClientModel {
             return this;
         }
 
-        public Builder withTranslationClientType(TranslationClientType translationClientType) {
-            this.translationClientType = translationClientType;
+        public Builder withTranslationClientType(ClientType clientType) {
+            this.clientType = clientType;
             return this;
         }
 
         public TranslationClientModel build() {
             return new TranslationClientModel(customerId, translationClientId, translationClientName,
-                    translationClientType);
+                    clientType);
         }
 
     }

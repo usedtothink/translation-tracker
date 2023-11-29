@@ -2,7 +2,9 @@ package com.nashss.se.translationtracker.converters;
 
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
+import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
+import com.nashss.se.translationtracker.model.TranslationClientModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +56,43 @@ public class ModelConverter {
     public List<TranslationCaseModel> toTranslationCaseModelList(List<TranslationCase> translationCases) {
         List<TranslationCaseModel> translationCaseModels = new ArrayList<>();
 
-        for (TranslationCase translationCase  : translationCases) {
+        for (TranslationCase translationCase : translationCases) {
             translationCaseModels.add(toTranslationCaseModel(translationCase));
         }
 
         return translationCaseModels;
+    }
+
+    /**
+     * Converts a provided {@link TranslationClient} into a {@link TranslationClientModel} representation.
+     *
+     * @param translationClient the translation client to convert
+     * @return the converted translation client
+     */
+    public TranslationClientModel toTranslationClientModel(TranslationClient translationClient) {
+
+        return TranslationClientModel.builder()
+                .withCustomerId(translationClient.getCustomerId())
+                .withTranslationClientId(translationClient.getTranslationClientId())
+                .withTranslationClientType(translationClient.getTranslationClientType())
+                .withTranslationClientName(translationClient.getTranslationClientName())
+                .build();
+    }
+
+    /**
+     * Converts a list of TranslationClients to a list of TranslationClientModels.
+     *
+     * @param translationClients The TranslationClients to convert to TranslationClientModels
+     * @return The converted list of TranslationClientModels
+     */
+    public List<TranslationClientModel> toTranslationClientModelList(List<TranslationClient> translationClients) {
+        List<TranslationClientModel> translationClientModels = new ArrayList<>();
+
+        for (TranslationClient translationClient : translationClients) {
+            translationClientModels.add(toTranslationClientModel(translationClient));
+        }
+
+        return translationClientModels;
     }
 
 }
