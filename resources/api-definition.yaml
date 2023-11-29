@@ -132,18 +132,21 @@ paths:
                         paymentHistory:
                           type: string
 
-  /translationcases/{translationCaseId}:
+  /translationcases/case:
     get:
       tags:
         - TranslationCases
       summary: Get an existing translation case (GetTranslationCaseLambda)
-      parameters:
-        - name: translationCaseId
-          in: path
-          description: ID of translation case to retrieve
-          required: true
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: string
+                translationCaseId:
+                  type: string
       responses:
         "200":
           description: GetTranslationCaseResponse
@@ -195,13 +198,6 @@ paths:
       tags:
         -TranslationCases
       summary: Update an existing translation case (UpdateTranslationCaseLambda)
-      parameters:
-        - name: translationCaseId
-          in: path
-          description: ID of translation case to retrieve
-          required: true
-          schema:
-            type: string
       requestBody:
         content:
           application/json:
@@ -210,9 +206,6 @@ paths:
                 type: string
               translationCaseId:
                 type: string
-              sourceTextTitle:
-                type: string
-
       responses:
         "200":
           description: UpdateTranslationCaseResponse
@@ -262,13 +255,14 @@ paths:
       tags:
         - TranslationCases
       summary: Archive an existing translation case (ArchiveTranslationCaseLambda)
-      parameters:
-        - name: translationCaseId
-          in: path
-          description: ID of translation case to archive
-          required: true
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              customerId:
+                type: string
+              translationCaseId:
+                type: string
       responses:
         "200":
           description: ArchiveTranslationCaseResponse

@@ -4,10 +4,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(builder = GetTranslationCaseRequest.Builder.class)
 public class GetTranslationCaseRequest {
+    private final String customerId;
     private final String translationCaseId;
 
-    private GetTranslationCaseRequest(String translationCaseId) {
+    private GetTranslationCaseRequest(String customerId, String translationCaseId) {
+        this.customerId = customerId;
         this.translationCaseId = translationCaseId;
+    }
+
+    public String getCustomerId() {
+        return customerId;
     }
 
     public String getTranslationCaseId() {
@@ -16,8 +22,9 @@ public class GetTranslationCaseRequest {
 
     @Override
     public String toString() {
-        return "GetTransalationCaseRequest{" +
-                "TranslationCaseId='" + translationCaseId + '\'' +
+        return "GetTranslationCaseRequest{" +
+                "customerId='" + customerId + '\'' +
+                ", translationCaseId='" + translationCaseId + '\'' +
                 '}';
     }
 
@@ -27,7 +34,13 @@ public class GetTranslationCaseRequest {
     }
 
     public static class Builder {
+        private String customerId;
         private String translationCaseId;
+
+        public Builder withCustomerId(String customerId) {
+            this.customerId = customerId;
+            return this;
+        }
 
         public Builder withTranslationCaseId(String translationCaseId) {
             this.translationCaseId = translationCaseId;
@@ -35,7 +48,7 @@ public class GetTranslationCaseRequest {
         }
 
         public GetTranslationCaseRequest build() {
-            return new GetTranslationCaseRequest(translationCaseId);
+            return new GetTranslationCaseRequest(customerId, translationCaseId);
         }
     }
 }

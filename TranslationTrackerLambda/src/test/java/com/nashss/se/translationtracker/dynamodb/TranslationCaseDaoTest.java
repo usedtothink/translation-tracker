@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 class TranslationCaseDaoTest {
     private static final String TRANSLATION_CASE_ID = "translationCaseId";
     private static final String NON_EXISTENT_CASE_ID = "not a translationCaseId";
+    private static final String CUSTOMER_ID = "customerId";
     @Mock
     private DynamoDBMapper dynamoDBMapper;
 
@@ -39,10 +40,13 @@ class TranslationCaseDaoTest {
     @Test
     public void getTranslationCase_withTranslationCaseId_callsMapperWithPartitionKey() {
         // GIVEN
-        when(dynamoDBMapper.load(TranslationCase.class, TRANSLATION_CASE_ID)).thenReturn(new TranslationCase());
+        TranslationCase testTranslationCase = new TranslationCase();
+        testTranslationCase.setCustomerId(CUSTOMER_ID);
+
+        when(dynamoDBMapper.load(TranslationCase.class, TRANSLATION_CASE_ID)).thenReturn(testTranslationCase);
 
         // WHEN
-        TranslationCase translationCase = caseDao.getTranslationCase(TRANSLATION_CASE_ID);
+        TranslationCase translationCase = caseDao.getTranslationCase(CUSTOMER_ID, TRANSLATION_CASE_ID);
 
         // THEN
         assertNotNull(translationCase);
@@ -55,7 +59,8 @@ class TranslationCaseDaoTest {
         when(dynamoDBMapper.load(TranslationCase.class, NON_EXISTENT_CASE_ID)).thenReturn(null);
 
         // WHEN & THEN
-        assertThrows(TranslationCaseNotFoundException.class, () -> caseDao.getTranslationCase(NON_EXISTENT_CASE_ID));
+        assertThrows(TranslationCaseNotFoundException.class, () -> caseDao.getTranslationCase(CUSTOMER_ID,
+                NON_EXISTENT_CASE_ID));
     }
 
     @Test

@@ -40,12 +40,17 @@ public class TranslationCaseDao {
      * @return The stored TranslationCase.
      * @throws TranslationCaseNotFoundException if a translation case with the given id does not exist.
      */
-    public TranslationCase getTranslationCase(String translationCaseId) {
+    public TranslationCase getTranslationCase(String customerId, String translationCaseId) {
         TranslationCase translationCase = this.dynamoDbMapper.load(TranslationCase.class, translationCaseId);
 
         if (translationCase == null) {
-            throw new TranslationCaseNotFoundException("Could not find translation case with id" + translationCaseId);
+            throw new TranslationCaseNotFoundException("Could not find translation case with id " + translationCaseId);
         }
+
+        if (!translationCase.getCustomerId().equals(customerId)) {
+            throw new SecurityException("CustomerId does not match, users may only retrieve cases they own.");
+        }
+
         return translationCase;
     }
 

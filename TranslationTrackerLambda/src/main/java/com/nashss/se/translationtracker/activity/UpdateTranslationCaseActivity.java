@@ -41,8 +41,10 @@ public class UpdateTranslationCaseActivity {
      * @return updateTranslationCaseResult Result object containing the API defined {@link TranslationCaseModel}
      */
     public UpdateTranslationCaseResult handleRequest(final UpdateTranslationCaseRequest updateTranslationCaseRequest) {
-        TranslationCase translationCase = caseDao.getTranslationCase(updateTranslationCaseRequest
-                                                                        .getTranslationCaseId());
+        String requestedId = updateTranslationCaseRequest.getTranslationCaseId();
+        String customerId = updateTranslationCaseRequest.getCustomerId();
+        TranslationCase translationCase = caseDao.getTranslationCase(customerId, requestedId);
+
         if (!translationCase.getCustomerId().equals(updateTranslationCaseRequest.getCustomerId())) {
             throw new SecurityException("You must own a translation case to update it.");
         }
