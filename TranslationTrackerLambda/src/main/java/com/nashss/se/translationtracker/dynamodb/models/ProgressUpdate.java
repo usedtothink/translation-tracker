@@ -70,6 +70,8 @@ public final class ProgressUpdate {
      */
     public static ProgressUpdate defensiveCopyTranslationCaseUpdate(ProgressUpdate original) {
         return ProgressUpdate.builder()
+                .withCustomerId(original.getCustomerId())
+                .withTranslationCaseId(original.getTranslationCaseId())
                 .withWordCount(original.getWordCount())
                 .withStartDate(original.getStartDate())
                 .withEndDate(original.getEndDate())
