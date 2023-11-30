@@ -36,6 +36,7 @@ public class TranslationCaseDao {
     /**
      * Returns the {@link TranslationCase} corresponding to the specified id.
      *
+     * @param customerId The customer ID.
      * @param translationCaseId The TranslationCase ID.
      * @return The stored TranslationCase.
      * @throws TranslationCaseNotFoundException if a translation case with the given id does not exist.
@@ -59,6 +60,7 @@ public class TranslationCaseDao {
      *
      * @param customerId The customer ID.
      * @return A list of stored TranslationCases, or null if none were found.
+     * @throws TranslationCaseNotFoundException if no translation cases are associated with the customer id.
      */
     public List<TranslationCase> getAllTranslationCases(String customerId) {
         Map<String, AttributeValue> valueMap = new HashMap<>();
@@ -68,7 +70,11 @@ public class TranslationCaseDao {
                 .withConsistentRead(false)
                 .withKeyConditionExpression("customerId = :customerId")
                 .withExpressionAttributeValues(valueMap);
-        return dynamoDbMapper.query(TranslationCase.class, queryExpression);
+        List<TranslationCase> translationCaseList = dynamoDbMapper.query(TranslationCase.class, queryExpression);
+        if (translationCaseList.isEmpty()) {
+            throw new TranslationCaseNotFoundException("No translation cases were associated with id " + customerId);
+        }
+        return translationCaseList;
     }
 
     /**

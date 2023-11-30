@@ -4,6 +4,7 @@ import com.nashss.se.translationtracker.activity.ArchiveTranslationCaseActvity;
 import com.nashss.se.translationtracker.activity.CreateTranslationCaseActivity;
 import com.nashss.se.translationtracker.activity.CreateTranslationClientActivity;
 import com.nashss.se.translationtracker.activity.GetAllTranslationCasesActivity;
+import com.nashss.se.translationtracker.activity.GetAllTranslationClientsActivity;
 import com.nashss.se.translationtracker.activity.GetTranslationCaseActivity;
 import com.nashss.se.translationtracker.activity.GetTranslationClientActivity;
 import com.nashss.se.translationtracker.activity.UpdateTranslationCaseActivity;
@@ -60,4 +61,10 @@ public interface ServiceComponent {
      * @return GetTranslationClientActivity
      */
     GetTranslationClientActivity provideGetTranslationClientActivity();
+
+    /**
+     * Provides the relevant activity.
+     * @return GetAllTranslationClientsActivity
+     */
+    GetAllTranslationClientsActivity provideGetAllTranslationClientsActivity();
 }

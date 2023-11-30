@@ -89,29 +89,29 @@ class GetAllTranslationCasesActivityTest {
         GetAllTranslationCasesResult result = getAllTranslationCasesActivity.handleRequest(request);
 
         // THEN
-        assertEquals(result.getTranslationCaseList().get(0).getCustomerId(), customerId);
-        assertEquals(result.getTranslationCaseList().get(1).getCustomerId(), customerId);
-        assertEquals(result.getTranslationCaseList().get(2).getCustomerId(), customerId);
+        assertEquals(customerId, result.getTranslationCaseList().get(0).getCustomerId());
+        assertEquals(customerId, result.getTranslationCaseList().get(1).getCustomerId());
+        assertEquals(customerId, result.getTranslationCaseList().get(2).getCustomerId());
 
-        assertEquals(result.getTranslationCaseList().get(0).getTranslationCaseId(), caseId1);
-        assertEquals(result.getTranslationCaseList().get(1).getTranslationCaseId(), caseId2);
-        assertEquals(result.getTranslationCaseList().get(2).getTranslationCaseId(), caseId3);
+        assertEquals(caseId1, result.getTranslationCaseList().get(0).getTranslationCaseId());
+        assertEquals(caseId2, result.getTranslationCaseList().get(1).getTranslationCaseId());
+        assertEquals(caseId3, result.getTranslationCaseList().get(2).getTranslationCaseId());
 
-        assertEquals(result.getTranslationCaseList().get(0).getDueDate(), dueDate1);
-        assertEquals(result.getTranslationCaseList().get(1).getDueDate(), dueDate2);
-        assertEquals(result.getTranslationCaseList().get(2).getDueDate(), dueDate3);
+        assertEquals(dueDate1, result.getTranslationCaseList().get(0).getDueDate());
+        assertEquals(dueDate2, result.getTranslationCaseList().get(1).getDueDate());
+        assertEquals(dueDate3, result.getTranslationCaseList().get(2).getDueDate());
 
-        assertEquals(result.getTranslationCaseList().get(0).getOpenCase(), openCase1);
-        assertEquals(result.getTranslationCaseList().get(1).getOpenCase(), openCase2);
-        assertEquals(result.getTranslationCaseList().get(2).getOpenCase(), openCase3);
+        assertEquals(openCase1, result.getTranslationCaseList().get(0).getOpenCase());
+        assertEquals(openCase2, result.getTranslationCaseList().get(1).getOpenCase());
+        assertEquals(openCase3, result.getTranslationCaseList().get(2).getOpenCase());
 
-        assertEquals(result.getTranslationCaseList().get(0).getProjectType(), projectType1);
-        assertEquals(result.getTranslationCaseList().get(1).getProjectType(), projectType2);
-        assertEquals(result.getTranslationCaseList().get(2).getProjectType(), projectType3);
+        assertEquals(projectType1, result.getTranslationCaseList().get(0).getProjectType());
+        assertEquals(projectType2, result.getTranslationCaseList().get(1).getProjectType());
+        assertEquals(projectType3, result.getTranslationCaseList().get(2).getProjectType());
 
-        assertEquals(result.getTranslationCaseList().get(0).getTranslatedTitle(), translatedTitle1);
-        assertEquals(result.getTranslationCaseList().get(1).getTranslatedTitle(), translatedTitle2);
-        assertEquals(result.getTranslationCaseList().get(2).getTranslatedTitle(), translatedTitle3);
+        assertEquals(translatedTitle1, result.getTranslationCaseList().get(0).getTranslatedTitle());
+        assertEquals(translatedTitle2, result.getTranslationCaseList().get(1).getTranslatedTitle());
+        assertEquals(translatedTitle3, result.getTranslationCaseList().get(2).getTranslatedTitle());
     }
 
 }

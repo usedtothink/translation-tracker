@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
+import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
 import com.nashss.se.translationtracker.exceptions.DuplicateCaseException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -82,6 +85,12 @@ class TranslationCaseDaoTest {
     public void getAllTranslationCases_queriesDatabase() {
         // GIVEN
         String customerId = "customerId";
+        List<TranslationCase> testList = new ArrayList<>();
+        testList.add(new TranslationCase());
+        PaginatedQueryList listMock = mock(PaginatedQueryList.class);
+        when(listMock.listIterator()).thenReturn(testList.listIterator());
+        when(dynamoDBMapper.query(eq(TranslationCase.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
+
         // WHEN
         caseDao.getAllTranslationCases(customerId);
         // THEN
