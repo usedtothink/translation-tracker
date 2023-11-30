@@ -70,7 +70,7 @@ paths:
                   rushJob:
                     type: boolean
                   progressLog:
-                    type: string
+                    type: list
                   totalWorkingHours:
                     type: number
                   wordsPerHour:
@@ -124,7 +124,7 @@ paths:
                         rushJob:
                           type: boolean
                         progressLog:
-                          type: string
+                          type: list
                         totalWorkingHours:
                           type: number
                         wordsPerHour:
@@ -184,7 +184,7 @@ paths:
                   rushJob:
                     type: boolean
                   progressLog:
-                    type: string
+                    type: list
                   totalWorkingHours:
                     type: number
                   wordsPerHour:
@@ -241,7 +241,7 @@ paths:
                   rushJob:
                     type: boolean
                   progressLog:
-                    type: string
+                    type: list
                   totalWorkingHours:
                     type: number
                   wordsPerHour:
@@ -300,7 +300,7 @@ paths:
                   rushJob:
                     type: boolean
                   progressLog:
-                    type: string
+                    type: list
                   totalWorkingHours:
                     type: number
                   wordsPerHour:
@@ -308,7 +308,57 @@ paths:
         "500":
           description: "Invalid input parameters"
 
-
+  /translationcases/case/update:
+    put:
+      tags:
+        -TranslationCases
+      summary: Add a progress update (AddProgressUpdateLambda)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              customerId:
+                type: string
+              translationCaseId:
+                type: string
+              wordCount:
+                type: number
+              startDate:
+                type: string
+              endDate:
+                type: string
+              startTime:
+                type: string
+              endTime:
+                type: string
+              notes:
+                type: list
+      responses:
+        "200":
+          description: AddProgressUpdateResponse
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customerId:
+                    type: string
+                  translationCaseId:
+                    type: string
+                  wordCount:
+                    type: number
+                  startDate:
+                    type: string
+                  endDate:
+                    type: string
+                  startTime:
+                    type: string
+                  endTime:
+                    type: string
+                  notes:
+                    type: list
+        "500":
+          description: "Invalid input parameters"
 
   /translationclients:
     post:

@@ -18,9 +18,9 @@ public class CreateTranslationCaseLambda
                         input.fromBody(CreateTranslationCaseRequest.class);
                 return input.fromUserClaims(claims ->
                         CreateTranslationCaseRequest.builder()
+                                .withCustomerId(claims.get("email"))
                                 .withCaseNickname(unauthenticatedRequest.getCaseNickname())
                                 .withProjectType(unauthenticatedRequest.getProjectType())
-                                .withCustomerId(claims.get("email"))
                                 .build());
             },
             (request, serviceComponent) ->
