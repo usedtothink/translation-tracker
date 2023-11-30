@@ -17,10 +17,10 @@ public final class ProgressUpdate {
     private final String endDate;
     private final String startTime;
     private final String endTime;
-    private final List<String> notes;
+    private final String notes;
 
     private ProgressUpdate(String customerId, String translationCaseId, Integer wordCount, String startDate,
-                           String endDate, String startTime, String endTime, List<String> notes) {
+                           String endDate, String startTime, String endTime, String notes) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
         this.wordCount = wordCount;
@@ -59,7 +59,7 @@ public final class ProgressUpdate {
         return endTime;
     }
 
-    public List<String> getNotes() {
+    public String getNotes() {
         return notes;
     }
 
@@ -132,7 +132,7 @@ public final class ProgressUpdate {
         private String endDate;
         private String startTime;
         private String endTime;
-        private List<String> notes;
+        private String notes;
 
         public Builder withCustomerId(String customerId) {
             this.customerId = customerId;
@@ -169,7 +169,7 @@ public final class ProgressUpdate {
             return this;
         }
 
-        public Builder withNotes(List<String> notes) {
+        public Builder withNotes(String notes) {
             this.notes = notes;
             return this;
         }

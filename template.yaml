@@ -437,8 +437,8 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationcases/case/upate
-              Method: put
+              Path: /translationcases/case/update
+              Method: post
 
   #-----------------------------------------------------
   # DynamoDB Configuration

@@ -309,7 +309,7 @@ paths:
           description: "Invalid input parameters"
 
   /translationcases/case/update:
-    put:
+    post:
       tags:
         -TranslationCases
       summary: Add a progress update (AddProgressUpdateLambda)
