@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-class ArchiveTranslationCaseActvityTest {
+class ArchiveTranslationCaseActivityTest {
 
     @Mock
     private TranslationCaseDao caseDao;
@@ -25,7 +25,7 @@ class ArchiveTranslationCaseActvityTest {
     }
 
     @Test
-    void handleRequest_validCustomerIdAndCaseId_archivesCase() {
+    void handleRequest_validCustomerIdAndCaseId_returnsCase() {
         // GIVEN
         String customerId = "customerId";
         String translationCaseId = "translationCaseId";

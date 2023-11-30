@@ -2,6 +2,7 @@ package com.nashss.se.translationtracker.dynamodb;
 
 import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
 import com.nashss.se.translationtracker.exceptions.DuplicateTranslationClientException;
+import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 import com.nashss.se.translationtracker.exceptions.TranslationClientNotFoundException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -104,5 +105,32 @@ public class TranslationClientDao {
         return translationClient;
     }
 
-    // Implement archiveTranslationClient method
+    /**
+     * Archives the given translation client.
+     *
+     * @param customerId The id of the customer attempting to archive the client.
+     * @param translationClientId The id of the translation client to archive.
+     * @return The TranslationClient object that was archived.
+     * @throws TranslationClientNotFoundException if no translation client with the given id is found.
+     * @throws SecurityException if the customerId does not match the customerId of the given case.
+     */
+    public TranslationClient archiveTranslationClient(String customerId, String translationClientId) {
+        TranslationClient translationClient = this.dynamoDbMapper.load(TranslationClient.class, translationClientId);
+
+        if (translationClient == null) {
+            throw new TranslationCaseNotFoundException("Could not find translation client with id" +
+                    translationClientId);
+        }
+
+        if (!translationClient.getCustomerId().equals(customerId)) {
+            throw new SecurityException("CustomerId does not match, users may only archive clients they own.");
+        }
+
+        translationClient.setTranslationClientId("archived - " + translationClientId);
+        saveTranslationClient(translationClient);
+
+        translationClient.setTranslationClientId(translationClientId);
+        this.dynamoDbMapper.delete(translationClient);
+        return translationClient;
+    }
 }

@@ -127,7 +127,7 @@ public class TranslationCaseDao {
             throw new SecurityException("CustomerId does not match, users may only archive cases they own.");
         }
 
-        translationCase.setTranslationCaseId("archived" + translationCaseId);
+        translationCase.setTranslationCaseId("archived - " + translationCaseId);
         saveTranslationCase(translationCase);
 
         translationCase.setTranslationCaseId(translationCaseId);
