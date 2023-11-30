@@ -20,7 +20,7 @@ public class GetAllTranslationCasesActivity {
     private final TranslationCaseDao caseDao;
 
     /**
-     * Instantiates a new GetAllTranslationCases Activity object.
+     * Instantiates a new GetAllTranslationCasesActivity object.
      *
      * @param caseDao TranslationCaseDao to access the translation case table.
      */
@@ -30,7 +30,7 @@ public class GetAllTranslationCasesActivity {
     }
 
     /**
-     * This method handles the incoming request by retrieving all the translation case from the database that are
+     * This method handles the incoming request by retrieving all the translation cases from the database that are
      * associated with the customerId.
      * <p>
      * It then returns a list of all translation cases associated with the customerId;

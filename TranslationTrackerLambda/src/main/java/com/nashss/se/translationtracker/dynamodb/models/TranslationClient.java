@@ -4,6 +4,7 @@ import com.nashss.se.translationtracker.types.ClientType;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
 
@@ -11,12 +12,14 @@ import java.util.Objects;
 
 @DynamoDBTable(tableName = "translation_clients")
 public class TranslationClient {
+    public static final String CUSTOMER_INDEX = "CustomerIdIndex";
     private String customerId;
     private String translationClientId;
     private String translationClientName;
     private ClientType translationClientType;
 
     @DynamoDBAttribute(attributeName =  "customerId")
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = CUSTOMER_INDEX, attributeName = "customerId")
     public String getCustomerId() {
         return customerId;
     }

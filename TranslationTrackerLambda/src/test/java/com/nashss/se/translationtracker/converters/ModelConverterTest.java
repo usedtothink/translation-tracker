@@ -3,8 +3,12 @@ package com.nashss.se.translationtracker.converters;
 import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
+import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
+import com.nashss.se.translationtracker.model.TranslationClientModel;
+import com.nashss.se.translationtracker.types.ClientType;
 import com.nashss.se.translationtracker.types.ProjectType;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +18,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ModelConverterTest {
-
+    // Translation case data
+    private String customerId = "customerId";
     private String translationCaseId = "translationCaseId";
     private String translationClientId = "translationClientId";
     private String caseNickname = "caseNickname";
@@ -32,11 +37,18 @@ class ModelConverterTest {
     private Double wordsPerHour = 400.3;
     private PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();
 
+    // Translation client data
+    private String translationClientName = "translationClientName";
+    private ClientType translationClientType = ClientType.GOVERNMENT;
+
+
     private ModelConverter modelConverter = new ModelConverter();
     private TranslationCase translationCase = new TranslationCase();
+    private TranslationClient translationClient = new TranslationClient();
 
     @BeforeEach
     public void setup() {
+        translationCase.setCustomerId(customerId);
         translationCase.setTranslationCaseId(translationCaseId);
         translationCase.setTranslationClientId(translationClientId);
         translationCase.setCaseNickname(caseNickname);
@@ -53,6 +65,11 @@ class ModelConverterTest {
         translationCase.setTotalWorkingHours(totalWorkingHours);
         translationCase.setWordsPerHour(wordsPerHour);
         translationCase.setPaymentRecord(paymentRecord);
+
+        translationClient.setCustomerId(customerId);
+        translationClient.setTranslationClientId(translationClientId);
+        translationClient.setTranslationClientName(translationClientName);
+        translationClient.setTranslationClientType(translationClientType);
     }
 
     @Test
@@ -61,22 +78,23 @@ class ModelConverterTest {
         TranslationCaseModel caseModel = modelConverter.toTranslationCaseModel(translationCase);
 
         // THEN
-        assertEquals(translationCase.getTranslationCaseId(), caseModel.getTranslationCaseId());
-        assertEquals(translationCase.getTranslationClientId(), caseModel.getTranslationClientId());
-        assertEquals(translationCase.getCaseNickname(), caseModel.getCaseNickname());
-        assertEquals(translationCase.getSourceTextTitle(), caseModel.getSourceTextTitle());
-        assertEquals(translationCase.getSourceTextAuthor(), caseModel.getSourceTextAuthor());
-        assertEquals(translationCase.getTranslatedTitle(), caseModel.getTranslatedTitle());
-        assertEquals(translationCase.getProjectType(), caseModel.getProjectType());
-        assertEquals(translationCase.getDueDate(), caseModel.getDueDate());
-        assertEquals(translationCase.getStartDate(), caseModel.getStartDate());
-        assertEquals(translationCase.getEndDate(), caseModel.getEndDate());
-        assertEquals(translationCase.getOpenCase(), caseModel.getOpenCase());
-        assertEquals(translationCase.getRushJob(), caseModel.getRushJob());
-        assertEquals(translationCase.getProgressLog(), caseModel.getProgressLog());
-        assertEquals(translationCase.getTotalWorkingHours(), caseModel.getTotalWorkingHours());
-        assertEquals(translationCase.getWordsPerHour(), caseModel.getWordsPerHour());
-        assertEquals(translationCase.getPaymentRecord(), caseModel.getPaymentRecord());
+        assertEquals(customerId, caseModel.getCustomerId());
+        assertEquals(translationCaseId, caseModel.getTranslationCaseId());
+        assertEquals(translationClientId, caseModel.getTranslationClientId());
+        assertEquals(caseNickname, caseModel.getCaseNickname());
+        assertEquals(sourceTextTitle, caseModel.getSourceTextTitle());
+        assertEquals(sourceTextAuthor, caseModel.getSourceTextAuthor());
+        assertEquals(translatedTitle, caseModel.getTranslatedTitle());
+        assertEquals(projectType, caseModel.getProjectType());
+        assertEquals(dueDate, caseModel.getDueDate());
+        assertEquals(startDate, caseModel.getStartDate());
+        assertEquals(endDate, caseModel.getEndDate());
+        assertEquals(openCase, caseModel.getOpenCase());
+        assertEquals(rushJob, caseModel.getRushJob());
+        assertEquals(progressLog, caseModel.getProgressLog());
+        assertEquals(totalWorkingHours, caseModel.getTotalWorkingHours());
+        assertEquals(wordsPerHour, caseModel.getWordsPerHour());
+        assertEquals(paymentRecord, caseModel.getPaymentRecord());
     }
 
     @Test
@@ -88,22 +106,50 @@ class ModelConverterTest {
         List<TranslationCaseModel> caseModelList = modelConverter.toTranslationCaseModelList(translationCaseList);
 
         // THEN
-        assertEquals(translationCase.getTranslationCaseId(), caseModelList.get(0).getTranslationCaseId());
-        assertEquals(translationCase.getTranslationClientId(), caseModelList.get(0).getTranslationClientId());
-        assertEquals(translationCase.getCaseNickname(), caseModelList.get(0).getCaseNickname());
-        assertEquals(translationCase.getSourceTextTitle(), caseModelList.get(0).getSourceTextTitle());
-        assertEquals(translationCase.getSourceTextAuthor(), caseModelList.get(0).getSourceTextAuthor());
-        assertEquals(translationCase.getTranslatedTitle(), caseModelList.get(0).getTranslatedTitle());
-        assertEquals(translationCase.getProjectType(), caseModelList.get(0).getProjectType());
-        assertEquals(translationCase.getDueDate(), caseModelList.get(0).getDueDate());
-        assertEquals(translationCase.getStartDate(), caseModelList.get(0).getStartDate());
-        assertEquals(translationCase.getEndDate(), caseModelList.get(0).getEndDate());
-        assertEquals(translationCase.getOpenCase(), caseModelList.get(0).getOpenCase());
-        assertEquals(translationCase.getRushJob(), caseModelList.get(0).getRushJob());
-        assertEquals(translationCase.getProgressLog(), caseModelList.get(0).getProgressLog());
-        assertEquals(translationCase.getTotalWorkingHours(), caseModelList.get(0).getTotalWorkingHours());
-        assertEquals(translationCase.getWordsPerHour(), caseModelList.get(0).getWordsPerHour());
-        assertEquals(translationCase.getPaymentRecord(), caseModelList.get(0).getPaymentRecord());
+        assertEquals(translationCaseId, caseModelList.get(0).getTranslationCaseId());
+        assertEquals(translationClientId, caseModelList.get(0).getTranslationClientId());
+        assertEquals(caseNickname, caseModelList.get(0).getCaseNickname());
+        assertEquals(sourceTextTitle, caseModelList.get(0).getSourceTextTitle());
+        assertEquals(sourceTextAuthor, caseModelList.get(0).getSourceTextAuthor());
+        assertEquals(translatedTitle, caseModelList.get(0).getTranslatedTitle());
+        assertEquals(projectType, caseModelList.get(0).getProjectType());
+        assertEquals(dueDate, caseModelList.get(0).getDueDate());
+        assertEquals(startDate, caseModelList.get(0).getStartDate());
+        assertEquals(endDate, caseModelList.get(0).getEndDate());
+        assertEquals(openCase, caseModelList.get(0).getOpenCase());
+        assertEquals(rushJob, caseModelList.get(0).getRushJob());
+        assertEquals(progressLog, caseModelList.get(0).getProgressLog());
+        assertEquals(totalWorkingHours, caseModelList.get(0).getTotalWorkingHours());
+        assertEquals(wordsPerHour, caseModelList.get(0).getWordsPerHour());
+        assertEquals(paymentRecord, caseModelList.get(0).getPaymentRecord());
+    }
 
+    @Test
+    void toTranslationClientModel() {
+        // GIVEN
+        List<TranslationClient> translationClientList = List.of(translationClient);
+
+        // WHEN
+        List<TranslationClientModel> translationClientModelList = new ModelConverter()
+                .toTranslationClientModelList(translationClientList);
+
+        // THEN
+        assertEquals(customerId, translationClientModelList.get(0).getCustomerId());
+        assertEquals(translationClientId, translationClientModelList.get(0).getTranslationClientId());
+        assertEquals(translationClientName, translationClientModelList.get(0).getTranslationClientName());
+        assertEquals(translationClientType, translationClientModelList.get(0).getTranslationClientType());
+    }
+
+    @Test
+    void toTranslationClientModelList() {
+        // GIVEN & WHEN
+        TranslationClientModel translationClientModel = new ModelConverter()
+                .toTranslationClientModel(translationClient);
+
+        // THEN
+        assertEquals(customerId , translationClientModel.getCustomerId());
+        assertEquals(translationClientId, translationClientModel.getTranslationClientId());
+        assertEquals(translationClientName, translationClientModel.getTranslationClientName());
+        assertEquals(translationClientType, translationClientModel.getTranslationClientType());
     }
 }

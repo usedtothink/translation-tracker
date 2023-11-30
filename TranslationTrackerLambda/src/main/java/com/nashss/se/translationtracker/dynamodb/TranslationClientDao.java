@@ -5,6 +5,12 @@ import com.nashss.se.translationtracker.exceptions.DuplicateTranslationClientExc
 import com.nashss.se.translationtracker.exceptions.TranslationClientNotFoundException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,6 +20,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class TranslationClientDao {
+    public static final String CUSTOMER_INDEX = "CustomerIdIndex";
     private final DynamoDBMapper dynamoDbMapper;
     /**
      * Instantiates a TranslationClientDao object.
@@ -28,6 +35,7 @@ public class TranslationClientDao {
     /**
      * Returns the {@link TranslationClient} corresponding to the specified id.
      *
+     * @param customerId The customer ID.
      * @param translationClientId The TranslationClient ID.
      * @return The stored TranslationClient.
      * @throws TranslationClientNotFoundException if a translation client with the given id does not exist.
@@ -46,7 +54,27 @@ public class TranslationClientDao {
         return translationClient;
     }
 
-    // Implement getAllTranslationClients method
+    /**
+     * Returns a list of {@link TranslationClient} corresponding to the customer id.
+     *
+     * @param customerId The customer ID.
+     * @return A list of stored TranslationClients, or null if none were found.
+     */
+    public List<TranslationClient> getAllTranslationClients(String customerId) {
+        Map<String, AttributeValue> valueMap = new HashMap<>();
+        valueMap.put(":customerId", new AttributeValue().withS(customerId));
+        DynamoDBQueryExpression<TranslationClient> queryExpression = new DynamoDBQueryExpression<TranslationClient>()
+                .withIndexName(CUSTOMER_INDEX)
+                .withConsistentRead(false)
+                .withKeyConditionExpression("customerId = :customerId")
+                .withExpressionAttributeValues(valueMap);
+        List<TranslationClient> translationClientList = dynamoDbMapper.query(TranslationClient.class, queryExpression);
+        if (translationClientList.isEmpty()) {
+            throw new TranslationClientNotFoundException("No translation clients were associated with id " +
+                    customerId);
+        }
+        return translationClientList;
+    }
 
     /**
      * Saves the given translation client.

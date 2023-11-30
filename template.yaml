@@ -257,10 +257,8 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationcases/{id}
+              Path: /translationcases/case
               Method: get
-              Auth:
-                Authorizer: 'NONE'
 
     GetAllTranslationCasesLambda:
       Type: AWS::Serverless::Function
@@ -281,8 +279,6 @@ Resources:
             Properties:
               Path: /translationcases
               Method: get
-              Auth:
-                Authorizer: 'NONE'
 
     UpdateTranslationCaseLambda:
       Type: AWS::Serverless::Function
@@ -301,7 +297,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationcases/{id}
+              Path: /translationcases/case
               Method: put
 
     ArchiveTranslationCaseLambda:
@@ -321,7 +317,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationcases/{id}
+              Path: /translationcases/case
               Method: delete
 
     CreateTranslationClientLambda:
@@ -361,10 +357,8 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationclients/{id}
+              Path: /translationclients/client
               Method: get
-              Auth:
-                Authorizer: 'NONE'
 
     GetAllTranslationClientsLambda:
       Type: AWS::Serverless::Function
@@ -385,8 +379,6 @@ Resources:
             Properties:
               Path: /translationclients
               Method: get
-              Auth:
-                Authorizer: 'NONE'
 
     UpdateTranslationClientLambda:
       Type: AWS::Serverless::Function
@@ -405,7 +397,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationclients/{id}
+              Path: /translationclients/client
               Method: put
 
     ArchiveTranslationClientLambda:
@@ -425,7 +417,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationclients/{id}
+              Path: /translationclients/client
               Method: delete
 
   #-----------------------------------------------------
@@ -451,12 +443,7 @@ Resources:
               - AttributeName: "customerId"
                 KeyType: "HASH"
             Projection:
-              ProjectionType: "INCLUDE"
-              NonKeyAttributes:
-                - "dueDate"
-                - "openCase"
-                - "projectType"
-                - "translatedTitle"
+              ProjectionType: "ALL"
 
     TranslationClientsTable:
       Type: AWS::DynamoDB::Table
@@ -464,11 +451,20 @@ Resources:
         AttributeDefinitions:
           - AttributeName: "translationClientId"
             AttributeType: "S"
+          - AttributeName: "customerId"
+            AttributeType: "S"
         KeySchema:
           - AttributeName: "translationClientId"
             KeyType: "HASH"
         BillingMode: "PAY_PER_REQUEST"
         TableName: "translation_clients"
+        GlobalSecondaryIndexes:
+          - IndexName: "CustomerIdIndex"
+            KeySchema:
+              - AttributeName: "customerId"
+                KeyType: "HASH"
+            Projection:
+              ProjectionType: "ALL"
 
 #-----------------------------------------------------
 # The outputs defined below will be printed
