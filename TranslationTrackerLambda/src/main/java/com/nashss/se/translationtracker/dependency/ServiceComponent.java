@@ -1,5 +1,6 @@
 package com.nashss.se.translationtracker.dependency;
 
+import com.nashss.se.translationtracker.activity.AddProgressUpdateActivity;
 import com.nashss.se.translationtracker.activity.ArchiveTranslationCaseActvity;
 import com.nashss.se.translationtracker.activity.ArchiveTranslationClientActivity;
 import com.nashss.se.translationtracker.activity.CreateTranslationCaseActivity;
@@ -74,4 +75,10 @@ public interface ServiceComponent {
      * @return ArchiveTranslationCaseActivity
      */
     ArchiveTranslationClientActivity provideArchiveTranslationClientActivity();
+
+    /**
+     * Provides the relevant activity.
+     * @return AddProgressUpdateActivity
+     */
+    AddProgressUpdateActivity provideAddProgressUpdateActivity();
 }

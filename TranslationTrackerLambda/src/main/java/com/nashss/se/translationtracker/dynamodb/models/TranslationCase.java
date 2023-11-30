@@ -1,7 +1,7 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
 import com.nashss.se.translationtracker.converters.PaymentHistoryRecordConverter;
-import com.nashss.se.translationtracker.converters.TranslationCaseUpdateConverter;
+import com.nashss.se.translationtracker.converters.ProgressLogConverter;
 import com.nashss.se.translationtracker.types.ProjectType;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
@@ -157,7 +157,7 @@ public class TranslationCase {
         this.rushJob = rushJob;
     }
 
-    @DynamoDBTypeConverted(converter = TranslationCaseUpdateConverter.class)
+    @DynamoDBTypeConverted(converter = ProgressLogConverter.class)
     @DynamoDBAttribute(attributeName = "progressLog")
     public List<ProgressUpdate> getProgressLog() {
         return progressLog;

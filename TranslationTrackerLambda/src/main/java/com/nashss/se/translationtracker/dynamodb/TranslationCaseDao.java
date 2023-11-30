@@ -1,5 +1,6 @@
 package com.nashss.se.translationtracker.dynamodb;
 
+import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.exceptions.DuplicateCaseException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
@@ -8,6 +9,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +51,7 @@ public class TranslationCaseDao {
         }
 
         if (!translationCase.getCustomerId().equals(customerId)) {
-            throw new SecurityException("CustomerId does not match, users may only retrieve cases they own.");
+            throw new SecurityException("CustomerId does not match, users may only access cases they own.");
         }
 
         return translationCase;
@@ -85,6 +87,7 @@ public class TranslationCaseDao {
      * @throws SecurityException if the customerId on the existing translation case does not match the update.
      */
     public TranslationCase saveTranslationCase(TranslationCase translationCase) {
+        // Update translation case needs to be separated from this
         TranslationCase existingCase = dynamoDbMapper.load(TranslationCase.class,
                 translationCase.getTranslationCaseId());
         if (existingCase != null && !existingCase.getCustomerId().equals(translationCase.getCustomerId())) {
@@ -132,6 +135,39 @@ public class TranslationCaseDao {
 
         translationCase.setTranslationCaseId(translationCaseId);
         this.dynamoDbMapper.delete(translationCase);
+        return translationCase;
+    }
+
+    /**
+     * Adds the given progress update.
+     *
+     * @param progressUpdate The progress update to be added to the progress log.
+     * @return The updated TranslationCase object.
+     * @throws TranslationCaseNotFoundException if no translation case with the given id is found.
+     * @throws SecurityException if the customerId does not match the customerId of the given case.
+     */
+    public TranslationCase addProgressUpdate(ProgressUpdate progressUpdate) {
+        TranslationCase translationCase = getTranslationCase(progressUpdate.getCustomerId(),
+                progressUpdate.getTranslationCaseId());
+
+        if (!translationCase.getCustomerId().equals(progressUpdate.getCustomerId())) {
+            throw new SecurityException("CustomerId does not match, " +
+                    "users may only progress updates to cases they own.");
+        }
+
+        List<ProgressUpdate> progressLog = translationCase.getProgressLog();
+        if (progressLog != null && progressLog.contains(progressUpdate)) {
+            throw new IllegalArgumentException("This progress update is already in the progress log " + progressUpdate);
+        }
+
+        if (progressLog == null) {
+            progressLog = new ArrayList<>();
+        }
+
+        progressLog.add(progressUpdate);
+        translationCase.setProgressLog(progressLog);
+        dynamoDbMapper.save(translationCase);
+
         return translationCase;
     }
 }
