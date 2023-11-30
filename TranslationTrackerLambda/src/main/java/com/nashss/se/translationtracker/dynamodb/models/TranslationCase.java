@@ -1,5 +1,6 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexRangeKey;
 import com.nashss.se.translationtracker.converters.PaymentHistoryRecordConverter;
 import com.nashss.se.translationtracker.converters.ProgressLogConverter;
 import com.nashss.se.translationtracker.types.ProjectType;
@@ -20,6 +21,7 @@ import java.util.Objects;
 @DynamoDBTable(tableName = "translation_cases")
 public class TranslationCase {
     public static final String CUSTOMER_INDEX = "CustomerIdIndex";
+    public static final String NICKNAME_TYPE_INDEX = "NicknameProjectTypeIndex";
     private String customerId;
     private String translationCaseId;
     private String translationClientId;
@@ -67,6 +69,7 @@ public class TranslationCase {
     }
 
     @DynamoDBAttribute(attributeName = "caseNickname")
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = NICKNAME_TYPE_INDEX, attributeName = "caseNickname")
     public String getCaseNickname() {
         return caseNickname;
     }
@@ -104,6 +107,7 @@ public class TranslationCase {
 
     @DynamoDBTypeConvertedEnum
     @DynamoDBAttribute(attributeName = "projectType")
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = NICKNAME_TYPE_INDEX, attributeName = "projectType")
     public ProjectType getProjectType() {
         return projectType;
     }
