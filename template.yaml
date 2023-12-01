@@ -468,14 +468,6 @@ Resources:
                 KeyType: "HASH"
             Projection:
               ProjectionType: "ALL"
-          - IndexName: "NicknameProjectTypeIndex"
-            KeySchema:
-              - AttributeName: "caseNickname"
-                KeyType: "HASH"
-              - AttributeName: "projectType"
-                KeyType: "RANGE"
-            Projection:
-              ProjectionType: "KEYS_ONLY"
 
     TranslationClientsTable:
       Type: AWS::DynamoDB::Table

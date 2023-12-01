@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -23,7 +24,6 @@ import javax.inject.Singleton;
 @Singleton
 public class TranslationCaseDao {
     public static final String CUSTOMER_INDEX = "CustomerIdIndex";
-    public static final String NICKNAME_TYPE_INDEX = "NicknameProjectTypeIndex";
     private final DynamoDBMapper dynamoDbMapper;
 
     /**
@@ -118,16 +118,21 @@ public class TranslationCaseDao {
      */
     public TranslationCase createTranslationCase(TranslationCase translationCase) {
         Map<String, AttributeValue> valueMap = new HashMap<>();
-        valueMap.put(":caseNickname", new AttributeValue().withS(translationCase.getCaseNickname()));
-        valueMap.put(":projectType", new AttributeValue().withS(translationCase.getProjectType().name()));
+        valueMap.put(":customerId", new AttributeValue().withS(translationCase.getCustomerId()));
         DynamoDBQueryExpression<TranslationCase> queryExpression = new DynamoDBQueryExpression<TranslationCase>()
-                .withIndexName(NICKNAME_TYPE_INDEX)
+                .withIndexName(CUSTOMER_INDEX)
                 .withConsistentRead(false)
-                .withKeyConditionExpression("caseNickname = :caseNickname and projectType = :projectType")
+                .withKeyConditionExpression("customerId = :customerId")
                 .withExpressionAttributeValues(valueMap);
         List<TranslationCase> translationCaseList = dynamoDbMapper.query(TranslationCase.class, queryExpression);
-        if (!translationCaseList.isEmpty()) {
-            throw new DuplicateCaseException("A translation case with nickname '" + translationCase.getCaseNickname() +
+        List<TranslationCase> filteredList = translationCaseList.stream()
+                .filter(translation -> translation.getCaseNickname()
+                        .equals(translationCase.getCaseNickname()) &&
+                        translation.getProjectType() == translationCase.getProjectType())
+                .collect(Collectors.toList());
+        if (!filteredList.isEmpty()) {
+            throw new DuplicateCaseException("A translation case with nickname '" +
+                    translationCase.getCaseNickname() +
                     "' and project type '" + translationCase.getProjectType().name() + "' already exists. ");
         }
         return saveTranslationCase(translationCase);
