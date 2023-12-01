@@ -1,6 +1,6 @@
 package com.nashss.se.translationtracker.model;
 
-import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
+import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.types.ProjectType;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,6 @@ class TranslationCaseModelTest {
         List<ProgressUpdate> progressLog = new ArrayList<>(List.of(ProgressUpdate.builder().build()));
         Double totalWorkingHours = 3.2;
         Double wordsPerHour = 400.3;
-        PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();
 
         TranslationCaseModel model = TranslationCaseModel.builder()
                 .withCustomerId(customerId)
@@ -51,7 +50,6 @@ class TranslationCaseModelTest {
                 .withProgressLog(progressLog)
                 .withTotalWorkingHours(totalWorkingHours)
                 .withWordsPerHour(wordsPerHour)
-                .withPaymentHistoryRecord(paymentRecord)
                 .build();
 
         // WHEN & THEN
@@ -71,7 +69,6 @@ class TranslationCaseModelTest {
         assertEquals(progressLog, model.getProgressLog());
         assertEquals(totalWorkingHours, model.getTotalWorkingHours());
         assertEquals(wordsPerHour, model.getWordsPerHour());
-        assertEquals(paymentRecord, model.getPaymentRecord());
     }
 
 

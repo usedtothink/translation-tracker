@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 @DynamoDBTable(tableName = "translation_cases")
 public class TranslationCase {
-    public static final String CUSTOMER_INDEX = "CustomerIdIndex";
+    public static final String CUSTOMER_INDEX = "CaseCustomerIdIndex";
     private String customerId;
     private String translationCaseId;
     private String translationClientId;
@@ -36,7 +36,7 @@ public class TranslationCase {
     private List<ProgressUpdate> progressLog;
     private Double totalWorkingHours;
     private Double wordsPerHour;
-    private PaymentHistoryRecord paymentRecord;
+    private PaymentRecord paymentRecord;
 
     @DynamoDBAttribute(attributeName = "customerId")
     @DynamoDBIndexHashKey(globalSecondaryIndexName = CUSTOMER_INDEX, attributeName = "customerId")
@@ -183,16 +183,6 @@ public class TranslationCase {
 
     public void setWordsPerHour(Double wordsPerHour) {
         this.wordsPerHour = wordsPerHour;
-    }
-
-    @DynamoDBTypeConverted(converter = PaymentHistoryRecordConverter.class)
-    @DynamoDBAttribute(attributeName = "paymentRecord")
-    public PaymentHistoryRecord getPaymentRecord() {
-        return paymentRecord;
-    }
-
-    public void setPaymentRecord(PaymentHistoryRecord paymentRecord) {
-        this.paymentRecord = paymentRecord;
     }
 
     @Override

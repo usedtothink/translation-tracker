@@ -22,7 +22,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class TranslationClientDao {
-    public static final String CUSTOMER_INDEX = "CustomerIdIndex";
+    public static final String CUSTOMER_INDEX = "ClientCustomerIdIndex";
     private final DynamoDBMapper dynamoDbMapper;
     /**
      * Instantiates a TranslationClientDao object.

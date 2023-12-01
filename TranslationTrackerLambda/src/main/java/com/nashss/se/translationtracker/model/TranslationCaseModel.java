@@ -1,10 +1,8 @@
 package com.nashss.se.translationtracker.model;
 
-import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.types.ProjectType;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,14 +24,12 @@ public class TranslationCaseModel {
     private List<ProgressUpdate> progressLog;
     private Double totalWorkingHours;
     private Double wordsPerHour;
-    private PaymentHistoryRecord paymentRecord;
 
     private TranslationCaseModel(String customerId, String translationCaseId, String translationClientId,
                                  String caseNickname, String sourceTextTitle, String sourceTextAuthor,
                                  String translatedTitle, ProjectType projectType, String dueDate, String startDate,
                                  String endDate, Boolean openCase, Boolean rushJob,
-                                 List<ProgressUpdate> progressLog, Double totalWorkingHours, Double wordsPerHour,
-                                 PaymentHistoryRecord paymentRecord) {
+                                 List<ProgressUpdate> progressLog, Double totalWorkingHours, Double wordsPerHour) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
         this.translationClientId = translationClientId;
@@ -47,23 +43,9 @@ public class TranslationCaseModel {
         this.endDate = endDate;
         this.openCase = openCase;
         this.rushJob = rushJob;
-        if (progressLog != null) {
-            this.progressLog = progressLog.stream()
-                                            .map(ProgressUpdate::defensiveCopyTranslationCaseUpdate)
-                                            .collect(Collectors.toList());
-        } else {
-            this.progressLog = new ArrayList<>();
-        }
+        this.progressLog = progressLog;
         this.totalWorkingHours = totalWorkingHours;
         this.wordsPerHour = wordsPerHour;
-        if (paymentRecord != null) {
-            this.paymentRecord = PaymentHistoryRecord.defensiveCopyPaymentHistory(paymentRecord);
-        } else {
-            this.paymentRecord = PaymentHistoryRecord.builder()
-                    .withTranslationCaseId(translationCaseId)
-                    .withTranslationClientId(translationClientId)
-                    .build();
-        }
     }
 
     public String getCustomerId() {
@@ -132,10 +114,6 @@ public class TranslationCaseModel {
         return wordsPerHour;
     }
 
-    public PaymentHistoryRecord getPaymentRecord() {
-        return PaymentHistoryRecord.defensiveCopyPaymentHistory(paymentRecord);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -160,8 +138,7 @@ public class TranslationCaseModel {
                 Objects.equals(getRushJob(), that.getRushJob()) &&
                 Objects.equals(getProgressLog(), that.getProgressLog()) &&
                 Objects.equals(getTotalWorkingHours(), that.getTotalWorkingHours()) &&
-                Objects.equals(getWordsPerHour(), that.getWordsPerHour()) &&
-                Objects.equals(getPaymentRecord(), that.getPaymentRecord());
+                Objects.equals(getWordsPerHour(), that.getWordsPerHour());
     }
 
     @Override
@@ -169,7 +146,7 @@ public class TranslationCaseModel {
         return Objects.hash(getCustomerId(), getTranslationCaseId(), getTranslationClientId(), getCaseNickname(),
                 getSourceTextTitle(), getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(),
                 getStartDate(), getEndDate(), getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
-                getWordsPerHour(), getPaymentRecord());
+                getWordsPerHour());
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -194,7 +171,6 @@ public class TranslationCaseModel {
         private List<ProgressUpdate> progressLog;
         private Double totalWorkingHours;
         private Double wordsPerHour;
-        private PaymentHistoryRecord paymentRecord;
 
         public Builder withCustomerId(String customerId) {
             this.customerId = customerId;
@@ -260,15 +236,11 @@ public class TranslationCaseModel {
             this.wordsPerHour = wordsPerHour;
             return this;
         }
-        public Builder withPaymentHistoryRecord(PaymentHistoryRecord paymentRecord) {
-            this.paymentRecord = paymentRecord;
-            return this;
-        }
 
         public TranslationCaseModel build() {
             return new TranslationCaseModel(customerId, translationCaseId, translationClientId, caseNickname,
                     sourceTextTitle, sourceTextAuthor, translatedTitle, projectType, dueDate, startDate,
-                    endDate, openCase, rushJob, progressLog, totalWorkingHours, wordsPerHour, paymentRecord);
+                    endDate, openCase, rushJob, progressLog, totalWorkingHours, wordsPerHour);
         }
     }
 }

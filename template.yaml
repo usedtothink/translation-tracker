@@ -452,17 +452,13 @@ Resources:
             AttributeType: "S"
           - AttributeName: "customerId"
             AttributeType: "S"
-          - AttributeName: "caseNickname"
-            AttributeType: "S"
-          - AttributeName: "projectType"
-            AttributeType: "S"
         KeySchema:
           - AttributeName: "translationCaseId"
             KeyType: "HASH"
         BillingMode: "PAY_PER_REQUEST"
         TableName: "translation_cases"
         GlobalSecondaryIndexes:
-          - IndexName: "CustomerIdIndex"
+          - IndexName: "CaseCustomerIdIndex"
             KeySchema:
               - AttributeName: "customerId"
                 KeyType: "HASH"
@@ -483,9 +479,38 @@ Resources:
         BillingMode: "PAY_PER_REQUEST"
         TableName: "translation_clients"
         GlobalSecondaryIndexes:
-          - IndexName: "CustomerIdIndex"
+          - IndexName: "ClientCustomerIdIndex"
             KeySchema:
               - AttributeName: "customerId"
+                KeyType: "HASH"
+            Projection:
+              ProjectionType: "ALL"
+
+    PaymentRecordsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "translationCaseId"
+            AttributeType: "S"
+          - AttributeName: "customerId"
+            AttributeType: "S"
+          - AttributeName: "translationClientId"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "translationCaseId"
+            KeyType: "HASH"
+        BillingMode: "PAY_PER_REQUEST"
+        TableName: "payment_records"
+        GlobalSecondaryIndexes:
+          - IndexName: "PaymentTranslationClientIdIndex"
+            KeySchema:
+              - AttributeName: "translationClientId"
+                KeyType: "HASH"
+            Projection:
+              ProjectionType: "ALL"
+          - IndexName: "PaymentCustomerIdIndex"
+            KeySchema:
+              - AttributeName: "translationClientId"
                 KeyType: "HASH"
             Projection:
               ProjectionType: "ALL"

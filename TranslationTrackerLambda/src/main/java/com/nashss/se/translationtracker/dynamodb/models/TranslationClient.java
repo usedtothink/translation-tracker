@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @DynamoDBTable(tableName = "translation_clients")
 public class TranslationClient {
-    public static final String CUSTOMER_INDEX = "CustomerIdIndex";
+    public static final String CUSTOMER_INDEX = "ClientCustomerIdIndex";
     private String customerId;
     private String translationClientId;
     private String translationClientName;
