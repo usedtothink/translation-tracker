@@ -25,7 +25,10 @@ public class IdGenerator {
      * @return The newly created translation client ID.
      */
     public static String newTranslationClientId(String clientType, String clientName) {
-        return clientType.toLowerCase() + clientName.replaceAll("\\s", "");
+        Random random = new Random();
+
+        return clientType.toLowerCase() + clientName.replaceAll("\\s", "") +
+                random.nextInt(10000);
     }
 
 }

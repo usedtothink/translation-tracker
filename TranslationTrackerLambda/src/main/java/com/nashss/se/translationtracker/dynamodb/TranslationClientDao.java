@@ -12,6 +12,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -96,13 +97,26 @@ public class TranslationClientDao {
      * @throws DuplicateTranslationClientException when the client name already exists.
      */
     public TranslationClient createTranslationClient(TranslationClient translationClient) {
-        TranslationClient existingClient = dynamoDbMapper.load(TranslationClient.class,
-                translationClient.getTranslationClientId());
-        if (existingClient != null) {
-            throw new DuplicateTranslationClientException("A translation client with this name already exists!");
+        Map<String, AttributeValue> valueMap = new HashMap<>();
+        valueMap.put(":customerId", new AttributeValue().withS(translationClient.getCustomerId()));
+        DynamoDBQueryExpression<TranslationClient> queryExpression = new DynamoDBQueryExpression<TranslationClient>()
+                .withIndexName(CUSTOMER_INDEX)
+                .withConsistentRead(false)
+                .withKeyConditionExpression("customerId = :customerId")
+                .withExpressionAttributeValues(valueMap);
+        List<TranslationClient> translationClientList = dynamoDbMapper.query(TranslationClient.class, queryExpression);
+        List<TranslationClient> filteredList = translationClientList.stream()
+                .filter(translation -> translation.getTranslationClientName()
+                        .equals(translationClient.getTranslationClientName()) &&
+                        translation.getTranslationClientType() == translationClient.getTranslationClientType())
+                .collect(Collectors.toList());
+
+        if (!filteredList.isEmpty()) {
+            throw new DuplicateTranslationClientException("A translation client with name '" +
+                    translationClient.getTranslationClientName() +
+                    "' and client type '" + translationClient.getTranslationClientType().name() + "' already exists. ");
         }
-        saveTranslationClient(translationClient);
-        return translationClient;
+        return saveTranslationClient(translationClient);
     }
 
     /**
