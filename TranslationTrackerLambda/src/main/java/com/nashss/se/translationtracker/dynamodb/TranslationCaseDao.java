@@ -23,6 +23,7 @@ import javax.inject.Singleton;
 @Singleton
 public class TranslationCaseDao {
     public static final String CUSTOMER_INDEX = "CustomerIdIndex";
+    public static final String NICKNAME_TYPE_INDEX = "NicknameProjectTypeIndex";
     private final DynamoDBMapper dynamoDbMapper;
 
     /**
@@ -87,14 +88,25 @@ public class TranslationCaseDao {
      * @throws SecurityException if the customerId on the existing translation case does not match the update.
      */
     public TranslationCase saveTranslationCase(TranslationCase translationCase) {
-        // Update translation case needs to be separated from this
+        this.dynamoDbMapper.save(translationCase);
+        return translationCase;
+    }
+
+    /**
+     * Updates the given translation case.
+     *
+     * @param translationCase The translation case to update.
+     * @return The TranslationCase object that was updated.
+     * @throws SecurityException if the customerId on the existing translation case does not match the update.
+     */
+    public TranslationCase updateTranslationCase(TranslationCase translationCase) {
         TranslationCase existingCase = dynamoDbMapper.load(TranslationCase.class,
                 translationCase.getTranslationCaseId());
         if (existingCase != null && !existingCase.getCustomerId().equals(translationCase.getCustomerId())) {
             throw new SecurityException("CustomerId does not match, users may only update cases they own.");
         }
-        this.dynamoDbMapper.save(translationCase);
-        return translationCase;
+
+        return saveTranslationCase(translationCase);
     }
 
     /**
@@ -105,9 +117,20 @@ public class TranslationCaseDao {
      * @throws DuplicateCaseException when the case nickname already exists.
      */
     public TranslationCase createTranslationCase(TranslationCase translationCase) {
-        // Update this to use a GSI to check for an existing translation case nickname
-        saveTranslationCase(translationCase);
-        return translationCase;
+        Map<String, AttributeValue> valueMap = new HashMap<>();
+        valueMap.put(":caseNickname", new AttributeValue().withS(translationCase.getCaseNickname()));
+        valueMap.put(":projectType", new AttributeValue().withS(translationCase.getProjectType().name()));
+        DynamoDBQueryExpression<TranslationCase> queryExpression = new DynamoDBQueryExpression<TranslationCase>()
+                .withIndexName(NICKNAME_TYPE_INDEX)
+                .withConsistentRead(false)
+                .withKeyConditionExpression("caseNickname = :caseNickname and projectType = :projectType")
+                .withExpressionAttributeValues(valueMap);
+        List<TranslationCase> translationCaseList = dynamoDbMapper.query(TranslationCase.class, queryExpression);
+        if (!translationCaseList.isEmpty()) {
+            throw new DuplicateCaseException("A translation case with nickname '" + translationCase.getCaseNickname() +
+                    "' and project type '" + translationCase.getProjectType().name() + "' already exists. ");
+        }
+        return saveTranslationCase(translationCase);
     }
 
     /**

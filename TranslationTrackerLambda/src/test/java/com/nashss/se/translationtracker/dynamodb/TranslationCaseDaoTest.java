@@ -7,6 +7,7 @@ import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
 import com.nashss.se.translationtracker.exceptions.DuplicateCaseException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
+import com.nashss.se.translationtracker.types.ProjectType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -29,6 +30,8 @@ class TranslationCaseDaoTest {
     private static final String TRANSLATION_CASE_ID = "translationCaseId";
     private static final String NON_EXISTENT_CASE_ID = "not a translationCaseId";
     private static final String CUSTOMER_ID = "customerId";
+    private static final String CASE_NICKNAME = "caseNickname";
+    private static final ProjectType PROJECT_TYPE = ProjectType.ACADEMIC;
     @Mock
     private DynamoDBMapper dynamoDBMapper;
 
@@ -84,85 +87,48 @@ class TranslationCaseDaoTest {
     @Test
     public void getAllTranslationCases_queriesDatabase() {
         // GIVEN
-        String customerId = "customerId";
+        // Mocking the paginated query list
         List<TranslationCase> testList = new ArrayList<>();
         testList.add(new TranslationCase());
         PaginatedQueryList listMock = mock(PaginatedQueryList.class);
+        // Return the test list when the mocked list is called
         when(listMock.listIterator()).thenReturn(testList.listIterator());
         when(dynamoDBMapper.query(eq(TranslationCase.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
         // WHEN
-        caseDao.getAllTranslationCases(customerId);
+        caseDao.getAllTranslationCases(CUSTOMER_ID);
         // THEN
         verify(dynamoDBMapper).query(any(), any());
     }
 
     @Test
-    public void saveTranslationCase_callsSave() {
+    public void createTranslationCase_caseExistsWithSameNicknameAndProjectType_throwsException() {
         // GIVEN
         TranslationCase translationCase = new TranslationCase();
-        // WHEN
-        caseDao.saveTranslationCase(translationCase);
-        // THEN
-        verify(dynamoDBMapper).save(translationCase);
-    }
+        translationCase.setCaseNickname(CASE_NICKNAME);
+        translationCase.setProjectType(PROJECT_TYPE);
+        // Mocking the paginated query list
+        List<TranslationCase> testList = new ArrayList<>();
+        testList.add(translationCase);
+        PaginatedQueryList listMock = mock(PaginatedQueryList.class);
+        // Return the test list when the mocked list is called
+        when(listMock.listIterator()).thenReturn(testList.listIterator());
+        when(dynamoDBMapper.query(eq(TranslationCase.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
-    @Test
-    public void createTranslationCase_callsSave() {
-        // GIVEN
-        TranslationCase translationCase = new TranslationCase();
-
-        // WHEN
-        TranslationCase result = caseDao.createTranslationCase(translationCase);
-
-        // THEN
-        verify(dynamoDBMapper).save(translationCase);
-        assertEquals(translationCase, result);
-    }
-
-    @Test
-    public void createTranslationCase_noExistingCase_callsSave() {
-        // GIVEN
-        TranslationCase translationCase = new TranslationCase();
-        translationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
-        when(dynamoDBMapper.load(TranslationCase.class, TRANSLATION_CASE_ID)).thenReturn(null);
-
-        // WHEN
-        TranslationCase result = caseDao.createTranslationCase(translationCase);
-
-        // THEN
-        verify(dynamoDBMapper).save(translationCase);
-        assertEquals(translationCase, result);
-    }
-
-    @Test
-    public void createTranslationCase_wrongCustomerId_throwsException() {
-        // GIVEN
-        TranslationCase translationCase = new TranslationCase();
-        translationCase.setCustomerId(CUSTOMER_ID);
-        translationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
-
-        TranslationCase wrongIdTranslationCase = new TranslationCase();
-        wrongIdTranslationCase.setCustomerId("wrongId");
-        wrongIdTranslationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
-
-        when(dynamoDBMapper.load(TranslationCase.class, TRANSLATION_CASE_ID)).thenReturn(translationCase);
-
-        // WHEN
-        assertThrows(SecurityException.class, () -> caseDao.createTranslationCase(wrongIdTranslationCase));
+        // WHEN & THEN
+        assertThrows(DuplicateCaseException.class, () -> caseDao.createTranslationCase(translationCase));
     }
 
     @Test
     public void archiveTranslationCase_validCustomerIdAndTranslationCaseId_callsSaveAndDelete() {
         // GIVEN
-        String customerId = "customerId";
         TranslationCase translationCase = new TranslationCase();
-        translationCase.setCustomerId(customerId);
+        translationCase.setCustomerId(CUSTOMER_ID);
         translationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
         when(dynamoDBMapper.load(TranslationCase.class, TRANSLATION_CASE_ID)).thenReturn(translationCase);
 
         // WHEN
-        TranslationCase result = caseDao.archiveTranslationCase(customerId, TRANSLATION_CASE_ID);
+        TranslationCase result = caseDao.archiveTranslationCase(CUSTOMER_ID, TRANSLATION_CASE_ID);
 
         // THEN
         verify(dynamoDBMapper).save(any(TranslationCase.class));
@@ -172,14 +138,13 @@ class TranslationCaseDaoTest {
     @Test
     public void archiveTranslationCase_caseDoesNotExist_throwsException() {
         // GIVEN
-        String customerId = "customerId";
         TranslationCase translationCase = new TranslationCase();
-        translationCase.setCustomerId(customerId);
+        translationCase.setCustomerId(CUSTOMER_ID);
         translationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
         when(dynamoDBMapper.load(TranslationCase.class, TRANSLATION_CASE_ID)).thenReturn(null);
 
         // WHEN & THEN
-        assertThrows(TranslationCaseNotFoundException.class, () -> caseDao.archiveTranslationCase(customerId,
+        assertThrows(TranslationCaseNotFoundException.class, () -> caseDao.archiveTranslationCase(CUSTOMER_ID,
                 TRANSLATION_CASE_ID));
     }
 
@@ -195,6 +160,59 @@ class TranslationCaseDaoTest {
         // WHEN & THEN
         assertThrows(SecurityException.class, () -> caseDao.archiveTranslationCase(wrongId,
                 TRANSLATION_CASE_ID));
+    }
+
+    @Test
+    public void saveTranslationCase_callsSave() {
+        // GIVEN
+        TranslationCase translationCase = new TranslationCase();
+        // WHEN
+        caseDao.saveTranslationCase(translationCase);
+        // THEN
+        verify(dynamoDBMapper).save(translationCase);
+    }
+
+    @Test
+    public void updateTranslationCase_customerIdMatches_updatesCase() {
+        // GIVEN
+        TranslationCase translationCase = new TranslationCase();
+        translationCase.setCustomerId(CUSTOMER_ID);
+        translationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
+        when(dynamoDBMapper.load(TranslationCase.class, TRANSLATION_CASE_ID)).thenReturn(translationCase);
+
+        Boolean rushJob = true;
+
+        TranslationCase updatedTranslationCase = new TranslationCase();
+        updatedTranslationCase.setCustomerId(CUSTOMER_ID);
+        updatedTranslationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
+        updatedTranslationCase.setRushJob(rushJob);
+
+        // WHEN
+        TranslationCase result = caseDao.updateTranslationCase(updatedTranslationCase);
+
+        // THEN
+        verify(dynamoDBMapper).save(any(TranslationCase.class));
+        assertEquals(CUSTOMER_ID, result.getCustomerId());
+        assertEquals(TRANSLATION_CASE_ID, result.getTranslationCaseId());
+        assertEquals(rushJob, result.getRushJob());
+    }
+
+    @Test
+    public void updateTranslationCase_wrongCustomerId_throwsException() {
+        // GIVEN
+        TranslationCase translationCase = new TranslationCase();
+        translationCase.setCustomerId(CUSTOMER_ID);
+        translationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
+        when(dynamoDBMapper.load(TranslationCase.class, TRANSLATION_CASE_ID)).thenReturn(translationCase);
+
+        String wrongId = "wrongId";
+
+        TranslationCase updatedTranslationCase = new TranslationCase();
+        updatedTranslationCase.setCustomerId(wrongId);
+        updatedTranslationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
+
+        // WHEN & THEN
+        assertThrows(SecurityException.class, () -> caseDao.updateTranslationCase(updatedTranslationCase));
     }
 
 }
