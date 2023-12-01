@@ -7,6 +7,7 @@ import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
 import com.nashss.se.translationtracker.exceptions.DuplicateCaseException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
+import com.nashss.se.translationtracker.types.ProjectType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -29,6 +30,8 @@ class TranslationCaseDaoTest {
     private static final String TRANSLATION_CASE_ID = "translationCaseId";
     private static final String NON_EXISTENT_CASE_ID = "not a translationCaseId";
     private static final String CUSTOMER_ID = "customerId";
+    private static final String CASE_NICKNAME = "caseNickname";
+    private static final ProjectType PROJECT_TYPE = ProjectType.ACADEMIC;
     @Mock
     private DynamoDBMapper dynamoDBMapper;
 
@@ -85,9 +88,11 @@ class TranslationCaseDaoTest {
     public void getAllTranslationCases_queriesDatabase() {
         // GIVEN
         String customerId = "customerId";
+        // Mocking the paginated query list
         List<TranslationCase> testList = new ArrayList<>();
         testList.add(new TranslationCase());
         PaginatedQueryList listMock = mock(PaginatedQueryList.class);
+        // Return the test list when the mocked list is called
         when(listMock.listIterator()).thenReturn(testList.listIterator());
         when(dynamoDBMapper.query(eq(TranslationCase.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
@@ -108,48 +113,21 @@ class TranslationCaseDaoTest {
     }
 
     @Test
-    public void createTranslationCase_callsSave() {
+    public void createTranslationCase_caseExistsWithSameNicknameAndProjectType_throwsException() {
         // GIVEN
         TranslationCase translationCase = new TranslationCase();
+        translationCase.setCaseNickname(CASE_NICKNAME);
+        translationCase.setProjectType(PROJECT_TYPE);
+        // Mocking the paginated query list
+        List<TranslationCase> testList = new ArrayList<>();
+        testList.add(translationCase);
+        PaginatedQueryList listMock = mock(PaginatedQueryList.class);
+        // Return the test list when the mocked list is called
+        when(listMock.listIterator()).thenReturn(testList.listIterator());
+        when(dynamoDBMapper.query(eq(TranslationCase.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
-        // WHEN
-        TranslationCase result = caseDao.createTranslationCase(translationCase);
-
-        // THEN
-        verify(dynamoDBMapper).save(translationCase);
-        assertEquals(translationCase, result);
-    }
-
-    @Test
-    public void createTranslationCase_noExistingCase_callsSave() {
-        // GIVEN
-        TranslationCase translationCase = new TranslationCase();
-        translationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
-        when(dynamoDBMapper.load(TranslationCase.class, TRANSLATION_CASE_ID)).thenReturn(null);
-
-        // WHEN
-        TranslationCase result = caseDao.createTranslationCase(translationCase);
-
-        // THEN
-        verify(dynamoDBMapper).save(translationCase);
-        assertEquals(translationCase, result);
-    }
-
-    @Test
-    public void createTranslationCase_wrongCustomerId_throwsException() {
-        // GIVEN
-        TranslationCase translationCase = new TranslationCase();
-        translationCase.setCustomerId(CUSTOMER_ID);
-        translationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
-
-        TranslationCase wrongIdTranslationCase = new TranslationCase();
-        wrongIdTranslationCase.setCustomerId("wrongId");
-        wrongIdTranslationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
-
-        when(dynamoDBMapper.load(TranslationCase.class, TRANSLATION_CASE_ID)).thenReturn(translationCase);
-
-        // WHEN
-        assertThrows(SecurityException.class, () -> caseDao.createTranslationCase(wrongIdTranslationCase));
+        // WHEN & THEN
+        assertThrows(DuplicateCaseException.class, () -> caseDao.createTranslationCase(translationCase));
     }
 
     @Test

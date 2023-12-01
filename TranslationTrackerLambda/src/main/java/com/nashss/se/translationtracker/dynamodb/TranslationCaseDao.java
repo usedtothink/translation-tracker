@@ -123,8 +123,7 @@ public class TranslationCaseDao {
         DynamoDBQueryExpression<TranslationCase> queryExpression = new DynamoDBQueryExpression<TranslationCase>()
                 .withIndexName(NICKNAME_TYPE_INDEX)
                 .withConsistentRead(false)
-                .withKeyConditionExpression("caseNickname = :caseNickname")
-                .withKeyConditionExpression("projectType = :projectType")
+                .withKeyConditionExpression("caseNickname = :caseNickname and projectType = :projectType")
                 .withExpressionAttributeValues(valueMap);
         List<TranslationCase> translationCaseList = dynamoDbMapper.query(TranslationCase.class, queryExpression);
         if (!translationCaseList.isEmpty()) {
