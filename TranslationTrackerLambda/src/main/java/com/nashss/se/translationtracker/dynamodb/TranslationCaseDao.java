@@ -3,6 +3,7 @@ package com.nashss.se.translationtracker.dynamodb;
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.exceptions.DuplicateCaseException;
+import com.nashss.se.translationtracker.exceptions.DuplicateProgressUpdateException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -23,7 +24,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class TranslationCaseDao {
-    public static final String CUSTOMER_INDEX = "CustomerIdIndex";
+    public static final String CUSTOMER_INDEX = "CaseCustomerIdIndex";
     private final DynamoDBMapper dynamoDbMapper;
 
     /**
@@ -34,6 +35,35 @@ public class TranslationCaseDao {
     @Inject
     public TranslationCaseDao(DynamoDBMapper dynamoDbMapper) {
         this.dynamoDbMapper = dynamoDbMapper;
+    }
+
+    /**
+     * Creates a new translation case, checks to make sure the case nickname is not a duplicate.
+     *
+     * @param translationCase The translation case to save.
+     * @return The TranslationCase object that was saved.
+     * @throws DuplicateCaseException when the case nickname already exists.
+     */
+    public TranslationCase createTranslationCase(TranslationCase translationCase) {
+        Map<String, AttributeValue> valueMap = new HashMap<>();
+        valueMap.put(":customerId", new AttributeValue().withS(translationCase.getCustomerId()));
+        DynamoDBQueryExpression<TranslationCase> queryExpression = new DynamoDBQueryExpression<TranslationCase>()
+                .withIndexName(CUSTOMER_INDEX)
+                .withConsistentRead(false)
+                .withKeyConditionExpression("customerId = :customerId")
+                .withExpressionAttributeValues(valueMap);
+        List<TranslationCase> translationCaseList = dynamoDbMapper.query(TranslationCase.class, queryExpression);
+        List<TranslationCase> filteredList = translationCaseList.stream()
+                .filter(translation -> translation.getCaseNickname()
+                        .equals(translationCase.getCaseNickname()) &&
+                        translation.getProjectType() == translationCase.getProjectType())
+                .collect(Collectors.toList());
+        if (!filteredList.isEmpty()) {
+            throw new DuplicateCaseException("A translation case with nickname '" +
+                    translationCase.getCaseNickname() +
+                    "' and project type '" + translationCase.getProjectType().name() + "' already exists. ");
+        }
+        return saveTranslationCase(translationCase);
     }
 
     /**
@@ -81,64 +111,6 @@ public class TranslationCaseDao {
     }
 
     /**
-     * Saves the given translation case.
-     *
-     * @param translationCase The translation case to save.
-     * @return The TranslationCase object that was saved.
-     * @throws SecurityException if the customerId on the existing translation case does not match the update.
-     */
-    public TranslationCase saveTranslationCase(TranslationCase translationCase) {
-        this.dynamoDbMapper.save(translationCase);
-        return translationCase;
-    }
-
-    /**
-     * Updates the given translation case.
-     *
-     * @param translationCase The translation case to update.
-     * @return The TranslationCase object that was updated.
-     * @throws SecurityException if the customerId on the existing translation case does not match the update.
-     */
-    public TranslationCase updateTranslationCase(TranslationCase translationCase) {
-        TranslationCase existingCase = dynamoDbMapper.load(TranslationCase.class,
-                translationCase.getTranslationCaseId());
-        if (existingCase != null && !existingCase.getCustomerId().equals(translationCase.getCustomerId())) {
-            throw new SecurityException("CustomerId does not match, users may only update cases they own.");
-        }
-
-        return saveTranslationCase(translationCase);
-    }
-
-    /**
-     * Creates a new translation case, checks to make sure the case nickname is not a duplicate.
-     *
-     * @param translationCase The translation case to save.
-     * @return The TranslationCase object that was saved.
-     * @throws DuplicateCaseException when the case nickname already exists.
-     */
-    public TranslationCase createTranslationCase(TranslationCase translationCase) {
-        Map<String, AttributeValue> valueMap = new HashMap<>();
-        valueMap.put(":customerId", new AttributeValue().withS(translationCase.getCustomerId()));
-        DynamoDBQueryExpression<TranslationCase> queryExpression = new DynamoDBQueryExpression<TranslationCase>()
-                .withIndexName(CUSTOMER_INDEX)
-                .withConsistentRead(false)
-                .withKeyConditionExpression("customerId = :customerId")
-                .withExpressionAttributeValues(valueMap);
-        List<TranslationCase> translationCaseList = dynamoDbMapper.query(TranslationCase.class, queryExpression);
-        List<TranslationCase> filteredList = translationCaseList.stream()
-                .filter(translation -> translation.getCaseNickname()
-                        .equals(translationCase.getCaseNickname()) &&
-                        translation.getProjectType() == translationCase.getProjectType())
-                .collect(Collectors.toList());
-        if (!filteredList.isEmpty()) {
-            throw new DuplicateCaseException("A translation case with nickname '" +
-                    translationCase.getCaseNickname() +
-                    "' and project type '" + translationCase.getProjectType().name() + "' already exists. ");
-        }
-        return saveTranslationCase(translationCase);
-    }
-
-    /**
      * Archives the given translation case.
      *
      * @param customerId The id of the customer attempting to archive the case.
@@ -173,10 +145,16 @@ public class TranslationCaseDao {
      * @return The updated TranslationCase object.
      * @throws TranslationCaseNotFoundException if no translation case with the given id is found.
      * @throws SecurityException if the customerId does not match the customerId of the given case.
+     * @throws IllegalArgumentException if the translation case already contains an identical progress update.
      */
     public TranslationCase addProgressUpdate(ProgressUpdate progressUpdate) {
         TranslationCase translationCase = getTranslationCase(progressUpdate.getCustomerId(),
                 progressUpdate.getTranslationCaseId());
+
+        if (translationCase == null) {
+            throw new TranslationCaseNotFoundException("Could not find translation case with id" +
+                    progressUpdate.getTranslationCaseId());
+        }
 
         if (!translationCase.getCustomerId().equals(progressUpdate.getCustomerId())) {
             throw new SecurityException("CustomerId does not match, " +
@@ -185,7 +163,8 @@ public class TranslationCaseDao {
 
         List<ProgressUpdate> progressLog = translationCase.getProgressLog();
         if (progressLog != null && progressLog.contains(progressUpdate)) {
-            throw new IllegalArgumentException("This progress update is already in the progress log " + progressUpdate);
+            throw new DuplicateProgressUpdateException("This progress update is already in the progress log " +
+                    progressUpdate);
         }
 
         if (progressLog == null) {
@@ -196,6 +175,18 @@ public class TranslationCaseDao {
         translationCase.setProgressLog(progressLog);
         dynamoDbMapper.save(translationCase);
 
+        return translationCase;
+    }
+
+    /**
+     * Saves the given translation case.
+     *
+     * @param translationCase The translation case to save.
+     * @return The TranslationCase object that was saved.
+     * @throws SecurityException if the customerId on the existing translation case does not match the update.
+     */
+    public TranslationCase saveTranslationCase(TranslationCase translationCase) {
+        this.dynamoDbMapper.save(translationCase);
         return translationCase;
     }
 }

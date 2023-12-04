@@ -48,6 +48,44 @@ class TranslationClientDaoTest {
     }
 
     @Test
+    public void createTranslationClient_noExistingClient_callsSave() {
+        // GIVEN
+        TranslationClient translationClient = new TranslationClient();
+        translationClient.setTranslationClientName(CLIENT_NAME);
+        translationClient.setTranslationClientType(CLIENT_TYPE);
+        // Mocking the paginated query list
+        List<TranslationClient> testList = new ArrayList<>();
+        PaginatedQueryList<TranslationClient> listMock = mock(PaginatedQueryList.class);
+        // Return the test list when the mocked list is called
+        when(listMock.stream()).thenReturn(testList.stream());
+        when(dynamoDBMapper.query(eq(TranslationClient.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
+
+        // WHEN
+        clientDao.createTranslationClient(translationClient);
+
+        // THEN
+        verify(dynamoDBMapper).save(any(TranslationClient.class));
+    }
+
+    @Test
+    public void createTranslationClient_clientExistsWithSameNameAndClientType_throwsException() {
+        // GIVEN
+        TranslationClient translationClient = new TranslationClient();
+        translationClient.setTranslationClientName(CLIENT_NAME);
+        translationClient.setTranslationClientType(CLIENT_TYPE);
+        // Mocking the paginated query list
+        List<TranslationClient> testList = new ArrayList<>();
+        testList.add(translationClient);
+        PaginatedQueryList<TranslationClient> listMock = mock(PaginatedQueryList.class);
+        // Return the test list when the mocked list is called
+        when(listMock.stream()).thenReturn(testList.stream());
+        when(dynamoDBMapper.query(eq(TranslationClient.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
+
+        // WHEN & THEN
+        assertThrows(DuplicateTranslationClientException.class, () -> clientDao.createTranslationClient(translationClient));
+    }
+
+    @Test
     void getTranslationClient_validCustomerIdValidClientId_returnsTranslationClient() {
         // GIVEN
         TranslationClient translationClient = new TranslationClient();
@@ -115,44 +153,6 @@ class TranslationClientDaoTest {
 
         // WHEN & THEN
         assertThrows(TranslationClientNotFoundException.class, () -> clientDao.getAllTranslationClients(CUSTOMER_ID));
-    }
-
-    @Test
-    public void createTranslationClient_noExistingClient_callsSave() {
-        // GIVEN
-        TranslationClient translationClient = new TranslationClient();
-        translationClient.setTranslationClientName(CLIENT_NAME);
-        translationClient.setTranslationClientType(CLIENT_TYPE);
-        // Mocking the paginated query list
-        List<TranslationClient> testList = new ArrayList<>();
-        PaginatedQueryList<TranslationClient> listMock = mock(PaginatedQueryList.class);
-        // Return the test list when the mocked list is called
-        when(listMock.stream()).thenReturn(testList.stream());
-        when(dynamoDBMapper.query(eq(TranslationClient.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
-
-        // WHEN
-        clientDao.createTranslationClient(translationClient);
-
-        // THEN
-        verify(dynamoDBMapper).save(any(TranslationClient.class));
-    }
-
-    @Test
-    public void createTranslationClient_clientExistsWithSameNameAndClientType_throwsException() {
-        // GIVEN
-        TranslationClient translationClient = new TranslationClient();
-        translationClient.setTranslationClientName(CLIENT_NAME);
-        translationClient.setTranslationClientType(CLIENT_TYPE);
-        // Mocking the paginated query list
-        List<TranslationClient> testList = new ArrayList<>();
-        testList.add(translationClient);
-        PaginatedQueryList<TranslationClient> listMock = mock(PaginatedQueryList.class);
-        // Return the test list when the mocked list is called
-        when(listMock.stream()).thenReturn(testList.stream());
-        when(dynamoDBMapper.query(eq(TranslationClient.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
-
-        // WHEN & THEN
-        assertThrows(DuplicateTranslationClientException.class, () -> clientDao.createTranslationClient(translationClient));
     }
 
     @Test

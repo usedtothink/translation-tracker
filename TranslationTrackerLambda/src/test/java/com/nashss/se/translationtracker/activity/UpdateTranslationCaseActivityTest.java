@@ -3,7 +3,7 @@ package com.nashss.se.translationtracker.activity;
 import com.nashss.se.translationtracker.activity.requests.UpdateTranslationCaseRequest;
 import com.nashss.se.translationtracker.activity.results.UpdateTranslationCaseResult;
 import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
-import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
+import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.types.ProjectType;
@@ -115,7 +115,6 @@ class UpdateTranslationCaseActivityTest {
         List<ProgressUpdate> progressLog = new ArrayList<>(List.of(ProgressUpdate.builder().build()));
         Double totalWorkingHours = 3.2;
         Double wordsPerHour = 400.3;
-        PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();
 
         TranslationCase translationCase = new TranslationCase();
         translationCase.setCustomerId(CUSTOMER_ID);
@@ -134,7 +133,6 @@ class UpdateTranslationCaseActivityTest {
         translationCase.setProgressLog(progressLog);
         translationCase.setTotalWorkingHours(totalWorkingHours);
         translationCase.setWordsPerHour(wordsPerHour);
-        translationCase.setPaymentRecord(paymentRecord);
 
         return translationCase;
     }

@@ -1,6 +1,5 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
-import com.nashss.se.translationtracker.converters.PaymentHistoryRecordConverter;
 import com.nashss.se.translationtracker.converters.ProgressLogConverter;
 import com.nashss.se.translationtracker.types.ProjectType;
 
@@ -19,7 +18,7 @@ import java.util.Objects;
  */
 @DynamoDBTable(tableName = "translation_cases")
 public class TranslationCase {
-    public static final String CUSTOMER_INDEX = "CustomerIdIndex";
+    public static final String CUSTOMER_INDEX = "CaseCustomerIdIndex";
     private String customerId;
     private String translationCaseId;
     private String translationClientId;
@@ -36,7 +35,6 @@ public class TranslationCase {
     private List<ProgressUpdate> progressLog;
     private Double totalWorkingHours;
     private Double wordsPerHour;
-    private PaymentHistoryRecord paymentRecord;
 
     @DynamoDBAttribute(attributeName = "customerId")
     @DynamoDBIndexHashKey(globalSecondaryIndexName = CUSTOMER_INDEX, attributeName = "customerId")
@@ -185,16 +183,6 @@ public class TranslationCase {
         this.wordsPerHour = wordsPerHour;
     }
 
-    @DynamoDBTypeConverted(converter = PaymentHistoryRecordConverter.class)
-    @DynamoDBAttribute(attributeName = "paymentRecord")
-    public PaymentHistoryRecord getPaymentRecord() {
-        return paymentRecord;
-    }
-
-    public void setPaymentRecord(PaymentHistoryRecord paymentRecord) {
-        this.paymentRecord = paymentRecord;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -219,8 +207,7 @@ public class TranslationCase {
                 Objects.equals(getRushJob(), that.getRushJob()) &&
                 Objects.equals(getProgressLog(), that.getProgressLog()) &&
                 Objects.equals(getTotalWorkingHours(), that.getTotalWorkingHours()) &&
-                Objects.equals(getWordsPerHour(), that.getWordsPerHour()) &&
-                Objects.equals(getPaymentRecord(), that.getPaymentRecord());
+                Objects.equals(getWordsPerHour(), that.getWordsPerHour());
     }
 
     @Override
@@ -228,6 +215,6 @@ public class TranslationCase {
         return Objects.hash(getCustomerId(), getTranslationCaseId(), getTranslationClientId(), getCaseNickname(),
                 getSourceTextTitle(), getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(),
                 getStartDate(), getEndDate(), getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
-                getWordsPerHour(), getPaymentRecord());
+                getWordsPerHour());
     }
 }

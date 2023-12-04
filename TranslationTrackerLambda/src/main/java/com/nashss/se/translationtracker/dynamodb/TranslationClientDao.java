@@ -22,7 +22,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class TranslationClientDao {
-    public static final String CUSTOMER_INDEX = "CustomerIdIndex";
+    public static final String CUSTOMER_INDEX = "ClientCustomerIdIndex";
     private final DynamoDBMapper dynamoDbMapper;
     /**
      * Instantiates a TranslationClientDao object.
@@ -32,61 +32,6 @@ public class TranslationClientDao {
     @Inject
     public TranslationClientDao(DynamoDBMapper dynamoDbMapper) {
         this.dynamoDbMapper = dynamoDbMapper;
-    }
-
-    /**
-     * Returns the {@link TranslationClient} corresponding to the specified id.
-     *
-     * @param customerId The customer ID.
-     * @param translationClientId The TranslationClient ID.
-     * @return The stored TranslationClient.
-     * @throws TranslationClientNotFoundException if a translation client with the given id does not exist.
-     */
-    public TranslationClient getTranslationClient(String customerId, String translationClientId) {
-        TranslationClient translationClient = this.dynamoDbMapper.load(TranslationClient.class, translationClientId);
-
-        if (translationClient == null) {
-            throw new TranslationClientNotFoundException("Could not find translation client with id" +
-                    translationClientId);
-        }
-
-        if (!translationClient.getCustomerId().equals(customerId)) {
-            throw new SecurityException("CustomerId does not match, users may only retrieve cases they own.");
-        }
-        return translationClient;
-    }
-
-    /**
-     * Returns a list of {@link TranslationClient} corresponding to the customer id.
-     *
-     * @param customerId The customer ID.
-     * @return A list of stored TranslationClients, or null if none were found.
-     */
-    public List<TranslationClient> getAllTranslationClients(String customerId) {
-        Map<String, AttributeValue> valueMap = new HashMap<>();
-        valueMap.put(":customerId", new AttributeValue().withS(customerId));
-        DynamoDBQueryExpression<TranslationClient> queryExpression = new DynamoDBQueryExpression<TranslationClient>()
-                .withIndexName(CUSTOMER_INDEX)
-                .withConsistentRead(false)
-                .withKeyConditionExpression("customerId = :customerId")
-                .withExpressionAttributeValues(valueMap);
-        List<TranslationClient> translationClientList = dynamoDbMapper.query(TranslationClient.class, queryExpression);
-        if (translationClientList.isEmpty()) {
-            throw new TranslationClientNotFoundException("No translation clients were associated with id " +
-                    customerId);
-        }
-        return translationClientList;
-    }
-
-    /**
-     * Saves the given translation client.
-     *
-     * @param translationClient The translation client to save.
-     * @return The TranslationClient object that was saved.
-     */
-    public TranslationClient saveTranslationClient(TranslationClient translationClient) {
-        this.dynamoDbMapper.save(translationClient);
-        return translationClient;
     }
 
     /**
@@ -120,6 +65,51 @@ public class TranslationClientDao {
     }
 
     /**
+     * Returns the {@link TranslationClient} corresponding to the specified id.
+     *
+     * @param customerId The customer ID.
+     * @param translationClientId The TranslationClient ID.
+     * @return The stored TranslationClient.
+     * @throws TranslationClientNotFoundException if a translation client with the given id does not exist.
+     * @throws SecurityException if the given customerId does not match the customerId in the TranslationClient object.
+     */
+    public TranslationClient getTranslationClient(String customerId, String translationClientId) {
+        TranslationClient translationClient = this.dynamoDbMapper.load(TranslationClient.class, translationClientId);
+
+        if (translationClient == null) {
+            throw new TranslationClientNotFoundException("Could not find translation client with id" +
+                    translationClientId);
+        }
+
+        if (!translationClient.getCustomerId().equals(customerId)) {
+            throw new SecurityException("CustomerId does not match, users may only retrieve cases they own.");
+        }
+        return translationClient;
+    }
+
+    /**
+     * Returns a list of {@link TranslationClient} corresponding to the customer id.
+     *
+     * @param customerId The customer ID.
+     * @return A list of stored TranslationClients, or null if none were found.
+     */
+    public List<TranslationClient> getAllTranslationClients(String customerId) {
+        Map<String, AttributeValue> valueMap = new HashMap<>();
+        valueMap.put(":customerId", new AttributeValue().withS(customerId));
+        DynamoDBQueryExpression<TranslationClient> queryExpression = new DynamoDBQueryExpression<TranslationClient>()
+                .withIndexName(CUSTOMER_INDEX)
+                .withConsistentRead(false)
+                .withKeyConditionExpression("customerId = :customerId")
+                .withExpressionAttributeValues(valueMap);
+        List<TranslationClient> translationClientList = dynamoDbMapper.query(TranslationClient.class, queryExpression);
+        if (translationClientList.isEmpty()) {
+            throw new TranslationClientNotFoundException("No translation clients are associated with id " +
+                    customerId);
+        }
+        return translationClientList;
+    }
+
+    /**
      * Archives the given translation client.
      *
      * @param customerId The id of the customer attempting to archive the client.
@@ -145,6 +135,17 @@ public class TranslationClientDao {
 
         translationClient.setTranslationClientId(translationClientId);
         this.dynamoDbMapper.delete(translationClient);
+        return translationClient;
+    }
+
+    /**
+     * Saves the given translation client.
+     *
+     * @param translationClient The translation client to save.
+     * @return The TranslationClient object that was saved.
+     */
+    public TranslationClient saveTranslationClient(TranslationClient translationClient) {
+        this.dynamoDbMapper.save(translationClient);
         return translationClient;
     }
 }

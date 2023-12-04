@@ -1,6 +1,5 @@
 package com.nashss.se.translationtracker.converters;
 
-import com.nashss.se.translationtracker.dynamodb.models.PaymentHistoryRecord;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
@@ -35,7 +34,6 @@ class ModelConverterTest {
     private List<ProgressUpdate> progressLog = new ArrayList<>(List.of(ProgressUpdate.builder().build()));
     private Double totalWorkingHours = 3.2;
     private Double wordsPerHour = 400.3;
-    private PaymentHistoryRecord paymentRecord = PaymentHistoryRecord.builder().build();
 
     // Translation client data
     private String translationClientName = "translationClientName";
@@ -64,7 +62,6 @@ class ModelConverterTest {
         translationCase.setProgressLog(progressLog);
         translationCase.setTotalWorkingHours(totalWorkingHours);
         translationCase.setWordsPerHour(wordsPerHour);
-        translationCase.setPaymentRecord(paymentRecord);
 
         translationClient.setCustomerId(customerId);
         translationClient.setTranslationClientId(translationClientId);
@@ -94,7 +91,6 @@ class ModelConverterTest {
         assertEquals(progressLog, caseModel.getProgressLog());
         assertEquals(totalWorkingHours, caseModel.getTotalWorkingHours());
         assertEquals(wordsPerHour, caseModel.getWordsPerHour());
-        assertEquals(paymentRecord, caseModel.getPaymentRecord());
     }
 
     @Test
@@ -121,7 +117,6 @@ class ModelConverterTest {
         assertEquals(progressLog, caseModelList.get(0).getProgressLog());
         assertEquals(totalWorkingHours, caseModelList.get(0).getTotalWorkingHours());
         assertEquals(wordsPerHour, caseModelList.get(0).getWordsPerHour());
-        assertEquals(paymentRecord, caseModelList.get(0).getPaymentRecord());
     }
 
     @Test
