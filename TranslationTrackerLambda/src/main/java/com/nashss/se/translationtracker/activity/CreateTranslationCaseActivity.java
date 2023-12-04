@@ -3,6 +3,7 @@ package com.nashss.se.translationtracker.activity;
 import com.nashss.se.translationtracker.activity.requests.CreateTranslationCaseRequest;
 import com.nashss.se.translationtracker.activity.results.CreateTranslationCaseResult;
 import com.nashss.se.translationtracker.converters.ModelConverter;
+import com.nashss.se.translationtracker.dynamodb.PaymentRecordDao;
 import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
@@ -18,15 +19,18 @@ import javax.inject.Inject;
 
 public class CreateTranslationCaseActivity {
     private final TranslationCaseDao caseDao;
+    private final PaymentRecordDao paymentRecordDao;
 
     /**
      * Instantiates a new CreateTranslationCaseActivity object.
      *
      * @param caseDao to access the translation cases table.
+     * @param paymentRecordDao to access the payment record table.
      */
     @Inject
-    public CreateTranslationCaseActivity(TranslationCaseDao caseDao) {
+    public CreateTranslationCaseActivity(TranslationCaseDao caseDao, PaymentRecordDao paymentRecordDao) {
         this.caseDao = caseDao;
+        this.paymentRecordDao = paymentRecordDao;
     }
     /**
      * This method handles the incoming request by persisting a new translation case
@@ -41,13 +45,17 @@ public class CreateTranslationCaseActivity {
      */
     public CreateTranslationCaseResult handleRequest(final CreateTranslationCaseRequest
             createTranslationCaseRequest) {
+        String customerId = createTranslationCaseRequest.getCustomerId();
+        String translationCaseId = createTranslationCaseRequest.getTranslationCaseId();
+
         TranslationCase newTranslationCase = new TranslationCase();
-        newTranslationCase.setCustomerId(createTranslationCaseRequest.getCustomerId());
-        newTranslationCase.setTranslationCaseId(createTranslationCaseRequest.getTranslationCaseId());
+        newTranslationCase.setCustomerId(customerId);
+        newTranslationCase.setTranslationCaseId(translationCaseId);
         newTranslationCase.setProjectType(ProjectType.valueOf(createTranslationCaseRequest.getProjectType()));
         newTranslationCase.setCaseNickname(createTranslationCaseRequest.getCaseNickname());
 
         caseDao.createTranslationCase(newTranslationCase);
+        paymentRecordDao.createPaymentRecord(customerId, translationCaseId);
 
         TranslationCaseModel translationCaseModel = new ModelConverter().toTranslationCaseModel(newTranslationCase);
         return CreateTranslationCaseResult.builder()

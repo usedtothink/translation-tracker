@@ -1,6 +1,5 @@
 package com.nashss.se.translationtracker.dynamodb.models;
 
-import com.nashss.se.translationtracker.converters.PaymentHistoryRecordConverter;
 import com.nashss.se.translationtracker.converters.ProgressLogConverter;
 import com.nashss.se.translationtracker.types.ProjectType;
 
@@ -36,7 +35,6 @@ public class TranslationCase {
     private List<ProgressUpdate> progressLog;
     private Double totalWorkingHours;
     private Double wordsPerHour;
-    private PaymentRecord paymentRecord;
 
     @DynamoDBAttribute(attributeName = "customerId")
     @DynamoDBIndexHashKey(globalSecondaryIndexName = CUSTOMER_INDEX, attributeName = "customerId")
@@ -209,8 +207,7 @@ public class TranslationCase {
                 Objects.equals(getRushJob(), that.getRushJob()) &&
                 Objects.equals(getProgressLog(), that.getProgressLog()) &&
                 Objects.equals(getTotalWorkingHours(), that.getTotalWorkingHours()) &&
-                Objects.equals(getWordsPerHour(), that.getWordsPerHour()) &&
-                Objects.equals(getPaymentRecord(), that.getPaymentRecord());
+                Objects.equals(getWordsPerHour(), that.getWordsPerHour());
     }
 
     @Override
@@ -218,6 +215,6 @@ public class TranslationCase {
         return Objects.hash(getCustomerId(), getTranslationCaseId(), getTranslationClientId(), getCaseNickname(),
                 getSourceTextTitle(), getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(),
                 getStartDate(), getEndDate(), getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
-                getWordsPerHour(), getPaymentRecord());
+                getWordsPerHour());
     }
 }

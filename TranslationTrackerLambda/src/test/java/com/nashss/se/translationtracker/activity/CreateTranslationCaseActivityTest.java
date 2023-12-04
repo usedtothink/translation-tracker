@@ -2,6 +2,7 @@ package com.nashss.se.translationtracker.activity;
 
 import com.nashss.se.translationtracker.activity.requests.CreateTranslationCaseRequest;
 import com.nashss.se.translationtracker.activity.results.CreateTranslationCaseResult;
+import com.nashss.se.translationtracker.dynamodb.PaymentRecordDao;
 import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.types.ProjectType;
@@ -21,12 +22,14 @@ import static org.mockito.MockitoAnnotations.openMocks;
 class CreateTranslationCaseActivityTest {
     @Mock
     private TranslationCaseDao caseDao;
+    @Mock
+    private PaymentRecordDao paymentRecordDao;
     private CreateTranslationCaseActivity createTranslationCaseActivity;
 
     @BeforeEach
     void setup() {
         openMocks(this);
-        createTranslationCaseActivity = new CreateTranslationCaseActivity(caseDao);
+        createTranslationCaseActivity = new CreateTranslationCaseActivity(caseDao, paymentRecordDao);
     }
 
     @Test
@@ -47,6 +50,7 @@ class CreateTranslationCaseActivityTest {
 
         // THEN
         verify(caseDao).createTranslationCase(any(TranslationCase.class));
+        verify(paymentRecordDao).createPaymentRecord(any(String.class), any(String.class));
 
         assertNotNull(result.getTranslationCase().getTranslationCaseId());
         assertEquals(expectedCustomerId, result.getTranslationCase().getCustomerId());

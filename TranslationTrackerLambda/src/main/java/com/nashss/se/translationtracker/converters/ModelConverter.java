@@ -1,8 +1,10 @@
 package com.nashss.se.translationtracker.converters;
 
+import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
+import com.nashss.se.translationtracker.model.PaymentRecordModel;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
 import com.nashss.se.translationtracker.model.TranslationClientModel;
 
@@ -43,7 +45,6 @@ public class ModelConverter {
                 .withProgressLog(progress)
                 .withTotalWorkingHours(translationCase.getTotalWorkingHours())
                 .withWordsPerHour(translationCase.getWordsPerHour())
-                .withPaymentHistoryRecord(translationCase.getPaymentRecord())
                 .build();
     }
 
@@ -95,4 +96,27 @@ public class ModelConverter {
         return translationClientModels;
     }
 
+    /**
+     * Converts a provided {@link PaymentRecord} into a {@link PaymentRecordModel} representation.
+     *
+     * @param paymentRecord the payment record to convert
+     * @return the converted payment record
+     */
+    public PaymentRecordModel toTranslationPaymentModel(PaymentRecord paymentRecord) {
+
+        return PaymentRecordModel.builder()
+                .withCustomerId(paymentRecord.getCustomerId())
+                .withTranslationCaseId(paymentRecord.getTranslationCaseId())
+                .withTranslationClientId(paymentRecord.getTranslationClientId())
+                .withCasePaid(paymentRecord.getCasePaid())
+                .withPaymentDate(paymentRecord.getPaymentDate())
+                .withOnTime(paymentRecord.getOnTime())
+                .withGrossPayment(paymentRecord.getGrossPayment())
+                .withTaxRate(paymentRecord.getTaxRate())
+                .withPayRate(paymentRecord.getPayRate())
+                .withPayRateUnit(paymentRecord.getPayRateUnit())
+                .withWordCount(paymentRecord.getWordCount())
+                .withWordCountUnit(paymentRecord.getWordCountUnit())
+                .build();
+    }
 }

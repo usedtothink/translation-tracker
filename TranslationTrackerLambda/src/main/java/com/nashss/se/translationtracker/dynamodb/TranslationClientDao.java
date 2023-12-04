@@ -35,12 +35,43 @@ public class TranslationClientDao {
     }
 
     /**
+     * Creates a new translation client, checks to make sure the client name is not a duplicate.
+     *
+     * @param translationClient The translation client to save.
+     * @return The TranslationClient object that was saved.
+     * @throws DuplicateTranslationClientException when the client name already exists.
+     */
+    public TranslationClient createTranslationClient(TranslationClient translationClient) {
+        Map<String, AttributeValue> valueMap = new HashMap<>();
+        valueMap.put(":customerId", new AttributeValue().withS(translationClient.getCustomerId()));
+        DynamoDBQueryExpression<TranslationClient> queryExpression = new DynamoDBQueryExpression<TranslationClient>()
+                .withIndexName(CUSTOMER_INDEX)
+                .withConsistentRead(false)
+                .withKeyConditionExpression("customerId = :customerId")
+                .withExpressionAttributeValues(valueMap);
+        List<TranslationClient> translationClientList = dynamoDbMapper.query(TranslationClient.class, queryExpression);
+        List<TranslationClient> filteredList = translationClientList.stream()
+                .filter(translation -> translation.getTranslationClientName()
+                        .equals(translationClient.getTranslationClientName()) &&
+                        translation.getTranslationClientType() == translationClient.getTranslationClientType())
+                .collect(Collectors.toList());
+
+        if (!filteredList.isEmpty()) {
+            throw new DuplicateTranslationClientException("A translation client with name '" +
+                    translationClient.getTranslationClientName() +
+                    "' and client type '" + translationClient.getTranslationClientType().name() + "' already exists. ");
+        }
+        return saveTranslationClient(translationClient);
+    }
+
+    /**
      * Returns the {@link TranslationClient} corresponding to the specified id.
      *
      * @param customerId The customer ID.
      * @param translationClientId The TranslationClient ID.
      * @return The stored TranslationClient.
      * @throws TranslationClientNotFoundException if a translation client with the given id does not exist.
+     * @throws SecurityException if the given customerId does not match the customerId in the TranslationClient object.
      */
     public TranslationClient getTranslationClient(String customerId, String translationClientId) {
         TranslationClient translationClient = this.dynamoDbMapper.load(TranslationClient.class, translationClientId);
@@ -72,51 +103,10 @@ public class TranslationClientDao {
                 .withExpressionAttributeValues(valueMap);
         List<TranslationClient> translationClientList = dynamoDbMapper.query(TranslationClient.class, queryExpression);
         if (translationClientList.isEmpty()) {
-            throw new TranslationClientNotFoundException("No translation clients were associated with id " +
+            throw new TranslationClientNotFoundException("No translation clients are associated with id " +
                     customerId);
         }
         return translationClientList;
-    }
-
-    /**
-     * Saves the given translation client.
-     *
-     * @param translationClient The translation client to save.
-     * @return The TranslationClient object that was saved.
-     */
-    public TranslationClient saveTranslationClient(TranslationClient translationClient) {
-        this.dynamoDbMapper.save(translationClient);
-        return translationClient;
-    }
-
-    /**
-     * Creates a new translation client, checks to make sure the client name is not a duplicate.
-     *
-     * @param translationClient The translation client to save.
-     * @return The TranslationClient object that was saved.
-     * @throws DuplicateTranslationClientException when the client name already exists.
-     */
-    public TranslationClient createTranslationClient(TranslationClient translationClient) {
-        Map<String, AttributeValue> valueMap = new HashMap<>();
-        valueMap.put(":customerId", new AttributeValue().withS(translationClient.getCustomerId()));
-        DynamoDBQueryExpression<TranslationClient> queryExpression = new DynamoDBQueryExpression<TranslationClient>()
-                .withIndexName(CUSTOMER_INDEX)
-                .withConsistentRead(false)
-                .withKeyConditionExpression("customerId = :customerId")
-                .withExpressionAttributeValues(valueMap);
-        List<TranslationClient> translationClientList = dynamoDbMapper.query(TranslationClient.class, queryExpression);
-        List<TranslationClient> filteredList = translationClientList.stream()
-                .filter(translation -> translation.getTranslationClientName()
-                        .equals(translationClient.getTranslationClientName()) &&
-                        translation.getTranslationClientType() == translationClient.getTranslationClientType())
-                .collect(Collectors.toList());
-
-        if (!filteredList.isEmpty()) {
-            throw new DuplicateTranslationClientException("A translation client with name '" +
-                    translationClient.getTranslationClientName() +
-                    "' and client type '" + translationClient.getTranslationClientType().name() + "' already exists. ");
-        }
-        return saveTranslationClient(translationClient);
     }
 
     /**
@@ -145,6 +135,17 @@ public class TranslationClientDao {
 
         translationClient.setTranslationClientId(translationClientId);
         this.dynamoDbMapper.delete(translationClient);
+        return translationClient;
+    }
+
+    /**
+     * Saves the given translation client.
+     *
+     * @param translationClient The translation client to save.
+     * @return The TranslationClient object that was saved.
+     */
+    public TranslationClient saveTranslationClient(TranslationClient translationClient) {
+        this.dynamoDbMapper.save(translationClient);
         return translationClient;
     }
 }

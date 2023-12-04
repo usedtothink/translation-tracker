@@ -510,7 +510,7 @@ Resources:
               ProjectionType: "ALL"
           - IndexName: "PaymentCustomerIdIndex"
             KeySchema:
-              - AttributeName: "translationClientId"
+              - AttributeName: "customerId"
                 KeyType: "HASH"
             Projection:
               ProjectionType: "ALL"
