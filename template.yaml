@@ -360,6 +360,26 @@ Resources:
               Path: /translationcases/case/payment
               Method: get
 
+    UpdatePaymentRecordLambda:
+      Type: AWS::Serverless::Function
+      Properties:
+        Role: !GetAtt AccessRole.Arn
+        CodeUri: TranslationTrackerLambda
+        Handler: com.nashss.se.translationtracker.lambda.UpdatePaymentRecordLambda::handleRequest
+        Runtime: java11
+        Architectures:
+          - x86_64
+        MemorySize: 512
+        Environment:
+          Variables:
+            JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1
+        Events:
+          TranslationTracker:
+            Type: Api
+            Properties:
+              Path: /translationcases/case/payment
+              Method: put
+
     CreateTranslationClientLambda:
       Type: AWS::Serverless::Function
       Properties:

@@ -20,8 +20,6 @@ public class UpdateTranslationCaseLambda
                 return input.fromUserClaims(claims ->
                         UpdateTranslationCaseRequest.builder()
                             .withCustomerId(claims.get("email"))
-                            // The TranslationCaseId is going to come in
-                            // through the front end including it in the body
                             .withTranslationCaseId(unauthenticatedRequest.getTranslationCaseId())
                             .withTranslationClientId(unauthenticatedRequest.getTranslationClientId())
                             .withSourceTextTitle(unauthenticatedRequest.getSourceTextTitle())

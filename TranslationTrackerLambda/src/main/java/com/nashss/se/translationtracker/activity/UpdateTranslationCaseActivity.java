@@ -27,27 +27,20 @@ public class UpdateTranslationCaseActivity {
 
     /**
      * This method handles the incoming request by retrieving the translation case, updating it
-     * and persisting the translation case.
+     * and persisting the updated translation case.
      * <p>
      * It then returns the updated translation case.
      * <p>
      * If the translation case does not exist, this should throw a TranslationCaseNotFoundException.
-     * <p>
-     * If the request tries to update the customer ID,
-     * this should throw an InvalidAttributeChangeException.
      *
      * @param updateTranslationCaseRequest Request object containing the translation case ID, customer ID, and other
      *                                     values for update.
      * @return updateTranslationCaseResult Result object containing the API defined {@link TranslationCaseModel}
      */
     public UpdateTranslationCaseResult handleRequest(final UpdateTranslationCaseRequest updateTranslationCaseRequest) {
-        String requestedId = updateTranslationCaseRequest.getTranslationCaseId();
+        String requestedTranslationCaseId = updateTranslationCaseRequest.getTranslationCaseId();
         String customerId = updateTranslationCaseRequest.getCustomerId();
-        TranslationCase translationCase = caseDao.getTranslationCase(customerId, requestedId);
-
-        if (!translationCase.getCustomerId().equals(updateTranslationCaseRequest.getCustomerId())) {
-            throw new SecurityException("You must own a translation case to update it.");
-        }
+        TranslationCase translationCase = caseDao.getTranslationCase(customerId, requestedTranslationCaseId);
 
         if (updateTranslationCaseRequest.getTranslationClientId() != null) {
             translationCase.setTranslationClientId(updateTranslationCaseRequest.getTranslationClientId());

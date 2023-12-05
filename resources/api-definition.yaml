@@ -375,7 +375,7 @@ paths:
                 type: string
       responses:
         "200":
-          description: AddProgressUpdateResponse
+          description: GetPaymentRecordResponse
           content:
             application/json:
               schema:
@@ -407,6 +407,74 @@ paths:
                     type: string
         "500":
           description: "Invalid input parameters"
+
+    put:
+      tags:
+        -TranslationCases
+      summary: Update an existing a payment record (UpdatePaymentRecordLambda)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              customerId:
+                type: string
+              translationCaseId:
+                type: string
+              translationClientId:
+                type: string
+              casePaid:
+                type: boolean
+              paymentDate:
+                type: string
+              onTime:
+                type: boolean
+              grossPayment:
+                type: number
+              taxRate:
+                type: number
+              payRate:
+                type: number
+              payRateUnit:
+                type: string
+              wordCount:
+                type: number
+              wordCountUnit:
+                type: string
+      responses:
+        "200":
+          description: UpdatePaymentRecordResponse
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customerId:
+                    type: string
+                  translationCaseId:
+                    type: string
+                  translationClientId:
+                    type: string
+                  casePaid:
+                    type: boolean
+                  paymentDate:
+                    type: string
+                  onTime:
+                    type: boolean
+                  grossPayment:
+                    type: number
+                  taxRate:
+                    type: number
+                  payRate:
+                    type: number
+                  payRateUnit:
+                    type: string
+                  wordCount:
+                    type: number
+                  wordCountUnit:
+                    type: string
+        "500":
+          description: "Invalid input parameters"
+
 
   /translationclients:
     post:
