@@ -4,12 +4,13 @@ actor Client
 participant "API Gateway/Lambda"
 participant ArchiveTranslationCaseActivity
 participant TranslationCaseDao
+participant PaymentRecordDao
 database    DynamoDB
 
 Client -> "API Gateway/Lambda" : HTTP Request
 "API Gateway/Lambda" -> ArchiveTranslationCaseActivity : ArchiveTranslationCaseRequest
 
-ArchiveTranslationCaseActivity -> TranslationCaseDao : getTranslationCase(translationCaseId)
+ArchiveTranslationCaseActivity -> TranslationCaseDao : archiveTranslationCase(customerId, translationCaseId)
 TranslationCaseDao -> DynamoDB : load(translationCaseId)
 
 alt if DynamoDB returns null
@@ -20,18 +21,49 @@ alt if DynamoDB returns null
 else continue
 end
 
-ArchiveTranslationCaseActivity -> ArchiveTranslationCaseActivity : append "archived" to \n the translationCaseId
+DynamoDB --> TranslationCaseDao : return TranslationCase data
 
-ArchiveTranslationCaseActivity -> TranslationCaseDao : updateTranslationCase(archivedCase)
+alt if Customer ID doesn't match the saved TranslationCase
+    TranslationCaseDao --> ArchiveTranslationCaseActivity: throw SecurityException
+    ArchiveTranslationCaseActivity --> "API Gateway/Lambda": propagate TranslationCaseNotFoundException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
 
+TranslationCaseDao -> TranslationCaseDao : prepend "archived" to \n the translationCaseId
 TranslationCaseDao -> DynamoDB : save(archivedCase)
 DynamoDB --> TranslationCaseDao : return 200 response
-
 TranslationCaseDao -> DynamoDB : delete(translationCaseId)
 DynamoDB --> TranslationCaseDao : return 200 response
+TranslationCaseDao --> ArchiveTranslationCaseActivity : return the original TranslationCase object
 
+ArchiveTranslationCaseActivity -> PaymentRecordDao : archivePaymentRecord(customerId, translationCaseId)
+PaymentRecordDao -> DynamoDB : load(translationCaseId)
 
-TranslationCaseDao --> ArchiveTranslationCaseActivity : return the removed translationCase object
+alt if DynamoDB returns null
+    DynamoDB --> PaymentRecordDao: return with no item data
+    PaymentRecordDao --> ArchiveTranslationCaseActivity: throw TranslationCaseNotFoundException
+    ArchiveTranslationCaseActivity --> "API Gateway/Lambda": propagate TranslationCaseNotFoundException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
+
+DynamoDB --> PaymentRecordDao : return PaymentRecord data
+
+alt if Customer ID doesn't match the saved PaymentRecord
+    PaymentRecordDao --> ArchiveTranslationCaseActivity: throw SecurityException
+    ArchiveTranslationCaseActivity --> "API Gateway/Lambda": propagate TranslationCaseNotFoundException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
+
+PaymentRecordDao -> PaymentRecordDao : prepend "archived" to \n the translationCaseId
+PaymentRecordDao -> DynamoDB : save(archivedPaymentRecord)
+DynamoDB --> PaymentRecordDao : return 200 response
+PaymentRecordDao -> DynamoDB : delete(translationCaseId)
+DynamoDB --> PaymentRecordDao : return 200 response
+PaymentRecordDao --> ArchiveTranslationCaseActivity : return the original PaymentRecord object
+
 ArchiveTranslationCaseActivity --> "API Gateway/Lambda" : return ArchiveTranslationCaseResult
 "API Gateway/Lambda" --> Client : return 200 response with ArchiveTranslationCaseResult data
 

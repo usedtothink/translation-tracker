@@ -1,0 +1,35 @@
+@startuml
+
+actor Client
+participant "API Gateway/Lambda"
+participant GetPaymentRecordActivity
+participant PaymentRecordDao
+database    DynamoDB
+
+Client -> "API Gateway/Lambda" : HTTP Request
+"API Gateway/Lambda" -> GetPaymentRecordActivity : GetTranslationClientRequest
+GetPaymentRecordActivity -> PaymentRecordDao : getPaymentRecord(customerId, translationCaseId)
+PaymentRecordDao -> DynamoDB : load(translationCaseId)
+
+alt if DynamoDB returns null
+    DynamoDB --> PaymentRecordDao : return with no item data
+    PaymentRecordDao --> GetPaymentRecordActivity : throw TranslationCaseNotFoundException
+    GetPaymentRecordActivity --> "API Gateway/Lambda" : propagate TranslationCasetNotFoundException
+    "API Gateway/Lambda" --> Client : return 400 response
+else else continue
+end
+
+DynamoDB --> PaymentRecordDao : return PaymentRecord data
+
+alt if customerId does not match the customerId of the saved PaymentRecord
+    PaymentRecordDao --> GetPaymentRecordActivity : throw SecurityException
+    GetPaymentRecordActivity --> "API Gateway/Lambda" : propagate SecurityException
+    "API Gateway/Lambda" --> Client : return 400 response
+else else continue
+end
+
+PaymentRecordDao --> GetPaymentRecordActivity : return PaymentRecord object
+GetPaymentRecordActivity --> "API Gateway/Lambda" : return GetPaymentRecordResult
+"API Gateway/Lambda" --> Client : return 200 response with GetPaymentRecordResult data
+
+@enduml

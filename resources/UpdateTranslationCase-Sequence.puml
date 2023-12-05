@@ -3,13 +3,15 @@
 actor Client
 participant "API Gateway/Lambda"
 participant UpdateTranslationCaseActivity
+participant UpdatePaymentRecordActivity
 participant TranslationCaseDao
+participant PaymentRecordDao
 database    DynamoDB
 
 Client -> "API Gateway/Lambda" : HTTP Request
 "API Gateway/Lambda" -> UpdateTranslationCaseActivity : UpdateTranslationCaseRequest
 
-UpdateTranslationCaseActivity -> TranslationCaseDao : getTranslationCase(translationCaseId)
+UpdateTranslationCaseActivity -> TranslationCaseDao : getTranslationCase(customerId, translationCaseId)
 TranslationCaseDao -> DynamoDB : load(translationCaseId)
 
 alt if DynamoDB returns null
@@ -20,10 +22,45 @@ alt if DynamoDB returns null
 else continue
 end
 
+alt if customerId doesn't match the customerId on the saved case
+    UpdatePaymentRecordActivity --> UpdateTranslationCaseActivity : throw SecurityException
+    UpdateTranslationCaseActivity --> "API Gateway/Lambda": propagate SecurityException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
+
 UpdateTranslationCaseActivity -> UpdateTranslationCaseActivity : update the item values based\non the values in the request
 
-UpdateTranslationCaseActivity -> TranslationCaseDao : saveTranslationCase(updatedCase)
+alt if translationClientId is updated
+    UpdateTranslationCaseActivity -> UpdatePaymentRecordActivity: handleRequest(request)
+    UpdatePaymentRecordActivity -> PaymentRecordDao : getPaymentRecord(customerId, translationCaseId)
+    PaymentRecordDao -> DynamoDB : load(translationCaseId)
 
+    alt if no PaymentRecord is found
+        DynamoDB --> PaymentRecordDao : return null
+        PaymentRecordDao --> UpdatePaymentRecordActivity : throw TranslationCaseNotFoundException
+        UpdatePaymentRecordActivity --> UpdateTranslationCaseActivity : propagate TranslationCaseNotFoundException
+        UpdateTranslationCaseActivity --> "API Gateway/Lambda" : propagate TranslationCaseNotFoundException
+        "API Gateway/Lambda" --> Client : return 400 response
+    else continue
+    end
+
+    alt if customerId does not match the customerId on the saved payment record
+        PaymentRecordDao --> UpdatePaymentRecordActivity : throw TranslationCaseNotFoundException
+        UpdatePaymentRecordActivity --> UpdateTranslationCaseActivity : propagate TranslationCaseNotFoundException
+        UpdateTranslationCaseActivity --> "API Gateway/Lambda" : propagate TranslationCaseNotFoundException
+        "API Gateway/Lambda" --> Client : return 400 response
+    else continue
+    end
+
+    UpdatePaymentRecordActivity -> UpdatePaymentRecordActivity : update the translationClientId
+    UpdatePaymentRecordActivity -> PaymentRecordDao : savePaymentRecord(updatedPaymentRecord)
+    PaymentRecordDao --> UpdatePaymentRecordActivity : return 200 response
+    UpdatePaymentRecordActivity --> UpdateTranslationCaseActivity : return updated PaymentRecord object
+else continue
+end
+
+UpdateTranslationCaseActivity -> TranslationCaseDao : saveTranslationCase(updatedCase)
 TranslationCaseDao -> DynamoDB : save(updatedCase)
 DynamoDB --> TranslationCaseDao : return 200 response
 TranslationCaseDao --> UpdateTranslationCaseActivity : return updated translationCase object

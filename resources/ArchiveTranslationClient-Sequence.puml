@@ -10,7 +10,7 @@ database    DynamoDB
 Client -> "API Gateway/Lambda" : HTTP Request
 "API Gateway/Lambda" -> ArchiveTranslationClientActivity : ArchiveTranslationClientRequest
 
-ArchiveTranslationClientActivity -> TranslationClientDao : getTranslationClient(translationClientId)
+ArchiveTranslationClientActivity -> TranslationClientDao : archiveTranslationClient(customerId, translationClientId)
 TranslationClientDao -> DynamoDB : load(translationClientId)
 
 alt if DynamoDB returns null
@@ -21,27 +21,24 @@ alt if DynamoDB returns null
 else else continue
 end
 
-alt if archivedClient has associated translation cases
-    loop for each translation case
-    ArchiveTranslationClientActivity -> ArchiveTranslationCaseActivity : ArchiveTranslationCaseRequest
-    ArchiveTranslationCaseActivity --> ArchiveTranslationClientActivity : return archived TranslationCase
-    end
+DynamoDB --> TranslationClientDao : return TranslationClient data
+
+alt if customerId does not match the customerId of the saved TranslationClient
+    TranslationClientDao --> ArchiveTranslationClientActivity: throw SecurityException
+    ArchiveTranslationClientActivity --> "API Gateway/Lambda": propagate SecurityException
+    "API Gateway/Lambda" --> Client : return 400 response
 else else continue
 end
 
-ArchiveTranslationClientActivity -> ArchiveTranslationClientActivity : append "archived" to \n the translationClientId
-
-ArchiveTranslationClientActivity -> TranslationClientDao : updateTranslationClient(archivedClient)
+TranslationClientDao -> TranslationClientDao : prepend "archived" to \n the translationClientId
 
 TranslationClientDao -> DynamoDB : save(archivedClient)
 DynamoDB --> TranslationClientDao : return 200 response
-
-
-TranslationClientDao -> DynamoDB : delete(translationClientId)
+TranslationClientDao -> DynamoDB : delete(originalClient)
 DynamoDB --> TranslationClientDao : return 200 response
 
 
-TranslationClientDao --> ArchiveTranslationClientActivity : return the removed translationClient object
+TranslationClientDao --> ArchiveTranslationClientActivity : return the original TranslationClient object
 ArchiveTranslationClientActivity --> "API Gateway/Lambda" : return ArchiveTranslationClientResult
 "API Gateway/Lambda" --> Client : return 200 response with ArchiveTranslationClientResult data
 

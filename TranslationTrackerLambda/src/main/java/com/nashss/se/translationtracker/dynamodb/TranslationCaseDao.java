@@ -2,7 +2,7 @@ package com.nashss.se.translationtracker.dynamodb;
 
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
-import com.nashss.se.translationtracker.exceptions.DuplicateCaseException;
+import com.nashss.se.translationtracker.exceptions.DuplicateTranslationCaseException;
 import com.nashss.se.translationtracker.exceptions.DuplicateProgressUpdateException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 
@@ -42,7 +42,7 @@ public class TranslationCaseDao {
      *
      * @param translationCase The translation case to save.
      * @return The TranslationCase object that was saved.
-     * @throws DuplicateCaseException when the case nickname already exists.
+     * @throws DuplicateTranslationCaseException when the case nickname already exists.
      */
     public TranslationCase createTranslationCase(TranslationCase translationCase) {
         Map<String, AttributeValue> valueMap = new HashMap<>();
@@ -59,7 +59,7 @@ public class TranslationCaseDao {
                         translation.getProjectType() == translationCase.getProjectType())
                 .collect(Collectors.toList());
         if (!filteredList.isEmpty()) {
-            throw new DuplicateCaseException("A translation case with nickname '" +
+            throw new DuplicateTranslationCaseException("A translation case with nickname '" +
                     translationCase.getCaseNickname() +
                     "' and project type '" + translationCase.getProjectType().name() + "' already exists. ");
         }
@@ -150,11 +150,6 @@ public class TranslationCaseDao {
     public TranslationCase addProgressUpdate(ProgressUpdate progressUpdate) {
         TranslationCase translationCase = getTranslationCase(progressUpdate.getCustomerId(),
                 progressUpdate.getTranslationCaseId());
-
-        if (translationCase == null) {
-            throw new TranslationCaseNotFoundException("Could not find translation case with id" +
-                    progressUpdate.getTranslationCaseId());
-        }
 
         if (!translationCase.getCustomerId().equals(progressUpdate.getCustomerId())) {
             throw new SecurityException("CustomerId does not match, " +

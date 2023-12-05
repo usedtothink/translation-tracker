@@ -8,10 +8,10 @@ database    DynamoDB
 
 Client -> "API Gateway/Lambda" : HTTP Request
 "API Gateway/Lambda" -> GetTranslationClientActivity : GetTranslationClientRequest
-GetTranslationClientActivity -> TranslationClientDao : getTranslationClient(translationClientId)
+GetTranslationClientActivity -> TranslationClientDao : getTranslationClient(customerId, translationClientId)
 TranslationClientDao -> DynamoDB : load(translationClientId)
 
-alt if translationClient does not exist
+alt if DynamoDB returns null
     DynamoDB --> TranslationClientDao : return with no item data
     TranslationClientDao --> GetTranslationClientActivity : throw TranslationClientNotFoundException
     GetTranslationClientActivity --> "API Gateway/Lambda" : propagate TranslationClientNotFoundException
@@ -20,7 +20,15 @@ else else continue
 end
 
 DynamoDB --> TranslationClientDao : return translationClient data
-TranslationClientDao --> GetTranslationClientActivity : return translationClient object
+
+alt if customerId does not match the customerId of the saved TranslationClient
+    TranslationClientDao --> GetTranslationClientActivity : throw SecurityException
+    GetTranslationClientActivity --> "API Gateway/Lambda" : propagate SecurityException
+    "API Gateway/Lambda" --> Client : return 400 response
+else else continue
+end
+
+TranslationClientDao --> GetTranslationClientActivity : return TranslationClient object
 GetTranslationClientActivity --> "API Gateway/Lambda" : return GetTranslationClientResult
 "API Gateway/Lambda" --> Client : return 200 response with GetTranslationClientResult data
 

@@ -1,0 +1,41 @@
+@startuml
+
+actor Client
+participant "API Gateway/Lambda"
+participant UpdatePaymentRecordActivity
+participant PaymentRecordDao
+database    DynamoDB
+
+Client -> "API Gateway/Lambda" : HTTP Request
+"API Gateway/Lambda" -> UpdatePaymentRecordActivity : UpdatePaymentRecordRequest
+
+UpdatePaymentRecordActivity -> PaymentRecordDao : getPaymentRecord(customerId, translationCaseId)
+PaymentRecordDao -> DynamoDB : load(translationCaseId)
+
+alt if DynamoDB returns null
+    DynamoDB --> PaymentRecordDao : return with no item data
+    PaymentRecordDao --> UpdatePaymentRecordActivity : throw TranslationCaseNotFoundException
+    UpdatePaymentRecordActivity --> "API Gateway/Lambda" : propagate TranslationCaseNotFoundException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
+
+DynamoDB --> PaymentRecordDao : return PaymentRecord data
+
+alt if customerId doesn't match the customerId on the saved payment record
+    PaymentRecordDao --> UpdatePaymentRecordActivity : throw SecurityException
+    UpdatePaymentRecordActivity --> "API Gateway/Lambda": propagate SecurityException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
+
+PaymentRecordDao --> UpdatePaymentRecordActivity : return PaymentRecord object
+UpdatePaymentRecordActivity -> UpdatePaymentRecordActivity : update the values in the\n PaymentRecord object
+UpdatePaymentRecordActivity -> PaymentRecordDao : savePaymentRecord(updatedPaymentRecord)
+PaymentRecordDao -> DynamoDB : save(updatedPaymentRecord)
+DynamoDB --> PaymentRecordDao : return 200 response
+PaymentRecordDao --> UpdatePaymentRecordActivity : return updated PaymentRecord object
+UpdatePaymentRecordActivity --> "API Gateway/Lambda" : return UpdatePaymentRecordResult
+"API Gateway/Lambda" --> Client : return 200 response with UpdatePaymentRecordResult data
+
+@enduml
