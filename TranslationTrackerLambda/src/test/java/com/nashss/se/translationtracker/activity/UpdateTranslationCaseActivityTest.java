@@ -38,12 +38,16 @@ class UpdateTranslationCaseActivityTest {
     private Double wordsPerHour = 400.3;
     @Mock
     private TranslationCaseDao caseDao;
+    @Mock
+    private UpdatePaymentRecordActivity updatePaymentRecordActivity;
+
     private UpdateTranslationCaseActivity updateTranslationCaseActivity;
+
 
     @BeforeEach
     void setup() {
         openMocks(this);
-        updateTranslationCaseActivity = new UpdateTranslationCaseActivity(caseDao);
+        updateTranslationCaseActivity = new UpdateTranslationCaseActivity(caseDao, updatePaymentRecordActivity);
     }
 
     @Test
@@ -102,6 +106,7 @@ class UpdateTranslationCaseActivityTest {
 
         // THEN
         verify(caseDao).saveTranslationCase(any(TranslationCase.class));
+        verify(updatePaymentRecordActivity).handleRequest(any());
         assertEquals(CUSTOMER_ID, result.getTranslationCase().getCustomerId());
         assertEquals(TRANSLATION_CASE_ID, result.getTranslationCase().getTranslationCaseId());
         assertEquals(updatedTranslationClientId, result.getTranslationCase().getTranslationClientId());

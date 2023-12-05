@@ -21,7 +21,7 @@ public class UpdatePaymentRecordLambda
                         UpdatePaymentRecordRequest.builder()
                                 .withCustomerId(claims.get("email"))
                                 .withTranslationCaseId(unauthenticatedRequest.getTranslationCaseId())
-                                .withTranslationClientId(unauthenticatedRequest.getTranslationClientId())
+                                // TranslationClientId is only updated in conjunction with UpdateTranslationCase
                                 .withCasePaid(unauthenticatedRequest.getCasePaid())
                                 .withPaymentDate(unauthenticatedRequest.getPaymentDate())
                                 .withOnTime(unauthenticatedRequest.getOnTime())

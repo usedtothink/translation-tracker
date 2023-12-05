@@ -1,5 +1,6 @@
 package com.nashss.se.translationtracker.activity;
 
+import com.nashss.se.translationtracker.activity.requests.UpdatePaymentRecordRequest;
 import com.nashss.se.translationtracker.activity.requests.UpdateTranslationCaseRequest;
 import com.nashss.se.translationtracker.activity.results.UpdateTranslationCaseResult;
 import com.nashss.se.translationtracker.converters.ModelConverter;
@@ -14,15 +15,19 @@ import javax.inject.Inject;
  */
 public class UpdateTranslationCaseActivity {
     private final TranslationCaseDao caseDao;
+    private final UpdatePaymentRecordActivity updatePaymentRecordActivity;
 
     /**
      * Instantiates a new UpdateTranslationCaseActivity object.
      *
      * @param caseDao TranslationCaseDao to access the translation case table.
+     * @param updatePaymentRecordActivity UpdatePaymentRecordActivity to update translationClientId.
      */
     @Inject
-    public UpdateTranslationCaseActivity(TranslationCaseDao caseDao) {
+    public UpdateTranslationCaseActivity(TranslationCaseDao caseDao,
+                                         UpdatePaymentRecordActivity updatePaymentRecordActivity) {
         this.caseDao = caseDao;
+        this.updatePaymentRecordActivity = updatePaymentRecordActivity;
     }
 
     /**
@@ -42,8 +47,18 @@ public class UpdateTranslationCaseActivity {
         String customerId = updateTranslationCaseRequest.getCustomerId();
         TranslationCase translationCase = caseDao.getTranslationCase(customerId, requestedTranslationCaseId);
 
+        // When the translation case TranslationClientId is set,
+        // it should also be set in the corresponding PaymentRecord
         if (updateTranslationCaseRequest.getTranslationClientId() != null) {
             translationCase.setTranslationClientId(updateTranslationCaseRequest.getTranslationClientId());
+
+            UpdatePaymentRecordRequest request = UpdatePaymentRecordRequest.builder()
+                    .withCustomerId(updateTranslationCaseRequest.getCustomerId())
+                    .withTranslationCaseId(updateTranslationCaseRequest.getTranslationCaseId())
+                    .withTranslationClientId(updateTranslationCaseRequest.getTranslationClientId())
+                    .build();
+
+            updatePaymentRecordActivity.handleRequest(request);
         }
 
         if (updateTranslationCaseRequest.getSourceTextTitle() != null) {
