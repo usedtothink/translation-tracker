@@ -2,8 +2,8 @@ package com.nashss.se.translationtracker.dynamodb;
 
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
-import com.nashss.se.translationtracker.exceptions.DuplicateTranslationCaseException;
 import com.nashss.se.translationtracker.exceptions.DuplicateProgressUpdateException;
+import com.nashss.se.translationtracker.exceptions.DuplicateTranslationCaseException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;

@@ -5,7 +5,6 @@ import com.nashss.se.translationtracker.types.ProjectType;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class TranslationCaseModel {
     private String customerId;
