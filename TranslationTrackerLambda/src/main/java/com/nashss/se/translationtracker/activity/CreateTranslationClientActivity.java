@@ -11,7 +11,7 @@ import com.nashss.se.translationtracker.types.ClientType;
 import javax.inject.Inject;
 
 /**
- * Implementation of the CreateTranslationClientActivity for the TranslationTracker's CreateTranslationClient API.
+ * Implementation of the CreateTranslationClient Activity for the TranslationTracker's CreateTranslationClient API.
  * <p>
  * This API allows the customer to create a new translation client.
  */

@@ -15,8 +15,8 @@ public class CreateTranslationCaseResult {
 
     @Override
     public String toString() {
-        return "CreateTranslationCaseResult{ " +
-                "translationCase= " + translationCase +
+        return "CreateTranslationCaseResult{" +
+                "translationCase=" + translationCase +
                 '}';
     }
 

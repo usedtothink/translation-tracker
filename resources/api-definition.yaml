@@ -14,6 +14,12 @@ tags:
   - name: TranslationClients
     description: Create, view, update, and archive translation clients
 
+  - name: ProgressUpdates
+    description: Create progress updates
+
+  - name: PaymentRecords
+    description: View and update payment records
+
 paths:
 
   /translationcases:
@@ -75,8 +81,6 @@ paths:
                     type: number
                   wordsPerHour:
                     type: number
-                  paymentHistory:
-                    type: string
 
     get:
       tags:
@@ -129,8 +133,6 @@ paths:
                           type: number
                         wordsPerHour:
                           type: number
-                        paymentHistory:
-                          type: string
 
   /translationcases/case:
     get:
@@ -189,8 +191,6 @@ paths:
                     type: number
                   wordsPerHour:
                     type: number
-                  paymentHistory:
-                    type: string
         "500":
           description: "Invalid input parameters"
 
@@ -246,8 +246,6 @@ paths:
                     type: number
                   wordsPerHour:
                     type: number
-                  paymentHistory:
-                    type: string
         "500":
           description: "Invalid input parameters"
 
@@ -311,7 +309,7 @@ paths:
   /translationcases/case/update:
     post:
       tags:
-        -TranslationCases
+        -ProgressUpdates
       summary: Add a progress update (AddProgressUpdateLambda)
       requestBody:
         content:
@@ -363,7 +361,7 @@ paths:
   /translationcases/case/payment:
     get:
       tags:
-        -TranslationCases
+        -PaymentRecords
       summary: Get an existing a payment record (GetPaymentRecordLambda)
       requestBody:
         content:
@@ -410,7 +408,7 @@ paths:
 
     put:
       tags:
-        -TranslationCases
+        -PaymentRecords
       summary: Update an existing a payment record (UpdatePaymentRecordLambda)
       requestBody:
         content:

@@ -62,24 +62,6 @@ public final class ProgressUpdate {
         return notes;
     }
 
-    /**
-     * Makes a defensive copy of a single TranslationCaseUpdate object.
-     * @param original the original TranslationCaseUpdate to be copied.
-     * @return the new, copied TranslationCaseUpdate.
-     */
-    public static ProgressUpdate defensiveCopyTranslationCaseUpdate(ProgressUpdate original) {
-        return ProgressUpdate.builder()
-                .withCustomerId(original.getCustomerId())
-                .withTranslationCaseId(original.getTranslationCaseId())
-                .withWordCount(original.getWordCount())
-                .withStartDate(original.getStartDate())
-                .withEndDate(original.getEndDate())
-                .withStartTime(original.getStartTime())
-                .withEndTime(original.getEndTime())
-                .withNotes(original.getNotes())
-                .build();
-    }
-
     @Override
     public String toString() {
         return "ProgressUpdate{" +
