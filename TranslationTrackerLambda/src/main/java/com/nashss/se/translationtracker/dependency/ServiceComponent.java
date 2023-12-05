@@ -10,6 +10,7 @@ import com.nashss.se.translationtracker.activity.GetAllTranslationClientsActivit
 import com.nashss.se.translationtracker.activity.GetPaymentRecordActivity;
 import com.nashss.se.translationtracker.activity.GetTranslationCaseActivity;
 import com.nashss.se.translationtracker.activity.GetTranslationClientActivity;
+import com.nashss.se.translationtracker.activity.UpdatePaymentRecordActivity;
 import com.nashss.se.translationtracker.activity.UpdateTranslationCaseActivity;
 
 import dagger.Component;
@@ -88,4 +89,10 @@ public interface ServiceComponent {
      * @return AddProgressUpdateActivity
      */
     GetPaymentRecordActivity provideGetPaymentRecordActivity();
+
+    /**
+     * Provides the relevant activity.
+     * @return UpdatePaymentRecordActivity
+     */
+    UpdatePaymentRecordActivity provideUpdatePaymentRecordActivity();
 }
