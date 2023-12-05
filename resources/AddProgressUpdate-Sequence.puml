@@ -1,0 +1,54 @@
+@startuml
+
+actor Client
+participant "API Gateway/Lambda"
+participant AddProgressUpdateActivity
+participant TranslationCaseDao
+database    DynamoDB
+
+Client -> "API Gateway/Lambda" : HTTP Request
+"API Gateway/Lambda" -> AddProgressUpdateActivity : AddProgressUpdateRequest
+
+AddProgressUpdateActivity -> TranslationCaseDao : addProgressUpdate(progressUpdate)
+TranslationCaseDao -> DynamoDB : load(translationCaseId)
+
+alt if DynamoDB returns null
+    DynamoDB --> TranslationCaseDao : return with no item data
+    TranslationCaseDao --> AddProgressUpdateActivity : throw TranslationCaseNotFoundException
+    AddProgressUpdateActivity --> "API Gateway/Lambda" : propagate TranslationCaseNotFoundException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
+
+DynamoDB --> TranslationCaseDao : return TranslationCase data
+
+alt if customerId doesn't match the customerId on the saved case
+    TranslationCaseDao --> AddProgressUpdateActivity : throw SecurityException
+    AddProgressUpdateActivity --> "API Gateway/Lambda": propagate SecurityException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
+
+alt if customerId doesn't match the customerId on the progress update
+    TranslationCaseDao --> AddProgressUpdateActivity : throw SecurityException
+    AddProgressUpdateActivity --> "API Gateway/Lambda": propagate SecurityException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
+
+alt if progress update already exists in the progress log
+    TranslationCaseDao --> AddProgressUpdateActivity : throw DuplicateProgressUpdateException
+    AddProgressUpdateActivity --> "API Gateway/Lambda": propagate DuplicateProgressUpdateException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
+
+TranslationCaseDao -> TranslationCaseDao : add the ProgressUpdate \nto progressLog
+
+TranslationCaseDao -> DynamoDB : save(updatedCase)
+DynamoDB --> TranslationCaseDao : return 200 response
+TranslationCaseDao --> AddProgressUpdateActivity : return updated translationCase object
+AddProgressUpdateActivity --> "API Gateway/Lambda" : return UpdateTranslationCaseResult
+"API Gateway/Lambda" --> Client : return 200 response with UpdateTranslationCaseResult data
+
+@enduml

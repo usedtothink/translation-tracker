@@ -46,9 +46,9 @@ public class ArchiveTranslationCaseActvity {
         String customerId = archiveTranslationCaseRequest.getCustomerId();
         String translationCaseId = archiveTranslationCaseRequest.getTranslationCaseId();
 
+        TranslationCase translationCase = caseDao.archiveTranslationCase(customerId, translationCaseId);
         paymentRecordDao.archivePaymentRecord(customerId, translationCaseId);
 
-        TranslationCase translationCase = caseDao.archiveTranslationCase(customerId, translationCaseId);
         TranslationCaseModel translationCaseModel = new ModelConverter().toTranslationCaseModel(translationCase);
 
         return ArchiveTranslationCaseResult.builder()

@@ -8,11 +8,18 @@ database    DynamoDB
 
 Client -> "API Gateway/Lambda" : HTTP Request
 "API Gateway/Lambda" -> GetAllTranslationCasesActivity : GetAllTranslationCasesRequest
-GetAllTranslationCasesActivity -> TranslationCaseDao : getAllTranslationCases(order)
-TranslationCaseDao -> DynamoDB : scan()
+GetAllTranslationCasesActivity -> TranslationCaseDao : getAllTranslationCases(customerId)
+TranslationCaseDao -> DynamoDB : load(DynamoDBQueryExpression - all cases for customer ID)
+DynamoDB --> TranslationCaseDao : return List of all TranslationCases
+TranslationCaseDao --> TranslationCaseDao : check whether List is empty
 
+alt if List of TranslationCases is empty
+    TranslationCaseDao --> GetAllTranslationCasesActivity: throw TranslationCaseNotFoundException
+    GetAllTranslationCasesActivity --> "API Gateway/Lambda": propagate TranslationCaseNotFoundException
+    "API Gateway/Lambda" --> Client : return 400 response
+else continue
+end
 
-DynamoDB --> TranslationCaseDao : return TranslationCase data
 TranslationCaseDao --> GetAllTranslationCasesActivity : return List<TranslationCase>
 GetAllTranslationCasesActivity --> "API Gateway/Lambda" : return GetAllTranslationCasesResult
 "API Gateway/Lambda" --> Client : return 200 response with GetAllTranslationCasesResult data

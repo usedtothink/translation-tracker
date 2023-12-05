@@ -3,14 +3,14 @@ package com.nashss.se.translationtracker.exceptions;
 /**
  * Exception to throw when a given translation case nickname already exists in the database.
  */
-public class DuplicateCaseException extends RuntimeException {
+public class DuplicateTranslationCaseException extends RuntimeException {
 
     private static final long serialVersionUID = -2336795214862597818L;
 
     /**
      * Exception with no message or cause.
      */
-    public DuplicateCaseException() {
+    public DuplicateTranslationCaseException() {
         super();
     }
 
@@ -18,7 +18,7 @@ public class DuplicateCaseException extends RuntimeException {
      * Exception with a message, but no cause.
      * @param message A descriptive message for this exception.
      */
-    public DuplicateCaseException(String message) {
+    public DuplicateTranslationCaseException(String message) {
         super(message);
     }
 
@@ -27,7 +27,7 @@ public class DuplicateCaseException extends RuntimeException {
      * @param message A descriptive message for this exception.
      * @param cause The original throwable resulting in this exception.
      */
-    public DuplicateCaseException(String message, Throwable cause) {
+    public DuplicateTranslationCaseException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -35,7 +35,7 @@ public class DuplicateCaseException extends RuntimeException {
      * Exception with no message, but with a cause.
      * @param cause The original throwable resulting in this exception.
      */
-    public DuplicateCaseException(Throwable cause) {
+    public DuplicateTranslationCaseException(Throwable cause) {
         super(cause);
     }
 }

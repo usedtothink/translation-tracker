@@ -5,7 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
-import com.nashss.se.translationtracker.exceptions.DuplicateCaseException;
+import com.nashss.se.translationtracker.exceptions.DuplicateTranslationCaseException;
 import com.nashss.se.translationtracker.exceptions.DuplicateProgressUpdateException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 import com.nashss.se.translationtracker.types.ProjectType;
@@ -80,7 +80,7 @@ class TranslationCaseDaoTest {
         when(dynamoDBMapper.query(eq(TranslationCase.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
         // WHEN & THEN
-        assertThrows(DuplicateCaseException.class, () -> caseDao.createTranslationCase(translationCase));
+        assertThrows(DuplicateTranslationCaseException.class, () -> caseDao.createTranslationCase(translationCase));
     }
 
     @Test

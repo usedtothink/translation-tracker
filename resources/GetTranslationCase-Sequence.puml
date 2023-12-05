@@ -20,8 +20,18 @@ else else continue
 end
 
 DynamoDB --> TranslationCaseDao : return translationCase data
-TranslationCaseDao --> GetTranslationCaseActivity : return translationCase object
-GetTranslationCaseActivity --> "API Gateway/Lambda" : return GetCaseResult
-"API Gateway/Lambda" --> Client : return 200 response with GetCaseResult data
+TranslationCaseDao --> TranslationCaseDao : Check for matching customer ID
+
+alt if customer ID does not match
+    TranslationCaseDao --> GetTranslationCaseActivity : throw SecurityException
+    GetTranslationCaseActivity --> "API Gateway/Lambda" : propagate SecurityException
+    "API Gateway/Lambda" --> Client : return 400 response
+else else continue
+end
+
+
+TranslationCaseDao --> GetTranslationCaseActivity : return TranslationCase object
+GetTranslationCaseActivity --> "API Gateway/Lambda" : return GetTranslationCaseResult
+"API Gateway/Lambda" --> Client : return 200 response with GetTranslationCaseResult data
 
 @enduml

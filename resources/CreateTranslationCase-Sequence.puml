@@ -4,24 +4,42 @@ actor Client
 participant "API Gateway/Lambda"
 participant CreateTranslationCaseActivity
 participant TranslationCaseDao
+participant PaymentRecordDao
 database    DynamoDB
 
 Client -> "API Gateway/Lambda" : HTTP Request
 "API Gateway/Lambda" -> CreateTranslationCaseActivity : CreateTranslationCaseRequest
 
-CreateTranslationCaseActivity -> TranslationCaseDao : createTranslationCase(generateTranslationCaseId(), translationCaseNickname)
-TranslationCaseDao -> DynamoDB : save(newTranslationCase)
+CreateTranslationCaseActivity -> TranslationCaseDao : CreateTranslationCase
+TranslationCaseDao -> DynamoDB : load(DynamoDBQueryExpression - customer ID)
+DynamoDB --> TranslationCaseDao: PaginatedQueryList of all cases for customer ID
+TranslationCaseDao --> TranslationCaseDao : Check for existing case
 
-alt if translationCaseNickname is identical to existing translationCaseNickname
-    DynamoDB --> TranslationCaseDao: throw ConditionalCheckFailedException
-    TranslationCaseDao --> CreateTranslationCaseActivity: throw DuplicateCaseNicknameException
-    CreateTranslationCaseActivity --> "API Gateway/Lambda": propagate DuplicateCaseNicknameException
+alt if translationCaseNickname / project type combination already exists in database
+    TranslationCaseDao --> CreateTranslationCaseActivity: throw DuplicateTranslationCaseException
+    CreateTranslationCaseActivity --> "API Gateway/Lambda": propagate DuplicateTranslationCaseException
     "API Gateway/Lambda" --> Client : return 400 response
 else else continue
 end
 
+TranslationCaseDao --> DynamoDB : save(translationCase)
 DynamoDB --> TranslationCaseDao : return 200 response
-TranslationCaseDao --> CreateTranslationCaseActivity : return newTranslationCase object
+TranslationCaseDao --> CreateTranslationCaseActivity : return TranslationCase object
+CreateTranslationCaseActivity --> PaymentRecordDao : createPaymentRecord(customerId, translationCaseId)
+PaymentRecordDao --> DynamoDB : load(translationCaseId)
+
+alt if DynamoDB does not return null
+    DynamoDB --> PaymentRecordDao : returns a PaymentRecord object
+    PaymentRecordDao --> CreateTranslationCaseActivity: throw DuplicatePaymentRecordException
+    CreateTranslationCaseActivity --> "API Gateway/Lambda": propagate DuplicatePaymentRecordException
+    "API Gateway/Lambda" --> Client : return 400 response
+else else continue
+end
+
+DynamoDB --> PaymentRecordDao : returns null
+PaymentRecordDao --> DynamoDB : save(new PaymentRecord)
+DynamoDB --> PaymentRecordDao : return 200 response
+PaymentRecordDao --> CreateTranslationCaseActivity : return PaymentRecord object
 CreateTranslationCaseActivity --> "API Gateway/Lambda" : return CreateTranslationCaseResult
 "API Gateway/Lambda" --> Client : return 200 response with CreateTranslationCaseResult data
 
