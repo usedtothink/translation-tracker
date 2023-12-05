@@ -14,7 +14,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 class ArchiveTranslationClientActivityTest {
-
+    private static final String CUSTOMER_ID = "customerId";
+    private static final String TRANSLATION_CLIENT_ID = "translationClientId";
     @Mock
     private TranslationClientDao clientDao;
     private ArchiveTranslationClientActivity archiveTranslationClientActivity;
@@ -28,25 +29,23 @@ class ArchiveTranslationClientActivityTest {
     @Test
     void handleRequest_validCustomerIdAndClientId_returnsClient() {
         // GIVEN
-        String customerId = "customerId";
-        String translationClientId = "translationClientId";
 
         TranslationClient translationClient = new TranslationClient();
-        translationClient.setCustomerId(customerId);
-        translationClient.setTranslationClientId(translationClientId);
+        translationClient.setCustomerId(CUSTOMER_ID);
+        translationClient.setTranslationClientId(TRANSLATION_CLIENT_ID);
 
-        when(clientDao.archiveTranslationClient(customerId, translationClientId)).thenReturn(translationClient);
+        when(clientDao.archiveTranslationClient(CUSTOMER_ID, TRANSLATION_CLIENT_ID)).thenReturn(translationClient);
 
         ArchiveTranslationClientRequest request = ArchiveTranslationClientRequest.builder()
-                .withCustomerId(customerId)
-                .withTranslationClientId(translationClientId)
+                .withCustomerId(CUSTOMER_ID)
+                .withTranslationClientId(TRANSLATION_CLIENT_ID)
                 .build();
 
         // WHEN
         ArchiveTranslationClientResult result = archiveTranslationClientActivity.handleRequest(request);
 
         // THEN
-        assertEquals(customerId, result.getTranslationClient().getCustomerId());
-        assertEquals(translationClientId, result.getTranslationClient().getTranslationClientId());
+        assertEquals(CUSTOMER_ID, result.getTranslationClient().getCustomerId());
+        assertEquals(TRANSLATION_CLIENT_ID, result.getTranslationClient().getTranslationClientId());
     }
 }

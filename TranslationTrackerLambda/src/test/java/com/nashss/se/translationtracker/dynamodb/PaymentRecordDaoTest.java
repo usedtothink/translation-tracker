@@ -4,7 +4,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
-import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.exceptions.DuplicatePaymentRecordException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 import com.nashss.se.translationtracker.exceptions.TranslationClientNotFoundException;
@@ -32,12 +31,12 @@ class PaymentRecordDaoTest {
 
     @Mock
     private DynamoDBMapper dynamoDBMapper;
-    private PaymentRecordDao paymentRecordDao;
+    private PaymentRecordDao paymentDao;
 
     @BeforeEach
     public void setup() {
         openMocks(this);
-        paymentRecordDao = new PaymentRecordDao(dynamoDBMapper);
+        paymentDao = new PaymentRecordDao(dynamoDBMapper);
     }
 
     @Test
@@ -46,7 +45,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.load(PaymentRecord.class, TRANSLATION_CASE_ID)).thenReturn(null);
 
         // WHEN
-        paymentRecordDao.createPaymentRecord(CUSTOMER_ID, TRANSLATION_CASE_ID);
+        paymentDao.createPaymentRecord(CUSTOMER_ID, TRANSLATION_CASE_ID);
 
         // THEN
         verify(dynamoDBMapper).save(any(PaymentRecord.class));
@@ -62,7 +61,7 @@ class PaymentRecordDaoTest {
 
         // WHEN & THEN
         assertThrows(DuplicatePaymentRecordException.class, () ->
-                paymentRecordDao.createPaymentRecord(CUSTOMER_ID, TRANSLATION_CASE_ID));
+                paymentDao.createPaymentRecord(CUSTOMER_ID, TRANSLATION_CASE_ID));
     }
 
     @Test
@@ -75,7 +74,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.load(PaymentRecord.class, TRANSLATION_CASE_ID)).thenReturn(paymentRecord);
 
         // WHEN
-        PaymentRecord result = paymentRecordDao.getPaymentRecord(CUSTOMER_ID, TRANSLATION_CASE_ID);
+        PaymentRecord result = paymentDao.getPaymentRecord(CUSTOMER_ID, TRANSLATION_CASE_ID);
 
         //THEN
         assertNotNull(result);
@@ -87,7 +86,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.load(PaymentRecord.class, NON_EXISTENT_CASE_ID)).thenReturn(null);
 
         // WHEN & THEN
-        assertThrows(TranslationCaseNotFoundException.class, () -> paymentRecordDao.getPaymentRecord(CUSTOMER_ID,
+        assertThrows(TranslationCaseNotFoundException.class, () -> paymentDao.getPaymentRecord(CUSTOMER_ID,
                 NON_EXISTENT_CASE_ID));
     }
 
@@ -101,7 +100,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.load(PaymentRecord.class, TRANSLATION_CASE_ID)).thenReturn(paymentRecord);
 
         // WHEN & THEN
-        assertThrows(SecurityException.class, () -> paymentRecordDao.getPaymentRecord(WRONG_CUSTOMER_ID,
+        assertThrows(SecurityException.class, () -> paymentDao.getPaymentRecord(WRONG_CUSTOMER_ID,
                 TRANSLATION_CASE_ID));
     }
 
@@ -117,7 +116,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.query(eq(PaymentRecord.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
         // WHEN
-        List<PaymentRecord> result = paymentRecordDao.getAllTranslationClientsForCustomerId(CUSTOMER_ID);
+        List<PaymentRecord> result = paymentDao.getAllTranslationClientsForCustomerId(CUSTOMER_ID);
 
         // THEN
         assertFalse(result.isEmpty());
@@ -134,7 +133,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.query(eq(PaymentRecord.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
         // WHEN & THEN
-        assertThrows(TranslationCaseNotFoundException.class, () -> paymentRecordDao
+        assertThrows(TranslationCaseNotFoundException.class, () -> paymentDao
                 .getAllTranslationClientsForCustomerId(CUSTOMER_ID));
     }
 
@@ -150,7 +149,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.query(eq(PaymentRecord.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
         // WHEN
-        List<PaymentRecord> result = paymentRecordDao
+        List<PaymentRecord> result = paymentDao
                 .getAllTranslationClientsForTranslationClientId(TRANSLATION_CLIENT_ID);
 
         // THEN
@@ -168,7 +167,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.query(eq(PaymentRecord.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
         // WHEN & THEN
-        assertThrows(TranslationClientNotFoundException.class, () -> paymentRecordDao
+        assertThrows(TranslationClientNotFoundException.class, () -> paymentDao
                 .getAllTranslationClientsForTranslationClientId(TRANSLATION_CLIENT_ID));
     }
 
@@ -182,7 +181,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.load(PaymentRecord.class, TRANSLATION_CASE_ID)).thenReturn(paymentRecord);
 
         // WHEN
-        Boolean result = paymentRecordDao.archivePaymentRecord(CUSTOMER_ID, TRANSLATION_CASE_ID);
+        Boolean result = paymentDao.archivePaymentRecord(CUSTOMER_ID, TRANSLATION_CASE_ID);
 
         // THEN
         assertTrue(result);
@@ -196,7 +195,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.load(PaymentRecord.class, TRANSLATION_CASE_ID)).thenReturn(null);
 
         // WHEN & THEN
-        assertThrows(TranslationCaseNotFoundException.class, () -> paymentRecordDao
+        assertThrows(TranslationCaseNotFoundException.class, () -> paymentDao
                 .archivePaymentRecord(CUSTOMER_ID, TRANSLATION_CASE_ID));
     }
 
@@ -210,7 +209,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.load(PaymentRecord.class, TRANSLATION_CASE_ID)).thenReturn(paymentRecord);
 
         // WHEN & THEN
-        assertThrows(SecurityException.class, () -> paymentRecordDao
+        assertThrows(SecurityException.class, () -> paymentDao
                 .archivePaymentRecord(WRONG_CUSTOMER_ID, TRANSLATION_CASE_ID));
     }
 
@@ -219,7 +218,7 @@ class PaymentRecordDaoTest {
         // GIVEN
         PaymentRecord paymentRecord = new PaymentRecord();
         // WHEN
-        paymentRecordDao.savePaymentRecord(paymentRecord);
+        paymentDao.savePaymentRecord(paymentRecord);
         // THEN
         verify(dynamoDBMapper).save(paymentRecord);
     }

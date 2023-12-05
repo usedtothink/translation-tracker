@@ -102,7 +102,7 @@ public class ModelConverter {
      * @param paymentRecord the payment record to convert
      * @return the converted payment record
      */
-    public PaymentRecordModel toTranslationPaymentModel(PaymentRecord paymentRecord) {
+    public PaymentRecordModel toPaymentRecordModel(PaymentRecord paymentRecord) {
 
         return PaymentRecordModel.builder()
                 .withCustomerId(paymentRecord.getCustomerId())

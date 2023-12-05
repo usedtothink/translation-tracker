@@ -3,7 +3,6 @@ package com.nashss.se.translationtracker.activity;
 import com.nashss.se.translationtracker.activity.requests.UpdateTranslationCaseRequest;
 import com.nashss.se.translationtracker.activity.results.UpdateTranslationCaseResult;
 import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
-import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.types.ProjectType;
@@ -71,19 +70,19 @@ class UpdateTranslationCaseActivityTest {
         UpdateTranslationCaseResult result = updateTranslationCaseActivity.handleRequest(request);
 
         // THEN
-        assertEquals(CUSTOMER_ID, request.getCustomerId());
-        assertEquals(TRANSLATION_CASE_ID, request.getTranslationCaseId());
-        assertEquals(translationClientId, request.getTranslationClientId());
-        assertEquals(sourceTextTitle, request.getSourceTextTitle());
-        assertEquals(sourceTextAuthor, request.getSourceTextAuthor());
-        assertEquals(translatedTitle, request.getTranslatedTitle());
-        assertEquals(dueDate, request.getDueDate());
-        assertEquals(startDate, request.getStartDate());
-        assertEquals(endDate, request.getEndDate());
-        assertEquals(openCase, request.getOpenCase());
-        assertEquals(rushJob, request.getRushJob());
-        assertEquals(totalWorkingHours, request.getTotalWorkingHours());
-        assertEquals(wordsPerHour, request.getWordsPerHour());
+        assertEquals(CUSTOMER_ID, result.getTranslationCase().getCustomerId());
+        assertEquals(TRANSLATION_CASE_ID, result.getTranslationCase().getTranslationCaseId());
+        assertEquals(translationClientId, result.getTranslationCase().getTranslationClientId());
+        assertEquals(sourceTextTitle, result.getTranslationCase().getSourceTextTitle());
+        assertEquals(sourceTextAuthor, result.getTranslationCase().getSourceTextAuthor());
+        assertEquals(translatedTitle, result.getTranslationCase().getTranslatedTitle());
+        assertEquals(dueDate, result.getTranslationCase().getDueDate());
+        assertEquals(startDate, result.getTranslationCase().getStartDate());
+        assertEquals(endDate, result.getTranslationCase().getEndDate());
+        assertEquals(openCase, result.getTranslationCase().getOpenCase());
+        assertEquals(rushJob, result.getTranslationCase().getRushJob());
+        assertEquals(totalWorkingHours, result.getTranslationCase().getTotalWorkingHours());
+        assertEquals(wordsPerHour, result.getTranslationCase().getWordsPerHour());
     }
 
     @Test

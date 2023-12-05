@@ -3,7 +3,6 @@ package com.nashss.se.translationtracker.activity;
 import com.nashss.se.translationtracker.activity.requests.GetTranslationCaseRequest;
 import com.nashss.se.translationtracker.activity.results.GetTranslationCaseResult;
 import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
-import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.types.ProjectType;
@@ -19,15 +18,16 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 public class GetTranslationCaseActivityTest {
-
+    private static final String CUSTOMER_ID = "customerId";
+    private static final String TRANSLATION_CASE_ID = "translationCaseId";
     @Mock
     private TranslationCaseDao caseDao;
     private GetTranslationCaseActivity getTranslationCaseActivity;
-    private TranslationCase testTranslationCase;
+    private TranslationCase translationCase;
 
     @BeforeEach
     void setup() {
-        testTranslationCase = getTestTranslationCase();
+        translationCase = getTranslationCase();
         openMocks(this);
         getTranslationCaseActivity = new GetTranslationCaseActivity(caseDao);
     }
@@ -35,39 +35,37 @@ public class GetTranslationCaseActivityTest {
     @Test
     void handleRequest_savedTranslationCaseFound_returnsTranslationCaseModelInResult() {
         // GIVEN
-        String expectedID = "ExpectedID";
-        testTranslationCase.setTranslationCaseId(expectedID);
-
-        when(caseDao.getTranslationCase(testTranslationCase.getCustomerId(), expectedID))
-                .thenReturn(testTranslationCase);
+        when(caseDao.getTranslationCase(CUSTOMER_ID, TRANSLATION_CASE_ID))
+                .thenReturn(translationCase);
 
         GetTranslationCaseRequest request = GetTranslationCaseRequest.builder()
-                .withTranslationCaseId(expectedID)
+                .withCustomerId(CUSTOMER_ID)
+                .withTranslationCaseId(TRANSLATION_CASE_ID)
                 .build();
 
         // WHEN
         GetTranslationCaseResult result = getTranslationCaseActivity.handleRequest(request);
 
         // THEN
-        assertEquals(expectedID, result.getTranslationCase().getTranslationCaseId());
-        assertEquals(testTranslationCase.getTranslationClientId(), result.getTranslationCase().getTranslationClientId());
-        assertEquals(testTranslationCase.getCaseNickname(), result.getTranslationCase().getCaseNickname());
-        assertEquals(testTranslationCase.getSourceTextTitle(), result.getTranslationCase().getSourceTextTitle());
-        assertEquals(testTranslationCase.getSourceTextAuthor(), result.getTranslationCase().getSourceTextAuthor());
-        assertEquals(testTranslationCase.getTranslatedTitle(), result.getTranslationCase().getTranslatedTitle());
-        assertEquals(testTranslationCase.getProjectType(), result.getTranslationCase().getProjectType());
-        assertEquals(testTranslationCase.getDueDate(), result.getTranslationCase().getDueDate());
-        assertEquals(testTranslationCase.getStartDate(), result.getTranslationCase().getStartDate());
-        assertEquals(testTranslationCase.getEndDate(), result.getTranslationCase().getEndDate());
-        assertEquals(testTranslationCase.getOpenCase(), result.getTranslationCase().getOpenCase());
-        assertEquals(testTranslationCase.getRushJob(), result.getTranslationCase().getRushJob());
-        assertEquals(testTranslationCase.getProgressLog(), result.getTranslationCase().getProgressLog());
-        assertEquals(testTranslationCase.getTotalWorkingHours(), result.getTranslationCase().getTotalWorkingHours());
-        assertEquals(testTranslationCase.getWordsPerHour(), result.getTranslationCase().getWordsPerHour());
+        assertEquals(CUSTOMER_ID, result.getTranslationCase().getCustomerId());
+        assertEquals(TRANSLATION_CASE_ID, result.getTranslationCase().getTranslationCaseId());
+        assertEquals(translationCase.getTranslationClientId(), result.getTranslationCase().getTranslationClientId());
+        assertEquals(translationCase.getCaseNickname(), result.getTranslationCase().getCaseNickname());
+        assertEquals(translationCase.getSourceTextTitle(), result.getTranslationCase().getSourceTextTitle());
+        assertEquals(translationCase.getSourceTextAuthor(), result.getTranslationCase().getSourceTextAuthor());
+        assertEquals(translationCase.getTranslatedTitle(), result.getTranslationCase().getTranslatedTitle());
+        assertEquals(translationCase.getProjectType(), result.getTranslationCase().getProjectType());
+        assertEquals(translationCase.getDueDate(), result.getTranslationCase().getDueDate());
+        assertEquals(translationCase.getStartDate(), result.getTranslationCase().getStartDate());
+        assertEquals(translationCase.getEndDate(), result.getTranslationCase().getEndDate());
+        assertEquals(translationCase.getOpenCase(), result.getTranslationCase().getOpenCase());
+        assertEquals(translationCase.getRushJob(), result.getTranslationCase().getRushJob());
+        assertEquals(translationCase.getProgressLog(), result.getTranslationCase().getProgressLog());
+        assertEquals(translationCase.getTotalWorkingHours(), result.getTranslationCase().getTotalWorkingHours());
+        assertEquals(translationCase.getWordsPerHour(), result.getTranslationCase().getWordsPerHour());
     }
 
-    private TranslationCase getTestTranslationCase() {
-        String translationCaseId = "translationCaseId";
+    private TranslationCase getTranslationCase() {
         String translationClientId = "translationClientId";
         String caseNickname = "caseNickname";
         String sourceTextTitle = "sourceTextTitle";
@@ -84,7 +82,8 @@ public class GetTranslationCaseActivityTest {
         Double wordsPerHour = 400.3;
         TranslationCase translationCase = new TranslationCase();
 
-        translationCase.setTranslationCaseId(translationCaseId);
+        translationCase.setCustomerId(CUSTOMER_ID);
+        translationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
         translationCase.setTranslationClientId(translationClientId);
         translationCase.setCaseNickname(caseNickname);
         translationCase.setSourceTextTitle(sourceTextTitle);

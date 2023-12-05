@@ -15,6 +15,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 class CreateTranslationClientActivityTest {
+    private static final String CUSTOMER_ID = "expectedCustomer";
+    private static final String TRANSLATION_CLIENT_NAME = "clientName";
+    private static final ClientType CLIENT_TYPE = ClientType.CONTRACT;
     @Mock
     private TranslationClientDao clientDao;
     private CreateTranslationClientActivity createTranslationClientActivity;
@@ -28,14 +31,10 @@ class CreateTranslationClientActivityTest {
     @Test
     void handleRequest_createsAndSavesTranslationClient() {
         // GIVEN
-        String expectedCustomerId = "expectedCustomer";
-        String expectedClientName = "clientName";
-        ClientType expectedClientType = ClientType.CONTRACT;
-
         CreateTranslationClientRequest request = CreateTranslationClientRequest.builder()
-                .withCustomerId(expectedCustomerId)
-                .withTranslationClientName(expectedClientName)
-                .withTranslationClientType(expectedClientType.name())
+                .withCustomerId(CUSTOMER_ID)
+                .withTranslationClientName(TRANSLATION_CLIENT_NAME)
+                .withTranslationClientType(CLIENT_TYPE.name())
                 .build();
 
         // WHEN
@@ -45,9 +44,9 @@ class CreateTranslationClientActivityTest {
         verify(clientDao).createTranslationClient(any(TranslationClient.class));
 
         assertNotNull(result.getTranslationClient().getTranslationClientId());
-        assertEquals(expectedCustomerId, result.getTranslationClient().getCustomerId());
-        assertEquals(expectedClientName, result.getTranslationClient().getTranslationClientName());
-        assertEquals(expectedClientType, result.getTranslationClient().getTranslationClientType());
+        assertEquals(CUSTOMER_ID, result.getTranslationClient().getCustomerId());
+        assertEquals(TRANSLATION_CLIENT_NAME, result.getTranslationClient().getTranslationClientName());
+        assertEquals(CLIENT_TYPE, result.getTranslationClient().getTranslationClientType());
     }
 
 }
