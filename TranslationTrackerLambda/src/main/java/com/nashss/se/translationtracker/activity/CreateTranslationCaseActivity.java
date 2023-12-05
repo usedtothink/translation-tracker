@@ -22,7 +22,7 @@ public class CreateTranslationCaseActivity {
     private final PaymentRecordDao paymentRecordDao;
 
     /**
-     * Instantiates a new CreateTranslationCaseActivity object.
+     * Instantiates a new CreateTranslationCase Activity object.
      *
      * @param caseDao to access the translation cases table.
      * @param paymentRecordDao to access the payment record table.

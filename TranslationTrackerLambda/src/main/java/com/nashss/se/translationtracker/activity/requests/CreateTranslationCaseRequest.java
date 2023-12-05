@@ -37,11 +37,11 @@ public class CreateTranslationCaseRequest {
 
     @Override
     public String toString() {
-        return "CreateTranslationCaseRequest{ " +
-                "customerId= '" + customerId + '\'' +
-                "caseNickname= '" + caseNickname + '\'' +
-                ", projectType= '" + projectType + '\'' +
-                ", translationCaseId= '" + translationCaseId + "' " +
+        return "CreateTranslationCaseRequest{" +
+                "customerId='" + customerId + '\'' +
+                ", projectType='" + projectType + '\'' +
+                ", translationCaseId='" + translationCaseId + '\'' +
+                ", caseNickname='" + caseNickname + '\'' +
                 '}';
     }
 

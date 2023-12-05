@@ -101,9 +101,7 @@ public class TranslationCaseModel {
     }
 
     public List<ProgressUpdate> getProgressLog() {
-        return progressLog.stream()
-                .map(ProgressUpdate::defensiveCopyTranslationCaseUpdate)
-                .collect(Collectors.toList());
+        return progressLog;
     }
 
     public Double getTotalWorkingHours() {

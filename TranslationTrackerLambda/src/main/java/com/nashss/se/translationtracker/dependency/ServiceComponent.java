@@ -86,7 +86,7 @@ public interface ServiceComponent {
 
     /**
      * Provides the relevant activity.
-     * @return AddProgressUpdateActivity
+     * @return GetPaymentRecordActivity
      */
     GetPaymentRecordActivity provideGetPaymentRecordActivity();
 
