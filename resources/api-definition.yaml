@@ -360,6 +360,54 @@ paths:
         "500":
           description: "Invalid input parameters"
 
+  /translationcases/case/payment:
+    get:
+      tags:
+        -TranslationCases
+      summary: Get an existing a payment record (GetPaymentRecordLambda)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              customerId:
+                type: string
+              translationCaseId:
+                type: string
+      responses:
+        "200":
+          description: AddProgressUpdateResponse
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customerId:
+                    type: string
+                  translationCaseId:
+                    type: string
+                  translationClientId:
+                    type: string
+                  casePaid:
+                    type: boolean
+                  paymentDate:
+                    type: string
+                  onTime:
+                    type: boolean
+                  grossPayment:
+                    type: number
+                  taxRate:
+                    type: number
+                  payRate:
+                    type: number
+                  payRateUnit:
+                    type: string
+                  wordCount:
+                    type: number
+                  wordCountUnit:
+                    type: string
+        "500":
+          description: "Invalid input parameters"
+
   /translationclients:
     post:
       tags:

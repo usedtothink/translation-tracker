@@ -20,6 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 class CreateTranslationCaseActivityTest {
+    private static final String CUSTOMER_ID = "customerId";
+    private static final String CASE_NICKNAME = "caseNickname";
+    private static final ProjectType PROJECT_TYPE = ProjectType.ACADEMIC;
     @Mock
     private TranslationCaseDao caseDao;
     @Mock
@@ -35,14 +38,10 @@ class CreateTranslationCaseActivityTest {
     @Test
     void handleRequest_createsAndSavesTranslationCase() {
         // GIVEN
-        String expectedCustomerId = "expectedCustomer";
-        String expectedCaseNickname = "expectedNickname";
-        ProjectType expectedProjectType = ProjectType.ACADEMIC;
-
         CreateTranslationCaseRequest request = CreateTranslationCaseRequest.builder()
-                .withCaseNickname(expectedCaseNickname)
-                .withProjectType(expectedProjectType.name())
-                .withCustomerId(expectedCustomerId)
+                .withCustomerId(CUSTOMER_ID)
+                .withCaseNickname(CASE_NICKNAME)
+                .withProjectType(PROJECT_TYPE.name())
                 .build();
 
         // WHEN
@@ -53,8 +52,8 @@ class CreateTranslationCaseActivityTest {
         verify(paymentRecordDao).createPaymentRecord(any(String.class), any(String.class));
 
         assertNotNull(result.getTranslationCase().getTranslationCaseId());
-        assertEquals(expectedCustomerId, result.getTranslationCase().getCustomerId());
-        assertEquals(expectedCaseNickname, result.getTranslationCase().getCaseNickname());
-        assertEquals(expectedProjectType, result.getTranslationCase().getProjectType());
+        assertEquals(CUSTOMER_ID, result.getTranslationCase().getCustomerId());
+        assertEquals(CASE_NICKNAME, result.getTranslationCase().getCaseNickname());
+        assertEquals(PROJECT_TYPE, result.getTranslationCase().getProjectType());
     }
 }

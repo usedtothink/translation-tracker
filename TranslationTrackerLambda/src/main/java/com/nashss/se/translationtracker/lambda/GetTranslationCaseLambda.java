@@ -19,8 +19,8 @@ public class GetTranslationCaseLambda
                         input.fromBody(GetTranslationCaseRequest.class);
                 return input.fromUserClaims(claims ->
                         GetTranslationCaseRequest.builder()
-                                .withTranslationCaseId(unauthenticatedRequest.getTranslationCaseId())
                                 .withCustomerId(claims.get("email"))
+                                .withTranslationCaseId(unauthenticatedRequest.getTranslationCaseId())
                                 .build());
             },
             (request, serviceComponent) ->

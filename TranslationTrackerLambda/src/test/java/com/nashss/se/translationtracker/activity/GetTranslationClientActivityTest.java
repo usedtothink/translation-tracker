@@ -10,27 +10,29 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 class GetTranslationClientActivityTest {
 
+    private static final String CUSTOMER_ID = "customerId";
+    private static final String TRANSLATION_CLIENT_ID = "clientId";
+    private static final String TRANSLATION_CLIENT_NAME = "clientName";
+    private static final ClientType TRANSLATION_CLIENT_TYPE = ClientType.CONTRACT;
     @Mock
     private TranslationClientDao clientDao;
     private GetTranslationClientActivity getTranslationClientActivity;
-    private TranslationClient testTranslationClient;
-    private String customerId = "customerId";
-    private String translationClientId = "clientId";
-    private String translationClientName = "clientName";
-    private ClientType translationClientType = ClientType.CONTRACT;
+    private TranslationClient translationClient;
+
 
     @BeforeEach
     void setup() {
-        testTranslationClient = new TranslationClient();
-        testTranslationClient.setCustomerId(customerId);
-        testTranslationClient.setTranslationClientId(translationClientId);
-        testTranslationClient.setTranslationClientName(translationClientName);
-        testTranslationClient.setTranslationClientType(translationClientType);
+        translationClient = new TranslationClient();
+        translationClient.setCustomerId(CUSTOMER_ID);
+        translationClient.setTranslationClientId(TRANSLATION_CLIENT_ID);
+        translationClient.setTranslationClientName(TRANSLATION_CLIENT_NAME);
+        translationClient.setTranslationClientType(TRANSLATION_CLIENT_TYPE);
 
         openMocks(this);
         getTranslationClientActivity = new GetTranslationClientActivity(clientDao);
@@ -39,20 +41,21 @@ class GetTranslationClientActivityTest {
     @Test
     void handleRequest_savedTranslationClientFound_returnsTranslationClientModelInResult() {
         // GIVEN
-        when(clientDao.getTranslationClient(customerId, translationClientId)).thenReturn(testTranslationClient);
+        when(clientDao.getTranslationClient(CUSTOMER_ID, TRANSLATION_CLIENT_ID)).thenReturn(translationClient);
 
         GetTranslationClientRequest request = GetTranslationClientRequest.builder()
-                .withCustomerId(customerId)
-                .withTranslationClientId(translationClientId)
+                .withCustomerId(CUSTOMER_ID)
+                .withTranslationClientId(TRANSLATION_CLIENT_ID)
                 .build();
 
         // WHEN
         GetTranslationClientResult result = getTranslationClientActivity.handleRequest(request);
 
         // THEN
-        assertEquals(customerId, result.getTranslationClient().getCustomerId());
-        assertEquals(translationClientId, result.getTranslationClient().getTranslationClientId());
-        assertEquals(translationClientName, result.getTranslationClient().getTranslationClientName());
-        assertEquals(translationClientType, result.getTranslationClient().getTranslationClientType());
+        verify(clientDao).getTranslationClient(CUSTOMER_ID, TRANSLATION_CLIENT_ID);
+        assertEquals(CUSTOMER_ID, result.getTranslationClient().getCustomerId());
+        assertEquals(TRANSLATION_CLIENT_ID, result.getTranslationClient().getTranslationClientId());
+        assertEquals(TRANSLATION_CLIENT_NAME, result.getTranslationClient().getTranslationClientName());
+        assertEquals(TRANSLATION_CLIENT_TYPE, result.getTranslationClient().getTranslationClientType());
     }
 }

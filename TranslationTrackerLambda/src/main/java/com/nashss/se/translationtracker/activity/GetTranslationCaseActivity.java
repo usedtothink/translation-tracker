@@ -10,7 +10,7 @@ import com.nashss.se.translationtracker.model.TranslationCaseModel;
 import javax.inject.Inject;
 
 /**
- * Implementation of the GetTranslationCaseActivity for Translation Tracker's GetTranslationCase API.
+ * Implementation of the GetTranslationCase Activity for Translation Tracker's GetTranslationCase API.
  *<p>
  * This API allows the customer to get one of their saved translation cases.
  */
@@ -34,7 +34,7 @@ public class GetTranslationCaseActivity {
      * <p>
      * If the translation case does not exist, this should throw a TranslationCaseNotFoundException.
      *
-     * @param getTranslationCaseRequest request object containing the translation case ID.
+     * @param getTranslationCaseRequest request object containing the translation case ID and customer ID.
      * @return GetTranslationCaseResult result object containing the API defined {@link TranslationCaseModel}
      */
     public GetTranslationCaseResult handleRequest(final GetTranslationCaseRequest getTranslationCaseRequest) {
