@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="assets/viewTranslationCase.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body class="background">
+    <header class="header" id="header"></header>
+    <div class="card">
+        <h2 id="case-nickname"></h2>
+        <h3>Project type: <span id="project-type"></span></h3>
+        <div id="translation-client-id"></div>
+        <div id="source-text-title"></div>
+        <div id="source-text-author"></div>
+        <div id="translated-title"></div>
+        <div id="due-date"></div>
+        <div id="start-date"></div>
+        <div id="end-date"></div>
+        <div id="open-case"></div>
+        <div id="rush-job"></div>
+        <div id="total-working-hours"></div>
+        <div id="wordsPerHour"></div>
+        <ul id="progress-log"></ul>
+    </div>
+    <div class="card">
+        <h2>Add progress update:</h2>
+        <form class="card-content" id="add-progress-update-form">
+            <p class="hidden error" id="error-message"> </p>
+            <p class="form-field">
+                <label>Start date</label>
+                <input type="date" required id="start-date">
+            </p>
+            <p class="form-field">
+                <label>Start time</label>
+                <input type="time" id="start-time">
+            </p>
+            <p class="form-field">
+                <label>End date</label>
+                <input type="date" required id="end-date">
+            </p>
+            <p class="form-field">
+                <label>End time</label>
+                <input type="time" id="end-time">
+            </p>
+            <p class="form-field">
+                <label>Word count</label>
+                <input type="text" id="word-count">
+            </p>
+            <p class="form-field">
+                <label>Notes</label>
+                <input type="text" id="notes">
+            </p>
+        </form>
+        <a href="#" class="button" id="add-progress-update">Add progress update</a>
+    </div>
+</body>
+
+</html>
