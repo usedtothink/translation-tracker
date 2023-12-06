@@ -55,13 +55,12 @@ public class TranslationCaseDao {
         List<TranslationCase> translationCaseList = dynamoDbMapper.query(TranslationCase.class, queryExpression);
         List<TranslationCase> filteredList = translationCaseList.stream()
                 .filter(translation -> translation.getCaseNickname()
-                        .equals(translationCase.getCaseNickname()) &&
-                        translation.getProjectType() == translationCase.getProjectType())
+                        .equals(translationCase.getCaseNickname()))
                 .collect(Collectors.toList());
         if (!filteredList.isEmpty()) {
             throw new DuplicateTranslationCaseException("A translation case with nickname '" +
                     translationCase.getCaseNickname() +
-                    "' and project type '" + translationCase.getProjectType().name() + "' already exists. ");
+                    "' already exists.");
         }
         return saveTranslationCase(translationCase);
     }

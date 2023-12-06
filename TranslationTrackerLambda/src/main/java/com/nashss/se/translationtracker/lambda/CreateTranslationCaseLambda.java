@@ -21,6 +21,15 @@ public class CreateTranslationCaseLambda
                                 .withCustomerId(claims.get("email"))
                                 .withCaseNickname(unauthenticatedRequest.getCaseNickname())
                                 .withProjectType(unauthenticatedRequest.getProjectType())
+                                .withTranslationClientId(unauthenticatedRequest.getTranslationClientId())
+                                .withSourceTextTitle(unauthenticatedRequest.getSourceTextTitle())
+                                .withSourceTextAuthor(unauthenticatedRequest.getSourceTextAuthor())
+                                .withTranslatedTitle(unauthenticatedRequest.getTranslatedTitle())
+                                .withDueDate(unauthenticatedRequest.getDueDate())
+                                .withStartDate(unauthenticatedRequest.getStartDate())
+                                .withEndDate(unauthenticatedRequest.getEndDate())
+                                .withOpenCase(unauthenticatedRequest.getOpenCase())
+                                .withRushJob(unauthenticatedRequest.getRushJob())
                                 .build());
             },
             (request, serviceComponent) ->

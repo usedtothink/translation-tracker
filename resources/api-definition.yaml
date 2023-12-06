@@ -35,10 +35,30 @@ paths:
               properties:
                 customerId:
                   type: string
+                translationCaseId:
+                  type: string
                 caseNickname:
                   type: string
                 projectType:
                   type: string
+                translationClientId:
+                  type: string
+                sourceTextTitle:
+                  type: string
+                sourceTextAuthor:
+                  type: string
+                translatedTitle:
+                  type: string
+                dueDate:
+                  type: string
+                startDate:
+                  type: string
+                endDate:
+                  type: string
+                openCase:
+                  type: boolean
+                rushJob:
+                  type: boolean
       responses:
         "200":
           description: A translation case object
@@ -51,13 +71,11 @@ paths:
                     type: string
                   translationCaseId:
                     type: string
-                  translationClientId:
-                    type: string
                   caseNickname:
                     type: string
                   projectType:
                     type: string
-                  mostRecentActivity:
+                  translationClientId:
                     type: string
                   sourceTextTitle:
                     type: string
