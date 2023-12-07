@@ -1,5 +1,6 @@
 package com.nashss.se.translationtracker.lambda;
 
+import com.nashss.se.translationtracker.activity.requests.ArchiveTranslationCaseRequest;
 import com.nashss.se.translationtracker.activity.requests.GetPaymentRecordRequest;
 import com.nashss.se.translationtracker.activity.results.GetPaymentRecordResult;
 
@@ -15,7 +16,10 @@ public class GetPaymentRecordLambda
         return super.runActivity(
             () -> {
                 GetPaymentRecordRequest unauthenticatedRequest =
-                        input.fromBody(GetPaymentRecordRequest.class);
+                        input.fromPath(path ->
+                                GetPaymentRecordRequest.builder()
+                                        .withTranslationCaseId(path.get("id"))
+                                        .build());
                 return input.fromUserClaims(claims ->
                         GetPaymentRecordRequest.builder()
                                 .withCustomerId(claims.get("email"))

@@ -1,6 +1,7 @@
 package com.nashss.se.translationtracker.lambda;
 
 import com.nashss.se.translationtracker.activity.requests.ArchiveTranslationCaseRequest;
+import com.nashss.se.translationtracker.activity.requests.ArchiveTranslationClientRequest;
 import com.nashss.se.translationtracker.activity.results.ArchiveTranslationCaseResult;
 
 import com.amazonaws.services.lambda.runtime.Context;
@@ -16,7 +17,10 @@ public class ArchiveTranslationCaseLambda
         return super.runActivity(
             () -> {
                 ArchiveTranslationCaseRequest unauthenticatedRequest =
-                        input.fromBody(ArchiveTranslationCaseRequest.class);
+                        input.fromPath(path ->
+                                ArchiveTranslationCaseRequest.builder()
+                                        .withTranslationCaseId(path.get("id"))
+                                        .build());
                 return input.fromUserClaims(claims ->
                         ArchiveTranslationCaseRequest.builder()
                                 .withCustomerId(claims.get("email"))

@@ -1,5 +1,6 @@
 package com.nashss.se.translationtracker.lambda;
 
+import com.nashss.se.translationtracker.activity.requests.ArchiveTranslationClientRequest;
 import com.nashss.se.translationtracker.activity.requests.GetTranslationClientRequest;
 import com.nashss.se.translationtracker.activity.results.GetTranslationClientResult;
 
@@ -15,8 +16,11 @@ public class GetTranslationClientLambda
                                         Context context) {
         return super.runActivity(
             () -> {
-                GetTranslationClientRequest unauthenticatedRequest = input.fromBody(
-                        GetTranslationClientRequest.class);
+                GetTranslationClientRequest unauthenticatedRequest =
+                        input.fromPath(path ->
+                                GetTranslationClientRequest.builder()
+                                        .withTranslationClientId(path.get("id"))
+                                        .build());
                 return input.fromUserClaims(claims ->
                         GetTranslationClientRequest.builder()
                                 .withCustomerId(claims.get("email"))

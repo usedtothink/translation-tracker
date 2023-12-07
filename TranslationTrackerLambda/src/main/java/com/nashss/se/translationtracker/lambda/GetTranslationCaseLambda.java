@@ -16,7 +16,10 @@ public class GetTranslationCaseLambda
         return super.runActivity(
             () -> {
                 GetTranslationCaseRequest unauthenticatedRequest =
-                        input.fromBody(GetTranslationCaseRequest.class);
+                        input.fromPath(path ->
+                                GetTranslationCaseRequest.builder()
+                                        .withTranslationCaseId(path.get("id"))
+                                        .build());
                 return input.fromUserClaims(claims ->
                         GetTranslationCaseRequest.builder()
                                 .withCustomerId(claims.get("email"))
