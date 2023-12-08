@@ -369,7 +369,7 @@ paths:
               endTime:
                 type: string
               notes:
-                type: list
+                type: string
       responses:
         "200":
           description: AddProgressUpdateResponse

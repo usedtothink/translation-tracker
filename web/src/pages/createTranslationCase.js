@@ -27,8 +27,8 @@ class CreateTranslationCase extends BindingClass {
     }
 
     /**
-     * Method to run when the create translation case submit button is pressed. Call the TranslationTrackerService
-     * to create the translation case.
+     * Method to run when the create translation case submit button is pressed. Call the TranslationTrackerService to create the
+     * translation case.
      */
     async submit(evt) {
         evt.preventDefault();
@@ -41,9 +41,21 @@ class CreateTranslationCase extends BindingClass {
         const origButtonText = createButton.innerText;
         createButton.innerText = 'Loading...';
 
-        const translationCaseName = document.getElementById('case-nickname').value;
+        const caseNickname = document.getElementById('case-nickname').value;
+        const projectType = document.getElementById('project-type').value;
 
-        const translationCase = await this.client.createTranslationCase(caseNickname, projectType, (error) => {
+        const translationClientId = document.getElementById('translation-client-id').value;
+        const sourceTextTitle = document.getElementById('source-text-title').value;
+        const sourceTextAuthor = document.getElementById('source-text-author').value;
+        const translatedTitle = document.getElementById('translated-title').value;
+        const dueDate = document.getElementById('due-date').value;
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        const openCase = document.getElementById('open-case').value;
+        const rushJob = document.getElementById('rush-job').value;
+
+
+        const translationCase = await this.client.createTranslationCase(caseNickname, projectType, translationClientId, sourceTextTitle, sourceTextAuthor, translatedTitle, dueDate, startDate, endDate, openCase, rushJob, (error) => {
             createButton.innerText = origButtonText;
             errorMessageDisplay.innerText = `Error: ${error.message}`;
             errorMessageDisplay.classList.remove('hidden');
@@ -52,12 +64,12 @@ class CreateTranslationCase extends BindingClass {
     }
 
     /**
-     * When the translationCase is updated in the datastore, redirect to the view translation case page.
+     * When the translationCase is updated in the datastore, redirect to the view translationCase page.
      */
     redirectToViewTranslationCase() {
         const translationCase = this.dataStore.get('translationCase');
         if (translationCase != null) {
-            window.location.href = `/translationCase.html?id=${translationCase.id}`;
+            window.location.href = `/translationCase.html?id=${translationCase.translationCaseId}`;
         }
     }
 }

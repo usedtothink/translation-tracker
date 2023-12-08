@@ -10,7 +10,9 @@
     <header class="header" id="header"></header>
     <div class="card">
         <h2 id="case-nickname"></h2>
-        <h3><span id="project-type">Project type: </span></h3>
+        <h3><span id="project-type"></span></h3>
+        <a href="#" class="button" id="update-translation-case">Update translation case details</a>
+        <br><br>
         <div id="translation-client-id"></div>
         <div id="source-text-title"></div>
         <div id="source-text-author"></div>
@@ -22,17 +24,18 @@
         <div id="rush-job"></div>
         <div id="total-working-hours"></div>
         <div id="words-per-hour"></div>
-        <ul id="progress-log"></ul>
-        <h3><span id="payment-record">Payment record: </span></h3>
+        <div id="progress-log"></div>
+        <ul id="progress-update"></ul>
+
+
+        <h3><span id="payment-record"></span></h3>
         <div id="case-paid"></div>
         <div id="payment-date"></div>
         <div id="on-time"></div>
         <div id="gross-payment"></div>
         <div id="tax-rate"></div>
-        <div id="pay-rate"></div>
-        <div id="pay-rate-unit"></div>
-        <div id="word-count-payment"></div>
-        <div id="word-count-unit"></div>
+        <div id="pay-rate"></div><div id="pay-rate-unit"></div>
+        <div id="word-count-payment"></div><div id="word-count-unit"></div>
 
     </div>
     <div class="card">
@@ -41,27 +44,27 @@
             <p class="hidden error" id="error-message"> </p>
             <p class="form-field">
                 <label>Start date</label>
-                <input type="date" required id="start-date">
+                <input type="date" required id="start-date-update">
             </p>
             <p class="form-field">
                 <label>Start time</label>
-                <input type="time" id="start-time">
+                <input type="time" required id="start-time">
             </p>
             <p class="form-field">
                 <label>End date</label>
-                <input type="date" required id="end-date">
+                <input type="date" required id="end-date-update">
             </p>
             <p class="form-field">
                 <label>End time</label>
-                <input type="time" id="end-time">
+                <input type="time" required id="end-time">
             </p>
             <p class="form-field">
                 <label>Word count</label>
-                <input type="text" id="word-count">
+                <input type="text" required id="word-count">
             </p>
             <p class="form-field">
                 <label>Notes</label>
-                <input type="text" id="notes">
+                <input type="text" required id="notes">
             </p>
         </form>
         <a href="#" class="button" id="add-progress-update">Add progress update</a>

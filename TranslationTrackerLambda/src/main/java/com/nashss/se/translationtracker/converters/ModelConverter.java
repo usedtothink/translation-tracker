@@ -22,27 +22,21 @@ public class ModelConverter {
      * @return the converted translation case
      */
     public TranslationCaseModel toTranslationCaseModel(TranslationCase translationCase) {
-        List<ProgressUpdate> progress = null;
-        if (translationCase.getProgressLog() != null) {
-            progress = new ArrayList<>(translationCase.getProgressLog());
-        }
-
         return TranslationCaseModel.builder()
                 .withCustomerId(translationCase.getCustomerId())
                 .withTranslationCaseId(translationCase.getTranslationCaseId())
-                .withTranslationClientId(translationCase.getTranslationClientId())
                 .withCaseNickname(translationCase.getCaseNickname())
-                .withSourceTextTitle(translationCase.getSourceTextTitle())
+                .withProjectType(translationCase.getProjectType())
+                .withTranslationClientId(translationCase.getTranslationClientId())
                 .withSourceTextTitle(translationCase.getSourceTextTitle())
                 .withSourceTextAuthor(translationCase.getSourceTextAuthor())
                 .withTranslatedTitle(translationCase.getTranslatedTitle())
-                .withProjectType(translationCase.getProjectType())
                 .withDueDate(translationCase.getDueDate())
                 .withStartDate(translationCase.getStartDate())
                 .withEndDate(translationCase.getEndDate())
                 .withOpenCase(translationCase.getOpenCase())
                 .withRushJob(translationCase.getRushJob())
-                .withProgressLog(progress)
+                .withProgressLog(translationCase.getProgressLog())
                 .withTotalWorkingHours(translationCase.getTotalWorkingHours())
                 .withWordsPerHour(translationCase.getWordsPerHour())
                 .build();
