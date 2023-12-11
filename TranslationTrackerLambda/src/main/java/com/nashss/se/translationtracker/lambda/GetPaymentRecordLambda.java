@@ -1,6 +1,5 @@
 package com.nashss.se.translationtracker.lambda;
 
-import com.nashss.se.translationtracker.activity.requests.ArchiveTranslationCaseRequest;
 import com.nashss.se.translationtracker.activity.requests.GetPaymentRecordRequest;
 import com.nashss.se.translationtracker.activity.results.GetPaymentRecordResult;
 

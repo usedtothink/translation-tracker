@@ -113,8 +113,12 @@ public class TranslationCaseModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TranslationCaseModel that = (TranslationCaseModel) o;
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&

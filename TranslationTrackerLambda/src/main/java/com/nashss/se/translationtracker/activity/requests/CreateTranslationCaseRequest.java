@@ -1,14 +1,7 @@
 package com.nashss.se.translationtracker.activity.requests;
 
-import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
-import com.nashss.se.translationtracker.types.ProjectType;
-import com.nashss.se.translationtracker.utils.IdGenerator;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @JsonDeserialize(builder = CreateTranslationCaseRequest.Builder.class)
 public class CreateTranslationCaseRequest {

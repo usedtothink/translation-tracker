@@ -1,7 +1,6 @@
 package com.nashss.se.translationtracker.converters;
 
 import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
-import com.nashss.se.translationtracker.dynamodb.models.ProgressUpdate;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
 import com.nashss.se.translationtracker.model.PaymentRecordModel;

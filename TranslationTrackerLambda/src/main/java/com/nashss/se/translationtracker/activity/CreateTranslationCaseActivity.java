@@ -10,8 +10,8 @@ import com.nashss.se.translationtracker.model.TranslationCaseModel;
 import com.nashss.se.translationtracker.types.ProjectType;
 import com.nashss.se.translationtracker.utils.IdGenerator;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
+import javax.inject.Inject;
 
 /**
  * Implementation of the CreateTranslationCaseActivity for the TranslationTracker's CreateTranslationCase API.

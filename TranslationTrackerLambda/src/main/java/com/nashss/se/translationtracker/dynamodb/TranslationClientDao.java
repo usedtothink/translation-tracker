@@ -102,10 +102,6 @@ public class TranslationClientDao {
                 .withKeyConditionExpression("customerId = :customerId")
                 .withExpressionAttributeValues(valueMap);
         List<TranslationClient> translationClientList = dynamoDbMapper.query(TranslationClient.class, queryExpression);
-        if (translationClientList.isEmpty()) {
-            throw new TranslationClientNotFoundException("No translation clients are associated with id " +
-                    customerId);
-        }
         return translationClientList;
     }
 

@@ -1,7 +1,6 @@
 package com.nashss.se.translationtracker.lambda;
 
 import com.nashss.se.translationtracker.activity.requests.ArchiveTranslationClientRequest;
-import com.nashss.se.translationtracker.activity.requests.GetTranslationCaseRequest;
 import com.nashss.se.translationtracker.activity.results.ArchiveTranslationClientResult;
 
 import com.amazonaws.services.lambda.runtime.Context;

@@ -63,6 +63,9 @@ class FrontPage extends BindingClass {
      * @returns A string of HTML suitable for being dropped on the page.
      */
     getHTMLForTranslationCases(translationCaseList) {
+        if (translationCaseList.length === 0) {
+            return '<h4>No translation cases found</h4>';
+        }
         let html = '<table><tr><th>Case Nickname</th><th>Project Type</th><th>Open</th></tr>';
         for (const translationCase of translationCaseList) {
             html += `
@@ -85,6 +88,9 @@ class FrontPage extends BindingClass {
      * @returns A string of HTML suitable for being dropped on the page.
      */
         getHTMLForTranslationClients(translationClientList) {
+            if (translationClientList.length === 0) {
+                return '<h4>No translation clients found</h4>';
+            }
             let html = '<table><tr><th>Client Name</th><th>Client Type</th><th>Open</th></tr>';
             for (const translationClient of translationClientList) {
                 html += `
