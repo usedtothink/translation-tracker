@@ -9,11 +9,11 @@ import DataStore from "../util/DataStore";
 class ViewTranslationCase extends BindingClass {
     constructor() {
         super();
-        this.bindClassMethods(['clientLoaded', 'mount', 'addTranslationCaseToPage', 'addProgressUpdate'], this);
+        this.bindClassMethods(['clientLoaded', 'mount', 'addTranslationCaseToPage', 'addProgressUpdate', 'archiveTranslationCase'], this);
         this.dataStore = new DataStore();
         this.dataStore.addChangeListener(this.addTranslationCaseToPage);
         this.header = new Header(this.dataStore);
-        console.log("viewTranslationcCase constructor");
+        console.log("viewTranslationCase constructor");
     }
 
     /**
@@ -38,6 +38,8 @@ class ViewTranslationCase extends BindingClass {
         document.getElementById('add-progress-update').addEventListener('click', this.addProgressUpdate);
 
         document.getElementById('update-translation-case').addEventListener('click', this.redirectToUpdateTranslationCase);
+
+        document.getElementById('archive-translation-case').addEventListener('click', this.archiveTranslationCase);
 
         this.header.addHeaderToPage();
 
@@ -199,6 +201,28 @@ class ViewTranslationCase extends BindingClass {
         document.getElementById('add-progress-update').innerText = 'Add progress update';
         document.getElementById("add-progress-update-form").reset();
     }
+
+    /**
+     * Method to run when the archive translation case button is pressed. Call the TranslationTrackerService to archive the translation case.
+     */
+    async archiveTranslationCase() {
+        const errorMessageDisplay = document.getElementById('error-message');
+        errorMessageDisplay.innerText = ``;
+        errorMessageDisplay.classList.add('hidden');
+
+        const translationCase = this.dataStore.get('translationCase');
+        if (translationCase == null) {
+            return;
+        }
+
+        const archivedCase = await this.client.archiveTranslationCase(translationCase.translationCaseId, (error) => {
+            errorMessageDisplay.innerText = `Error: ${error.message}`;
+            errorMessageDisplay.classList.remove('hidden');           
+        });
+
+        window.location.href = '/index.html';
+    }
+
 }
 
 

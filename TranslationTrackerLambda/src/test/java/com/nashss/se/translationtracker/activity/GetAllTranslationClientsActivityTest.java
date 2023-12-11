@@ -41,7 +41,7 @@ class GetAllTranslationClientsActivityTest {
 
         ClientType translationClientType1 = ClientType.COMMERCIAL;
         ClientType translationClientType2 = ClientType.CORPORATE;
-        ClientType translationClientType3 = ClientType.MASSMEDIA;
+        ClientType translationClientType3 = ClientType.MEDIA;
 
         TranslationClient translationClient1 = new TranslationClient();
         translationClient1.setCustomerId(customerId);

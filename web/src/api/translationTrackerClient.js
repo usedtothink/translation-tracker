@@ -10,7 +10,7 @@ export default class TranslationTrackerClient extends BindingClass {
     constructor(props = {}) {
         super();
 
-        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'createTranslationCase', 'getTranslationCase', 'addProgressUpdate', 'getPaymentRecord', 'updateTranslationCase', 'getAllTranslationCases', 'getAllTranslationClients'];
+        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'createTranslationCase', 'getTranslationCase', 'addProgressUpdate', 'getPaymentRecord', 'updateTranslationCase', 'getAllTranslationCases', 'getAllTranslationClients', 'createTranslationClient', 'getTranslationClient', 'archiveTranslationCase', 'archiveTranslationClient'];
         this.bindClassMethods(methodsToBind, this);
 
         this.authenticator = new Authenticator();;
@@ -66,7 +66,6 @@ export default class TranslationTrackerClient extends BindingClass {
         return await this.authenticator.getUserToken();
     }
  
-
     /**
      * Create a new translation case owned by the current user.
      * @param caseNickname The nickname of the translation case to create.
@@ -108,6 +107,70 @@ export default class TranslationTrackerClient extends BindingClass {
             this.handleError(error, errorCallback)
         }
     }
+
+        /**
+     * Create a new translation client owned by the current user.
+     * @param translationClientName The name of the translation client to create.
+     * @param translationClientType The client type to associate with a translation client.
+     * @returns The translation client that has been created.
+     */
+    async createTranslationClient(translationClientName, translationClientType) {
+        try {
+            const token = await this.getTokenOrThrow("Only authenticated users can create translation clients.");
+            const response = await this.axiosClient.post(`translationclients`, {
+                translationClientName: translationClientName,
+                translationClientType: translationClientType
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data.translationClient;
+        } catch (error) {
+            this.handleError(error, errorCallback)
+        }
+    }
+
+    /**
+     * Archives the translation case for the given ID.
+     * @param translationCaseId Unique identifier for a translation case.
+     * @param errorCallback (Optional) A function to execute if the call fails.
+     * @returns The archived translation case's metadata.
+     */
+    async archiveTranslationCase(translationCaseId, errorCallback) {
+        try {
+            const token = await this.getTokenOrThrow("Only authenticated users can archive a translation case.");
+            const response = await this.axiosClient.delete(`translationcases/${translationCaseId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data.translationCase;
+        } catch (error) {
+            this.handleError(error, errorCallback)
+        }
+    }
+
+    /**
+     * Archives the translation client for the given ID.
+     * @param translationClientId Unique identifier for a translation client.
+     * @param errorCallback (Optional) A function to execute if the call fails.
+     * @returns The archived translation client's metadata.
+     */
+    async archiveTranslationClient(translationClientId, errorCallback) {
+        try {
+            const token = await this.getTokenOrThrow("Only authenticated users can archive a translation client.");
+            const response = await this.axiosClient.delete(`translationclients/${translationClientId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data.translationClient;
+        } catch (error) {
+            this.handleError(error, errorCallback)
+        }
+    }
+    
 
     /**
      * Update an existing translation case owned by the current user.
@@ -157,7 +220,7 @@ export default class TranslationTrackerClient extends BindingClass {
      */
     async getTranslationCase(translationCaseId, errorCallback) {
         try {
-            const token = await this.getTokenOrThrow("Only authenticated users can add a song to a playlist.");
+            const token = await this.getTokenOrThrow("Only authenticated users can access a translation case.");
             const response = await this.axiosClient.get(`translationcases/${translationCaseId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -169,6 +232,25 @@ export default class TranslationTrackerClient extends BindingClass {
         }
     }
 
+    /**
+     * Gets the translation client for the given ID.
+     * @param translationClientId Unique identifier for a translation client.
+     * @param errorCallback (Optional) A function to execute if the call fails.
+     * @returns The translation client's metadata.
+     */
+        async getTranslationClient(translationClientId, errorCallback) {
+            try {
+                const token = await this.getTokenOrThrow("Only authenticated users can access a translation client.");
+                const response = await this.axiosClient.get(`translationclients/${translationClientId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                return response.data.translationClient;
+            } catch (error) {
+                this.handleError(error, errorCallback)
+            }
+        }
 
     /**
      * Add a progress update to a translation case.

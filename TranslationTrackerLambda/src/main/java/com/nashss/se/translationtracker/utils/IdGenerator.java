@@ -12,8 +12,9 @@ public class IdGenerator {
      */
     public static String newTranslationCaseId(String projectType, String caseNickname) {
         Random random = new Random();
+        String cleanName = caseNickname.replaceAll("[^a-zA-Z0-9]", "");
 
-        return projectType.toLowerCase() + caseNickname.replaceAll("\\s", "") +
+        return projectType.toLowerCase() + cleanName.replaceAll("\\s", "").toLowerCase() +
                 random.nextInt(10000);
     }
 
@@ -26,8 +27,9 @@ public class IdGenerator {
      */
     public static String newTranslationClientId(String clientType, String clientName) {
         Random random = new Random();
+        String cleanName = clientName.replaceAll("[^a-zA-Z0-9]", "");
 
-        return clientType.toLowerCase() + clientName.replaceAll("\\s", "") +
+        return clientType.toLowerCase() + cleanName.replaceAll("\\s", "").toLowerCase() +
                 random.nextInt(10000);
     }
 

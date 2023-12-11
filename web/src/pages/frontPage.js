@@ -24,6 +24,7 @@ class FrontPage extends BindingClass {
         const translationClientList = await this.client.getAllTranslationClients();
         this.dataStore.set('translationClientList', translationClientList);
         document.getElementById('new-translation-case').href='/createTranslationCase.html';
+        document.getElementById('new-translation-client').href='/createTranslationClient.html';
     }
 
     /**
@@ -68,14 +69,16 @@ class FrontPage extends BindingClass {
         }
         let html = '<table><tr><th>Case Nickname</th><th>Project Type</th><th>Open</th></tr>';
         for (const translationCase of translationCaseList) {
-            html += `
-            <tr>
-                <td>
-                    <a href="translationCase.html?id=${translationCase.translationCaseId}">${translationCase.caseNickname}</a>
-                </td>
-                <td>${translationCase.projectType}</td>
-                <td>${translationCase.openCase}</td>
-            </tr>`;
+            if (!translationCase.translationCaseId.startsWith("archived - ")) {
+                html += `
+                <tr>
+                    <td>
+                        <a href="translationCase.html?id=${translationCase.translationCaseId}">${translationCase.caseNickname}</a>
+                    </td>
+                    <td>${translationCase.projectType}</td>
+                    <td>${translationCase.openCase}</td>
+                </tr>`;
+            }
         }
         html += '</table>';
 
@@ -93,13 +96,15 @@ class FrontPage extends BindingClass {
             }
             let html = '<table><tr><th>Client Name</th><th>Client Type</th><th>Open</th></tr>';
             for (const translationClient of translationClientList) {
-                html += `
-                <tr>
-                    <td>
-                        <a href="translationClient.html?id=${translationClient.translationClientId}">${translationClient.translationClientName}</a>
-                    </td>
-                    <td>${translationClient.clientType}</td>
-                </tr>`;
+                if (!translationClient.translationClientId.startsWith("archived - ")) {
+                    html += `
+                    <tr>
+                        <td>
+                            <a href="translationClient.html?id=${translationClient.translationClientId}">${translationClient.translationClientName}</a>
+                        </td>
+                        <td>${translationClient.clientType}</td>
+                    </tr>`;
+                }
             }
             html += '</table>';
     
