@@ -2,31 +2,25 @@
 <html>
 
 <head>
-    <script type="text/javascript" src="assets/createTranslationCase.js"></script>
+    <script type="text/javascript" src="assets/frontPage.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 
 <body class="background">
-<header class="header" id="header"></header>
-<div class="card">
-    <h2>Index</h2>
-    <form class="card-content" id="create-translationCase-form">
-        <p class="hidden error" id="error-message"> </p>
-        <p class="form-field">
-            <label>Translation Case Nickname</label>
-            <input type="text" required class="validated-field" id="translation-case-nickname"
-                   data-tip="Translation case nicknames must be unique." autofocus>
-        </p>
-        <p class="form-field">
-            <label>Project Type</label>
-            <input type="text" id="projectType" class="projectType" placeholder="ACADEMIC"
-                   data-tip="Must be in all-caps.">
-        </p>
-        <p>
-            <a href="#" class="button" id="create">Create Translation Case</a>
-        </p>
-    </form>
-</div>
+    <header class="header" id="header"></header>
+    <div class="card" id='create-new-container'>
+        <a href="#" class="button" id="new-translation-case">Create a new translation case</a>
+    </div>
+    <div class="card" id='translation-case-list-container'>
+        <h3>Translation Cases</h3>
+        <div id="translation-cases-display">
+        </div>
+    </div>
+    <div class="card" id='translation-clients-list-container'>
+        <h3>Translation Clients</h3>
+        <div id="translation-clients-display">
+        </div>
+    </div>
 </body>
 
 </html>

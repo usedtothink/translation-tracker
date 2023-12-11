@@ -9,64 +9,105 @@ import DataStore from '../util/DataStore';
 class FrontPage extends BindingClass {
     constructor() {
         super();
-        this.bindClassMethods(['mount', 'submit', 'redirectToViewTranslationCase'], this);
+        this.bindClassMethods(['clientLoaded', 'mount', 'addTranslationCasesAndClientsToPage', 'getHTMLForTranslationCases'], this);
         this.dataStore = new DataStore();
-        this.dataStore.addChangeListener(this.redirectToViewTranslationCase);
+        this.dataStore.addChangeListener(this.addTranslationCasesAndClientsToPage);
         this.header = new Header(this.dataStore);
+    }
+
+    /**
+     * Once the client is loaded, get the translation case and translation client metadata.
+     */
+    async clientLoaded() {
+        const translationCaseList = await this.client.getAllTranslationCases();
+        this.dataStore.set('translationCaseList', translationCaseList);
+        const translationClientList = await this.client.getAllTranslationClients();
+        this.dataStore.set('translationClientList', translationClientList);
+        document.getElementById('new-translation-case').href='/createTranslationCase.html';
     }
 
     /**
      * Add the header to the page and load the TranslationTrackerClient.
      */
     mount() {
-        document.getElementById('create').addEventListener('click', this.submit);
-
         this.header.addHeaderToPage();
 
         this.client = new TranslationTrackerClient();
+        this.clientLoaded();
     }
 
     /**
-     * Method to run when the create translation case submit button is pressed. Call the TranslationTrackerService
-     * to create the translation case.
+     * When the translation case list is updated in the datastore, update the translation case metadata on the page.
      */
-    async submit(evt) {
-        evt.preventDefault();
-
-        const errorMessageDisplay = document.getElementById('error-message');
-        errorMessageDisplay.innerText = ``;
-        errorMessageDisplay.classList.add('hidden');
-
-        const createButton = document.getElementById('create');
-        const origButtonText = createButton.innerText;
-        createButton.innerText = 'Loading...';
-
-        const translationCaseName = document.getElementById('case-nickname').value;
-
-        const translationCase = await this.client.createTranslationCase(caseNickname, projectType, (error) => {
-            createButton.innerText = origButtonText;
-            errorMessageDisplay.innerText = `Error: ${error.message}`;
-            errorMessageDisplay.classList.remove('hidden');
-        });
-        this.dataStore.set('translationCase', translationCase);
-    }
-
-    /**
-     * When the translationCase is updated in the datastore, redirect to the view translation case page.
-     */
-    redirectToViewTranslationCase() {
-        const translationCase = this.dataStore.get('translationCase');
-        if (translationCase != null) {
-            window.location.href = `/translationCase.html?id=${translationCase.id}`;
+    addTranslationCasesAndClientsToPage() {
+        const translationCaseList = this.dataStore.get('translationCaseList');
+        if (translationCaseList == null) {
+            return;
         }
+
+        const translationClientList = this.dataStore.get('translationClientList');
+        if (translationClientList == null) {
+            return;
+        }
+
+        const translationCaseDisplay = document.getElementById('translation-cases-display');
+        translationCaseDisplay.innerHTML = this.getHTMLForTranslationCases(translationCaseList);
+
+        const translationClientDisplay = document.getElementById('translation-clients-display');
+        translationClientDisplay.innerHTML = this.getHTMLForTranslationClients(translationClientList);
     }
+
+    /**
+     * Create appropriate HTML for displaying searchResults on the page.
+     * @param translationCaseList An array of playlists objects to be displayed on the page.
+     * @returns A string of HTML suitable for being dropped on the page.
+     */
+    getHTMLForTranslationCases(translationCaseList) {
+        let html = '<table><tr><th>Case Nickname</th><th>Project Type</th><th>Open</th></tr>';
+        for (const translationCase of translationCaseList) {
+            html += `
+            <tr>
+                <td>
+                    <a href="translationCase.html?id=${translationCase.translationCaseId}">${translationCase.caseNickname}</a>
+                </td>
+                <td>${translationCase.projectType}</td>
+                <td>${translationCase.openCase}</td>
+            </tr>`;
+        }
+        html += '</table>';
+
+        return html;
+    }
+
+        /**
+     * Create appropriate HTML for displaying searchResults on the page.
+     * @param translationCaseList An array of playlists objects to be displayed on the page.
+     * @returns A string of HTML suitable for being dropped on the page.
+     */
+        getHTMLForTranslationClients(translationClientList) {
+            let html = '<table><tr><th>Client Name</th><th>Client Type</th><th>Open</th></tr>';
+            for (const translationClient of translationClientList) {
+                html += `
+                <tr>
+                    <td>
+                        <a href="translationClient.html?id=${translationClient.translationClientId}">${translationClient.translationClientName}</a>
+                    </td>
+                    <td>${translationClient.clientType}</td>
+                </tr>`;
+            }
+            html += '</table>';
+    
+            return html;
+        }
+
+
 }
 
 /**
  * Main method to run when the page contents have loaded.
  */
 const main = async () => {
-    const frontPage = new frontPage();
+    const frontPage = new FrontPage();
     frontPage.mount();
 };
 

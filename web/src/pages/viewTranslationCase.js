@@ -12,9 +12,8 @@ class ViewTranslationCase extends BindingClass {
         this.bindClassMethods(['clientLoaded', 'mount', 'addTranslationCaseToPage', 'addProgressUpdate'], this);
         this.dataStore = new DataStore();
         this.dataStore.addChangeListener(this.addTranslationCaseToPage);
-        this.dataStore.add
         this.header = new Header(this.dataStore);
-        console.log("viewtranslationcase constructor");
+        console.log("viewTranslationcCase constructor");
     }
 
     /**
@@ -29,6 +28,7 @@ class ViewTranslationCase extends BindingClass {
         document.getElementById('payment-record').innerText = "(loading payment record...)";
         const paymentRecord = await this.client.getPaymentRecord(translationCaseId);
         this.dataStore.set('paymentRecord', paymentRecord);
+        document.getElementById('update-translation-case').href='/updateTranslationCase.html?id=' + translationCaseId;
     }
 
     /**
@@ -198,13 +198,6 @@ class ViewTranslationCase extends BindingClass {
 
         document.getElementById('add-progress-update').innerText = 'Add progress update';
         document.getElementById("add-progress-update-form").reset();
-    }
-
-    /**
-     * When the button is clicked, redirect to the update translationCase page.
-     */
-    redirectToUpdateTranslationCase(translationCaseId) {
-        window.location.href = `/updateTranslationCase.html?id=${translationCaseId}`;
     }
 }
 

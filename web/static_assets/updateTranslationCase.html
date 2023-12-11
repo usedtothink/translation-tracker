@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="assets/updateTranslationCase.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body class="background">
+    <header class="header" id="header"></header>
+    <div class="card">
+        <h2>Update translation case:</h2>
+        <form class="card-content" id="update-translationCase-form">
+            <p class="hidden error" id="error-message"> </p>
+            <p>
+                <div id="case-nickname"></div>
+            </p>
+            <p>
+                <div id="project-type"></div>
+            </p>
+            <p class="form-field">
+                <label>Translation client ID:</label>
+                <input type="text" id="translation-client-id">
+            </p>
+            <p class="form-field">
+                <label>Source text title:</label>
+                <input type="text" id="source-text-title">
+            </p>
+            <p class="form-field">
+                <label>Source text author:</label>
+                <input type="text" id="source-text-author">
+            </p>
+            <p class="form-field">
+                <label>Translated title:</label>
+                <input type="text" id="translated-title">
+            </p>
+            <p class="form-field">
+                <label>Due date:</label>
+                <input type="date" id="due-date">
+            </p>
+            <p class="form-field">
+                <label>Start date:</label>
+                <input type="date" id="start-date">
+            </p>
+            <p class="form-field">
+                <label>End date:</label>
+                <input type="date" id="end-date">
+            </p>
+            <p class="form-field">
+                <label>Open case:</label>
+                <select name="open-case" id="open-case">
+                    <option value=""> </option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </p>
+            <p class="form-field">
+                <label>Rush job:</label>
+                <select name="rush-job" id="rush-job">
+                    <option value=""> </option>
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+            </p>
+            <p>
+                <a href="#" class="button" id="update">Update Translation Case</a>
+            </p>
+        </form>
+    </div>
+</body>
+
+</html>

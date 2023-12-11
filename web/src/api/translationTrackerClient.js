@@ -10,7 +10,7 @@ export default class TranslationTrackerClient extends BindingClass {
     constructor(props = {}) {
         super();
 
-        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'createTranslationCase', 'getTranslationCase', 'addProgressUpdate', 'getPaymentRecord', 'updateTranslationCase'];
+        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'createTranslationCase', 'getTranslationCase', 'addProgressUpdate', 'getPaymentRecord', 'updateTranslationCase', 'getAllTranslationCases', 'getAllTranslationClients'];
         this.bindClassMethods(methodsToBind, this);
 
         this.authenticator = new Authenticator();;
@@ -127,7 +127,7 @@ export default class TranslationTrackerClient extends BindingClass {
     async updateTranslationCase(translationCaseId, translationClientId, sourceTextTitle, sourceTextAuthor, translatedTitle, dueDate, startDate, endDate, openCase, rushJob, errorCallback) {
         try {
             const token = await this.getTokenOrThrow("Only authenticated users can update translation cases.");
-            const response = await this.axiosClient.put(`translationcases/${translationCaseId}`, {
+            const response = await this.axiosClient.post(`translationcases/${translationCaseId}`, {
                 translationCaseId: translationCaseId,
                 translationClientId: translationClientId,
                 sourceTextTitle: sourceTextTitle,
@@ -222,6 +222,45 @@ export default class TranslationTrackerClient extends BindingClass {
             this.handleError(error, errorCallback)
         }
     }
+
+    /**
+     * Gets all translation cases for the current user.
+     * @param errorCallback (Optional) A function to execute if the call fails.
+     * @returns A list of translation case metadata.
+     */
+        async getAllTranslationCases(errorCallback) {
+            try {
+                const token = await this.getTokenOrThrow("Only authenticated users can get translation cases.");
+                const response = await this.axiosClient.get(`translationcases/`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                return response.data.translationCaseList;
+            } catch (error) {
+                this.handleError(error, errorCallback)
+            }
+        }
+
+    /**
+     * Gets all translation clients for the current user.
+     * @param errorCallback (Optional) A function to execute if the call fails.
+     * @returns A list of translation client metadata.
+     */
+        async getAllTranslationClients(errorCallback) {
+            try {
+                const token = await this.getTokenOrThrow("Only authenticated users can get translation clients.");
+                const response = await this.axiosClient.get(`translationclients/`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                return response.data.translationClientList;
+            } catch (error) {
+                this.handleError(error, errorCallback)
+            }
+        }
+    
 
     /**
      * Helper method to log the error and run any error functions.
