@@ -45,8 +45,8 @@ public class CreateTranslationClientActivity {
         TranslationClient newTranslationClient = new TranslationClient();
         newTranslationClient.setCustomerId(createTranslationClientRequest.getCustomerId());
         newTranslationClient.setTranslationClientId(createTranslationClientRequest.getTranslationClientId());
-        newTranslationClient.setTranslationClientType(ClientType.valueOf(createTranslationClientRequest
-                .getTranslationClientType()));
+        newTranslationClient.setClientType(ClientType.valueOf(createTranslationClientRequest
+                .getClientType()));
         newTranslationClient.setTranslationClientName(createTranslationClientRequest.getTranslationClientName());
 
         clientDao.createTranslationClient(newTranslationClient);

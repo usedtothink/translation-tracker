@@ -42,9 +42,9 @@ class CreateTranslationClient extends BindingClass {
         createButton.innerText = 'Loading...';
 
         const translationClientName = document.getElementById('client-name').value;
-        const translationClientType = document.getElementById('client-type').value;
+        const clientType = document.getElementById('client-type').value;
 
-        const translationClient = await this.client.createTranslationClient(translationClientName, translationClientType, (error) => {
+        const translationClient = await this.client.createTranslationClient(translationClientName, clientType, (error) => {
             createButton.innerText = origButtonText;
             errorMessageDisplay.innerText = `Error: ${error.message}`;
             errorMessageDisplay.classList.remove('hidden');

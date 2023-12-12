@@ -41,15 +41,26 @@ public class AddProgressUpdateActivity {
      */
     public AddProgressUpdateResult handleRequest(final AddProgressUpdateRequest addProgressUpdateRequest) {
 
+        Integer wordCount = addProgressUpdateRequest.getWordCount();
+        String startDate = addProgressUpdateRequest.getStartDate();
+        String endDate = addProgressUpdateRequest.getEndDate();
+        String startTime = addProgressUpdateRequest.getStartTime();
+        String endTime = addProgressUpdateRequest.getEndTime();
+        String notes = addProgressUpdateRequest.getNotes();
+
+        if (wordCount == null || startDate == null || endDate == null || startTime == null || endTime == null ||
+        notes == null) {
+            throw new UnsupportedOperationException("All fields of the progress update must be filled in.");
+        }
         ProgressUpdate progressUpdate = ProgressUpdate.builder()
                 .withCustomerId(addProgressUpdateRequest.getCustomerId())
                 .withTranslationCaseId(addProgressUpdateRequest.getTranslationCaseId())
-                .withWordCount(addProgressUpdateRequest.getWordCount())
-                .withStartDate(addProgressUpdateRequest.getStartDate())
-                .withEndDate(addProgressUpdateRequest.getEndDate())
-                .withStartTime(addProgressUpdateRequest.getStartTime())
-                .withEndTime(addProgressUpdateRequest.getEndTime())
-                .withNotes(addProgressUpdateRequest.getNotes())
+                .withWordCount(wordCount)
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .withStartTime(startTime)
+                .withEndTime(endTime)
+                .withNotes(notes)
                 .build();
 
         TranslationCase translationCase = caseDao.addProgressUpdate(progressUpdate);

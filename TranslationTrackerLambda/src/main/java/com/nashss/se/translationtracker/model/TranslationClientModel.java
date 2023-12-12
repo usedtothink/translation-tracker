@@ -30,7 +30,7 @@ public class TranslationClientModel {
         return translationClientName;
     }
 
-    public ClientType getTranslationClientType() {
+    public ClientType getClientType() {
         return clientType;
     }
 
@@ -46,13 +46,13 @@ public class TranslationClientModel {
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
-                Objects.equals(getTranslationClientType(), that.getTranslationClientType());
+                Objects.equals(getClientType(), that.getClientType());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getCustomerId(), getTranslationClientId(), getTranslationClientName(),
-                getTranslationClientType());
+                getClientType());
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -81,7 +81,7 @@ public class TranslationClientModel {
             return this;
         }
 
-        public Builder withTranslationClientType(ClientType clientType) {
+        public Builder withClientType(ClientType clientType) {
             this.clientType = clientType;
             return this;
         }

@@ -49,7 +49,7 @@ class ViewTranslationClient extends BindingClass {
         }
 
         document.getElementById('translation-client-name').innerText = translationClient.translationClientName;
-        document.getElementById('translation-client-type').innerText = "Client type: " + translationClient.translationClientType;
+        document.getElementById('translation-client-type').innerText = "Client type: " + translationClient.clientType;
     }
 
     /**

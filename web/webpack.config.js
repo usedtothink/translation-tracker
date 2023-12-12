@@ -26,7 +26,6 @@ module.exports = {
     frontPage: path.resolve(__dirname, 'src', 'pages', 'frontPage.js'),
     createTranslationCase: path.resolve(__dirname, 'src', 'pages', 'createTranslationCase.js'),
     viewTranslationCase: path.resolve(__dirname, 'src', 'pages', 'viewTranslationCase.js'),
-    updateTranslationCase: path.resolve(__dirname, 'src', 'pages', 'updateTranslationCase.js'),
     createTranslationClient: path.resolve(__dirname, 'src', 'pages', 'createTranslationClient.js'),    
     viewTranslationClient: path.resolve(__dirname, 'src', 'pages', 'viewTranslationClient.js'),
   },

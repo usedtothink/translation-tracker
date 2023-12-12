@@ -47,19 +47,19 @@ class GetAllTranslationClientsActivityTest {
         translationClient1.setCustomerId(customerId);
         translationClient1.setTranslationClientId(translationClientId1);
         translationClient1.setTranslationClientName(translationClientName1);
-        translationClient1.setTranslationClientType(translationClientType1);
+        translationClient1.setClientType(translationClientType1);
 
         TranslationClient translationClient2 = new TranslationClient();
         translationClient2.setCustomerId(customerId);
         translationClient2.setTranslationClientId(translationClientId2);
         translationClient2.setTranslationClientName(translationClientName2);
-        translationClient2.setTranslationClientType(translationClientType2);
+        translationClient2.setClientType(translationClientType2);
 
         TranslationClient translationClient3 = new TranslationClient();
         translationClient3.setCustomerId(customerId);
         translationClient3.setTranslationClientId(translationClientId3);
         translationClient3.setTranslationClientName(translationClientName3);
-        translationClient3.setTranslationClientType(translationClientType3);
+        translationClient3.setClientType(translationClientType3);
 
         List<TranslationClient> listOfClients = List.of(translationClient1, translationClient2, translationClient3);
 
@@ -85,9 +85,9 @@ class GetAllTranslationClientsActivityTest {
         assertEquals(translationClientName2, result.getTranslationClientList().get(1).getTranslationClientName());
         assertEquals(translationClientName3, result.getTranslationClientList().get(2).getTranslationClientName());
 
-        assertEquals(translationClientType1, result.getTranslationClientList().get(0).getTranslationClientType());
-        assertEquals(translationClientType2, result.getTranslationClientList().get(1).getTranslationClientType());
-        assertEquals(translationClientType3, result.getTranslationClientList().get(2).getTranslationClientType());
+        assertEquals(translationClientType1, result.getTranslationClientList().get(0).getClientType());
+        assertEquals(translationClientType2, result.getTranslationClientList().get(1).getClientType());
+        assertEquals(translationClientType3, result.getTranslationClientList().get(2).getClientType());
     }
 
 }

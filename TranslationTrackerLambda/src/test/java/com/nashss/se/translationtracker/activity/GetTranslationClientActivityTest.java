@@ -32,7 +32,7 @@ class GetTranslationClientActivityTest {
         translationClient.setCustomerId(CUSTOMER_ID);
         translationClient.setTranslationClientId(TRANSLATION_CLIENT_ID);
         translationClient.setTranslationClientName(TRANSLATION_CLIENT_NAME);
-        translationClient.setTranslationClientType(TRANSLATION_CLIENT_TYPE);
+        translationClient.setClientType(TRANSLATION_CLIENT_TYPE);
 
         openMocks(this);
         getTranslationClientActivity = new GetTranslationClientActivity(clientDao);
@@ -56,6 +56,6 @@ class GetTranslationClientActivityTest {
         assertEquals(CUSTOMER_ID, result.getTranslationClient().getCustomerId());
         assertEquals(TRANSLATION_CLIENT_ID, result.getTranslationClient().getTranslationClientId());
         assertEquals(TRANSLATION_CLIENT_NAME, result.getTranslationClient().getTranslationClientName());
-        assertEquals(TRANSLATION_CLIENT_TYPE, result.getTranslationClient().getTranslationClientType());
+        assertEquals(TRANSLATION_CLIENT_TYPE, result.getTranslationClient().getClientType());
     }
 }

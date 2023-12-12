@@ -19,8 +19,11 @@ class FrontPage extends BindingClass {
      * Once the client is loaded, get the translation case and translation client metadata.
      */
     async clientLoaded() {
+        document.getElementById('translation-cases-display').innerText = "Loading translation cases...";
+        document.getElementById('translation-clients-display').innerText = "Loading translation clients...";
         const translationCaseList = await this.client.getAllTranslationCases();
         this.dataStore.set('translationCaseList', translationCaseList);
+
         const translationClientList = await this.client.getAllTranslationClients();
         this.dataStore.set('translationClientList', translationClientList);
         document.getElementById('new-translation-case').href='/createTranslationCase.html';
@@ -94,7 +97,7 @@ class FrontPage extends BindingClass {
             if (translationClientList.length === 0) {
                 return '<h4>No translation clients found</h4>';
             }
-            let html = '<table><tr><th>Client Name</th><th>Client Type</th><th>Open</th></tr>';
+            let html = '<table><tr><th>Client Name</th><th>Client Type</th></tr>';
             for (const translationClient of translationClientList) {
                 if (!translationClient.translationClientId.startsWith("archived - ")) {
                     html += `

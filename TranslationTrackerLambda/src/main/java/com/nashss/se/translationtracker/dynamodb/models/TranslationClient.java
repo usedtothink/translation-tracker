@@ -16,7 +16,7 @@ public class TranslationClient {
     private String customerId;
     private String translationClientId;
     private String translationClientName;
-    private ClientType translationClientType;
+    private ClientType clientType;
 
     @DynamoDBAttribute(attributeName =  "customerId")
     @DynamoDBIndexHashKey(globalSecondaryIndexName = CUSTOMER_INDEX, attributeName = "customerId")
@@ -48,12 +48,12 @@ public class TranslationClient {
 
     @DynamoDBTypeConvertedEnum
     @DynamoDBAttribute(attributeName = "translationClientType")
-    public ClientType getTranslationClientType() {
-        return translationClientType;
+    public ClientType getClientType() {
+        return clientType;
     }
 
-    public void setTranslationClientType(ClientType translationClientType) {
-        this.translationClientType = translationClientType;
+    public void setClientType(ClientType clientType) {
+        this.clientType = clientType;
     }
 
     @Override
@@ -68,12 +68,12 @@ public class TranslationClient {
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
-                getTranslationClientType() == that.getTranslationClientType();
+                getClientType() == that.getClientType();
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getCustomerId(), getTranslationClientId(), getTranslationClientName(),
-                getTranslationClientType());
+                getClientType());
     }
 }

@@ -53,13 +53,13 @@ public class TranslationClientDao {
         List<TranslationClient> filteredList = translationClientList.stream()
                 .filter(translation -> translation.getTranslationClientName()
                         .equals(translationClient.getTranslationClientName()) &&
-                        translation.getTranslationClientType() == translationClient.getTranslationClientType())
+                        translation.getClientType() == translationClient.getClientType())
                 .collect(Collectors.toList());
 
         if (!filteredList.isEmpty()) {
             throw new DuplicateTranslationClientException("A translation client with name '" +
                     translationClient.getTranslationClientName() +
-                    "' and client type '" + translationClient.getTranslationClientType().name() + "' already exists. ");
+                    "' and client type '" + translationClient.getClientType().name() + "' already exists. ");
         }
         return saveTranslationClient(translationClient);
     }

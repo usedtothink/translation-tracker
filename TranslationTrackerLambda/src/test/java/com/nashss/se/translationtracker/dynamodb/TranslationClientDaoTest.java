@@ -52,7 +52,7 @@ class TranslationClientDaoTest {
         // GIVEN
         TranslationClient translationClient = new TranslationClient();
         translationClient.setTranslationClientName(CLIENT_NAME);
-        translationClient.setTranslationClientType(CLIENT_TYPE);
+        translationClient.setClientType(CLIENT_TYPE);
         // Mocking the paginated query list
         List<TranslationClient> testList = new ArrayList<>();
         PaginatedQueryList<TranslationClient> listMock = mock(PaginatedQueryList.class);
@@ -72,7 +72,7 @@ class TranslationClientDaoTest {
         // GIVEN
         TranslationClient translationClient = new TranslationClient();
         translationClient.setTranslationClientName(CLIENT_NAME);
-        translationClient.setTranslationClientType(CLIENT_TYPE);
+        translationClient.setClientType(CLIENT_TYPE);
         // Mocking the paginated query list
         List<TranslationClient> testList = new ArrayList<>();
         testList.add(translationClient);

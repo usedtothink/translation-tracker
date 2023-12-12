@@ -68,7 +68,7 @@ public class ModelConverter {
         return TranslationClientModel.builder()
                 .withCustomerId(translationClient.getCustomerId())
                 .withTranslationClientId(translationClient.getTranslationClientId())
-                .withTranslationClientType(translationClient.getTranslationClientType())
+                .withClientType(translationClient.getClientType())
                 .withTranslationClientName(translationClient.getTranslationClientName())
                 .build();
     }

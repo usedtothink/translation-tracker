@@ -9,7 +9,7 @@ import DataStore from "../util/DataStore";
 class ViewTranslationCase extends BindingClass {
     constructor() {
         super();
-        this.bindClassMethods(['clientLoaded', 'mount', 'addTranslationCaseToPage', 'addProgressUpdate', 'archiveTranslationCase'], this);
+        this.bindClassMethods(['clientLoaded', 'mount', 'addTranslationCaseToPage', 'addProgressUpdate', 'archiveTranslationCase', 'displayUpdateCaseForm', 'updateTranslationCase', 'displayUpdatePaymentRecordForm', 'updatePaymentRecord'], this);
         this.dataStore = new DataStore();
         this.dataStore.addChangeListener(this.addTranslationCaseToPage);
         this.header = new Header(this.dataStore);
@@ -22,13 +22,13 @@ class ViewTranslationCase extends BindingClass {
     async clientLoaded() {
         const urlParams = new URLSearchParams(window.location.search);
         const translationCaseId = urlParams.get('id');
-        document.getElementById('case-nickname').innerText = "Loading translation case ...";
+        document.getElementById('case-nickname').innerText = "Loading translation case...";
         const translationCase = await this.client.getTranslationCase(translationCaseId);
         this.dataStore.set('translationCase', translationCase);
-        document.getElementById('payment-record').innerText = "(loading payment record...)";
+        document.getElementById('payment-record').innerText = "Loading payment record...";
         const paymentRecord = await this.client.getPaymentRecord(translationCaseId);
         this.dataStore.set('paymentRecord', paymentRecord);
-        document.getElementById('update-translation-case').href='/updateTranslationCase.html?id=' + translationCaseId;
+        //document.getElementById('update-translation-case').href='/updateTranslationCase.html?id=' + translationCaseId;
     }
 
     /**
@@ -40,6 +40,14 @@ class ViewTranslationCase extends BindingClass {
         document.getElementById('update-translation-case').addEventListener('click', this.redirectToUpdateTranslationCase);
 
         document.getElementById('archive-translation-case').addEventListener('click', this.archiveTranslationCase);
+
+        document.getElementById('update-translation-case').addEventListener('click', this.displayUpdateCaseForm);
+
+        document.getElementById('submit-case-update').addEventListener('click', this.updateTranslationCase);
+
+        document.getElementById('update-payment-record').addEventListener('click', this.displayUpdatePaymentRecordForm);
+
+        document.getElementById('submit-payment-update').addEventListener('click', this.updatePaymentRecord);
 
         this.header.addHeaderToPage();
 
@@ -61,7 +69,7 @@ class ViewTranslationCase extends BindingClass {
             return;
         }
 
-        document.getElementById('case-nickname').innerText = "Case nickname: " + translationCase.caseNickname;
+        document.getElementById('case-nickname').innerText = translationCase.caseNickname;
         document.getElementById('project-type').innerText = "Project type: " + translationCase.projectType;
 
         if (!Object.is(translationCase.translationClientId, null)) {
@@ -124,7 +132,7 @@ class ViewTranslationCase extends BindingClass {
 
         document.getElementById('case-paid').innerText = "Paid: ";
         if (!Object.is(paymentRecord.casePaid, null)) {
-            document.getElementById('case-paid').innerText = " " + paymentRecord.casePaid;
+            document.getElementById('case-paid').innerText += " " + paymentRecord.casePaid;
         }
 
         document.getElementById('payment-date').innerText = "Payment date: ";
@@ -172,7 +180,7 @@ class ViewTranslationCase extends BindingClass {
      */
     async addProgressUpdate() {
 
-        const errorMessageDisplay = document.getElementById('error-message');
+        const errorMessageDisplay = document.getElementById('progress-update-error-message');
         errorMessageDisplay.innerText = ``;
         errorMessageDisplay.classList.add('hidden');
 
@@ -184,9 +192,9 @@ class ViewTranslationCase extends BindingClass {
         document.getElementById('add-progress-update').innerText = 'Adding...';
         
         const translationCaseId = translationCase.translationCaseId;
-        const startDate = document.getElementById('start-date-update').value;
+        const startDate = document.getElementById('start-date-progress-update').value;
         const startTime = document.getElementById('start-time').value;
-        const endDate = document.getElementById('end-date-update').value;
+        const endDate = document.getElementById('end-date-progress-update').value;
         const endTime = document.getElementById('end-time').value;
         const wordCount = document.getElementById('word-count').value;
         const notes = document.getElementById('notes').value;
@@ -200,6 +208,102 @@ class ViewTranslationCase extends BindingClass {
 
         document.getElementById('add-progress-update').innerText = 'Add progress update';
         document.getElementById("add-progress-update-form").reset();
+    }
+
+    /**
+     * Method to run when the update translation case details button is pressed. Shows the update form that was previously hidden.
+     */
+    displayUpdateCaseForm() {
+        const hiddenUpdateCaseCard = document.getElementById('hidden-update-case-card');
+        const displayedCaseNickname = document.getElementById('case-name-for-case-update');
+
+        hiddenUpdateCaseCard.classList.toggle('hidden');
+        displayedCaseNickname.innerText = this.dataStore.get('translationCase').caseNickname;
+    }
+
+    /**
+     * Method to run when the update translation case details button is pressed. Shows the update form that was previously hidden.
+     */
+    displayUpdatePaymentRecordForm() {
+        const hiddenUpdatePaymentCard = document.getElementById('hidden-update-payment-card');
+        const displayedCaseNickname = document.getElementById('case-name-for-payment-update');
+
+        hiddenUpdatePaymentCard.classList.toggle('hidden');
+        displayedCaseNickname.innerText = this.dataStore.get('translationCase').caseNickname;
+    }
+
+    /**
+     * Method to run when the submit updated info button is pressed. Call the TranslationTrackerService to update the translation case.
+     */
+    async updateTranslationCase(evt) {
+        evt.preventDefault();
+
+        const errorMessageDisplay = document.getElementById('case-update-error-message');
+        errorMessageDisplay.innerText = ``;
+        errorMessageDisplay.classList.add('hidden');
+
+        const submitUpdateButton = document.getElementById('submit-case-update');
+        const origButtonText = submitUpdateButton.innerText;
+        submitUpdateButton.innerText = 'Loading...';
+
+        const translationCaseId = this.dataStore.get('translationCase').translationCaseId;
+        const translationClientId = document.getElementById('translation-client-id-update').value;
+        const sourceTextTitle = document.getElementById('source-text-title-update').value;
+        const sourceTextAuthor = document.getElementById('source-text-author-update').value;
+        const translatedTitle = document.getElementById('translated-title-update').value;
+        const dueDate = document.getElementById('due-date-update').value;
+        const startDate = document.getElementById('start-date-update').value;
+        const endDate = document.getElementById('end-date-update').value;
+        const openCase = document.getElementById('open-case-update').value;
+        const rushJob = document.getElementById('rush-job-update').value;
+
+
+        const translationCase = await this.client.updateTranslationCase(translationCaseId, translationClientId, sourceTextTitle, sourceTextAuthor, translatedTitle, dueDate, startDate, endDate, openCase, rushJob, (error) => {
+            submitUpdateButton.innerText = origButtonText;
+            errorMessageDisplay.innerText = `Error: ${error.message}`;
+            errorMessageDisplay.classList.remove('hidden');
+        });
+        this.dataStore.set('translationCase', translationCase);
+        document.getElementById('submit-case-update').innerText = 'Submit updated info';
+        document.getElementById("update-case-form").reset();
+        document.getElementById('hidden-update-case-card').classList.add('hidden');
+    }
+
+    /**
+     * Method to run when the submit updated payment record info button is pressed. Call the TranslationTrackerService to update the payment record.
+     */
+    async updatePaymentRecord(evt) {
+        evt.preventDefault();
+
+        const errorMessageDisplay = document.getElementById('payment-update-error-message');
+        errorMessageDisplay.innerText = ``;
+        errorMessageDisplay.classList.add('hidden');
+
+        const submitUpdateButton = document.getElementById('submit-payment-update');
+        const origButtonText = submitUpdateButton.innerText;
+        submitUpdateButton.innerText = 'Loading...';
+
+        const translationCaseId = this.dataStore.get('translationCase').translationCaseId;
+        const casePaid = document.getElementById('case-paid-payment-update').value;
+        const paymentDate = document.getElementById('payment-date-payment-update').value;
+        const onTime = document.getElementById('on-time-payment-update').value;
+        const grossPayment = document.getElementById('gross-payment-update').value;
+        const taxRate = document.getElementById('tax-rate-payment-update').value;
+        const payRate = document.getElementById('pay-rate-payment-update').value;
+        const payRateUnit = document.getElementById('pay-rate-unit-payment-update').value;
+        const wordCount = document.getElementById('word-count-payment-update').value;
+        const wordCountUnit = document.getElementById('word-count-unit-payment-update').value;
+
+
+        const paymentRecord = await this.client.updatePaymentRecord(translationCaseId, casePaid, paymentDate, onTime, grossPayment, taxRate, payRate, payRateUnit, wordCount, wordCountUnit, (error) => {
+            submitUpdateButton.innerText = origButtonText;
+            errorMessageDisplay.innerText = `Error: ${error.message}`;
+            errorMessageDisplay.classList.remove('hidden');
+        });
+        this.dataStore.set('paymentRecord', paymentRecord);
+        document.getElementById('submit-payment-update').innerText = 'Submit updated info';
+        document.getElementById("update-payment-form").reset();
+        document.getElementById('hidden-update-payment-card').classList.add('hidden');
     }
 
     /**

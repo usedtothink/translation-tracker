@@ -10,7 +10,7 @@ export default class TranslationTrackerClient extends BindingClass {
     constructor(props = {}) {
         super();
 
-        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'createTranslationCase', 'getTranslationCase', 'addProgressUpdate', 'getPaymentRecord', 'updateTranslationCase', 'getAllTranslationCases', 'getAllTranslationClients', 'createTranslationClient', 'getTranslationClient', 'archiveTranslationCase', 'archiveTranslationClient'];
+        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'createTranslationCase', 'getTranslationCase', 'addProgressUpdate', 'getPaymentRecord', 'updateTranslationCase', 'getAllTranslationCases', 'getAllTranslationClients', 'createTranslationClient', 'getTranslationClient', 'archiveTranslationCase', 'archiveTranslationClient', 'updatePaymentRecord'];
         this.bindClassMethods(methodsToBind, this);
 
         this.authenticator = new Authenticator();;
@@ -114,12 +114,12 @@ export default class TranslationTrackerClient extends BindingClass {
      * @param translationClientType The client type to associate with a translation client.
      * @returns The translation client that has been created.
      */
-    async createTranslationClient(translationClientName, translationClientType) {
+    async createTranslationClient(translationClientName, clientType, errorCallback) {
         try {
             const token = await this.getTokenOrThrow("Only authenticated users can create translation clients.");
             const response = await this.axiosClient.post(`translationclients`, {
                 translationClientName: translationClientName,
-                translationClientType: translationClientType
+                clientType: clientType
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -190,7 +190,7 @@ export default class TranslationTrackerClient extends BindingClass {
     async updateTranslationCase(translationCaseId, translationClientId, sourceTextTitle, sourceTextAuthor, translatedTitle, dueDate, startDate, endDate, openCase, rushJob, errorCallback) {
         try {
             const token = await this.getTokenOrThrow("Only authenticated users can update translation cases.");
-            const response = await this.axiosClient.post(`translationcases/${translationCaseId}`, {
+            const response = await this.axiosClient.put(`translationcases/${translationCaseId}`, {
                 translationCaseId: translationCaseId,
                 translationClientId: translationClientId,
                 sourceTextTitle: sourceTextTitle,
@@ -211,6 +211,46 @@ export default class TranslationTrackerClient extends BindingClass {
             this.handleError(error, errorCallback)
         }
     }
+
+        /**
+     * Update an existing translation case owned by the current user.
+     * @param translationCaseId The ID of the translation case to be updated.
+     * @param casePaid Boolean for whether the case is paid.
+     * @param paymentDate The date the client paid the fee.
+     * @param onTime Boolean for whether the payment was on time.
+     * @param grossPayment The gross payment amount.
+     * @param taxRate The tax rate.
+     * @param payRate The pay rate (typically per word).
+     * @param payRateUnit The monetary unit for the pay rate.
+     * @param wordCount The total word count of the case.
+     * @param wordCountUnit Specifies the word count unit (words, characters, etc.).
+     * @param errorCallback (Optional) A function to execute if the call fails.
+     * @returns The translation case that has been created.
+     */
+        async updatePaymentRecord(translationCaseId, casePaid, paymentDate, onTime, grossPayment, taxRate, payRate, payRateUnit, wordCount, wordCountUnit, errorCallback) {
+            try {
+                const token = await this.getTokenOrThrow("Only authenticated users can update payment records.");
+                const response = await this.axiosClient.put(`translationcases/${translationCaseId}/payment`, {
+                    translationCaseId: translationCaseId,
+                    casePaid: casePaid,
+                    paymentDate: paymentDate,
+                    onTime: onTime,
+                    grossPayment: grossPayment,
+                    taxRate: taxRate,
+                    payRate: payRate,
+                    payRateUnit: payRateUnit,
+                    wordCount: wordCount,
+                    wordCountUnit: wordCountUnit,
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                return response.data.paymentRecord;
+            } catch (error) {
+                this.handleError(error, errorCallback)
+            }
+        }
 
     /**
      * Gets the translation case for the given ID.
