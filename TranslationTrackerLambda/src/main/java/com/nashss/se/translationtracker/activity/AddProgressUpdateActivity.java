@@ -49,7 +49,7 @@ public class AddProgressUpdateActivity {
         String notes = addProgressUpdateRequest.getNotes();
 
         if (wordCount == null || startDate == null || endDate == null || startTime == null || endTime == null ||
-        notes == null) {
+            notes == null) {
             throw new UnsupportedOperationException("All fields of the progress update must be filled in.");
         }
         ProgressUpdate progressUpdate = ProgressUpdate.builder()
