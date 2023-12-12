@@ -21,12 +21,12 @@ public class TranslationCase {
     public static final String CUSTOMER_INDEX = "CaseCustomerIdIndex";
     private String customerId;
     private String translationCaseId;
-    private String translationClientId;
     private String caseNickname;
+    private ProjectType projectType;
+    private String translationClientId;
     private String sourceTextTitle;
     private String sourceTextAuthor;
     private String translatedTitle;
-    private ProjectType projectType;
     private String dueDate;
     private String startDate;
     private String endDate;
@@ -46,15 +46,6 @@ public class TranslationCase {
         this.customerId = customerId;
     }
 
-    @DynamoDBAttribute(attributeName = "translationClientId")
-    public String getTranslationClientId() {
-        return translationClientId;
-    }
-
-    public void setTranslationClientId(String translationClientId) {
-        this.translationClientId = translationClientId;
-    }
-
     @DynamoDBHashKey(attributeName = "translationCaseId")
     public String getTranslationCaseId() {
         return translationCaseId;
@@ -71,6 +62,25 @@ public class TranslationCase {
 
     public void setCaseNickname(String caseNickname) {
         this.caseNickname = caseNickname;
+    }
+
+    @DynamoDBTypeConvertedEnum
+    @DynamoDBAttribute(attributeName = "projectType")
+    public ProjectType getProjectType() {
+        return projectType;
+    }
+
+    public void setProjectType(ProjectType projectType) {
+        this.projectType = projectType;
+    }
+
+    @DynamoDBAttribute(attributeName = "translationClientId")
+    public String getTranslationClientId() {
+        return translationClientId;
+    }
+
+    public void setTranslationClientId(String translationClientId) {
+        this.translationClientId = translationClientId;
     }
 
     @DynamoDBAttribute(attributeName = "sourceTextTitle")
@@ -98,16 +108,6 @@ public class TranslationCase {
 
     public void setTranslatedTitle(String translatedTitle) {
         this.translatedTitle = translatedTitle;
-    }
-
-    @DynamoDBTypeConvertedEnum
-    @DynamoDBAttribute(attributeName = "projectType")
-    public ProjectType getProjectType() {
-        return projectType;
-    }
-
-    public void setProjectType(ProjectType projectType) {
-        this.projectType = projectType;
     }
 
     @DynamoDBAttribute(attributeName = "dueDate")
@@ -194,12 +194,12 @@ public class TranslationCase {
         TranslationCase that = (TranslationCase) o;
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&
-                Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getCaseNickname(), that.getCaseNickname()) &&
+                getProjectType() == that.getProjectType() &&
+                Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getSourceTextTitle(), that.getSourceTextTitle()) &&
                 Objects.equals(getSourceTextAuthor(), that.getSourceTextAuthor()) &&
                 Objects.equals(getTranslatedTitle(), that.getTranslatedTitle()) &&
-                Objects.equals(getProjectType(), that.getProjectType()) &&
                 Objects.equals(getDueDate(), that.getDueDate()) &&
                 Objects.equals(getStartDate(), that.getStartDate()) &&
                 Objects.equals(getEndDate(), that.getEndDate()) &&
@@ -212,9 +212,10 @@ public class TranslationCase {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCustomerId(), getTranslationCaseId(), getTranslationClientId(), getCaseNickname(),
-                getSourceTextTitle(), getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(),
-                getStartDate(), getEndDate(), getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
-                getWordsPerHour());
+        return Objects.hash(getCustomerId(), getTranslationCaseId(), getCaseNickname(),
+                getProjectType(), getTranslationClientId(), getSourceTextTitle(),
+                getSourceTextAuthor(), getTranslatedTitle(), getDueDate(), getStartDate(),
+                getEndDate(), getOpenCase(), getRushJob(), getProgressLog(),
+                getTotalWorkingHours(), getWordsPerHour());
     }
 }

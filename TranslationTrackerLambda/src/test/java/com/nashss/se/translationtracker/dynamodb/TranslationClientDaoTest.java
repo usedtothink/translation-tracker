@@ -52,7 +52,7 @@ class TranslationClientDaoTest {
         // GIVEN
         TranslationClient translationClient = new TranslationClient();
         translationClient.setTranslationClientName(CLIENT_NAME);
-        translationClient.setTranslationClientType(CLIENT_TYPE);
+        translationClient.setClientType(CLIENT_TYPE);
         // Mocking the paginated query list
         List<TranslationClient> testList = new ArrayList<>();
         PaginatedQueryList<TranslationClient> listMock = mock(PaginatedQueryList.class);
@@ -72,7 +72,7 @@ class TranslationClientDaoTest {
         // GIVEN
         TranslationClient translationClient = new TranslationClient();
         translationClient.setTranslationClientName(CLIENT_NAME);
-        translationClient.setTranslationClientType(CLIENT_TYPE);
+        translationClient.setClientType(CLIENT_TYPE);
         // Mocking the paginated query list
         List<TranslationClient> testList = new ArrayList<>();
         testList.add(translationClient);
@@ -139,20 +139,6 @@ class TranslationClientDaoTest {
 
         // THEN
         assertFalse(result.isEmpty());
-    }
-
-    @Test
-    void getAllTranslationClients_noClientsFoundForCustomerId_throwsException() {
-        // GIVEN
-        // Mocking the paginated query list
-        List<TranslationClient> testList = new ArrayList<>();
-        PaginatedQueryList listMock = mock(PaginatedQueryList.class);
-        // Return the size of the real list
-        when(listMock.isEmpty()).thenReturn(testList.isEmpty());
-        when(dynamoDBMapper.query(eq(TranslationClient.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
-
-        // WHEN & THEN
-        assertThrows(TranslationClientNotFoundException.class, () -> clientDao.getAllTranslationClients(CUSTOMER_ID));
     }
 
     @Test

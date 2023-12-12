@@ -206,15 +206,23 @@ Resources:
               Statement:
                 - Effect: Allow
                   Action: dynamodb:*
-                  Resource: !Sub "arn:aws:dynamob:${AWS::Region}:${AWS::AccountId}:table/translationclients"
+                  Resource: !Sub "arn:aws:dynamob:${AWS::Region}:${AWS::AccountId}:table/translation_clients"
 
-          - PolicyName: 'AccessTranslationCaseTable'
+          - PolicyName: 'AccessTranslationCasesTable'
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
               - Effect: Allow
                 Action: dynamodb:*
-                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/translationCases"
+                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/translation_cases"
+
+          - PolicyName: 'AccessPaymentRecordTable'
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action: dynamodb:*
+                  Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/payment_records"
 
     #-----------------------------------------------------
     # Lambda Functions Configuration
@@ -257,7 +265,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationcases/case
+              Path: /translationcases/{id}
               Method: get
 
     GetAllTranslationCasesLambda:
@@ -297,7 +305,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationcases/case
+              Path: /translationcases/{id}
               Method: put
 
     ArchiveTranslationCaseLambda:
@@ -317,7 +325,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationcases/case
+              Path: /translationcases/{id}
               Method: delete
 
     AddProgressUpdateLambda:
@@ -337,7 +345,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationcases/case/update
+              Path: /translationcases/{id}/update
               Method: post
 
     GetPaymentRecordLambda:
@@ -357,7 +365,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationcases/case/payment
+              Path: /translationcases/{id}/payment
               Method: get
 
     UpdatePaymentRecordLambda:
@@ -377,7 +385,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationcases/case/payment
+              Path: /translationcases/{id}/payment
               Method: put
 
     CreateTranslationClientLambda:
@@ -417,7 +425,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationclients/client
+              Path: /translationclients/{id}
               Method: get
 
     GetAllTranslationClientsLambda:
@@ -457,7 +465,7 @@ Resources:
           TranslationTracker:
             Type: Api
             Properties:
-              Path: /translationclients/client
+              Path: /translationclients/{id}
               Method: delete
 
   #-----------------------------------------------------

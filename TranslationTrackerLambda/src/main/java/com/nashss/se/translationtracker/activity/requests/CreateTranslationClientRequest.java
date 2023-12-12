@@ -10,14 +10,14 @@ public class CreateTranslationClientRequest {
     private final String customerId;
     private final String translationClientId;
     private final String translationClientName;
-    private final String translationClientType;
+    private final String clientType;
 
     private CreateTranslationClientRequest(String customerId, String translationClientName,
-                                           String translationClientType) {
+                                           String clientType) {
         this.customerId = customerId;
-        this.translationClientId = IdGenerator.newTranslationClientId(translationClientType, translationClientName);
+        this.translationClientId = IdGenerator.newTranslationClientId(clientType, translationClientName);
         this.translationClientName = translationClientName;
-        this.translationClientType = translationClientType;
+        this.clientType = clientType;
     }
 
     public String getCustomerId() {
@@ -32,8 +32,8 @@ public class CreateTranslationClientRequest {
         return translationClientName;
     }
 
-    public String getTranslationClientType() {
-        return translationClientType;
+    public String getClientType() {
+        return clientType;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class CreateTranslationClientRequest {
                 "customerId='" + customerId + '\'' +
                 ", translationClientId='" + translationClientId + '\'' +
                 ", translationClientName='" + translationClientName + '\'' +
-                ", translationClientType='" + translationClientType + '\'' +
+                ", clientType='" + clientType + '\'' +
                 '}';
     }
 
@@ -55,7 +55,7 @@ public class CreateTranslationClientRequest {
     public static class Builder {
         private String customerId;
         private String translationClientName;
-        private String translationClientType;
+        private String clientType;
 
         public Builder withCustomerId(String customerId) {
             this.customerId = customerId;
@@ -67,14 +67,14 @@ public class CreateTranslationClientRequest {
             return this;
         }
 
-        public Builder withTranslationClientType(String translationClientType) {
-            this.translationClientType = translationClientType;
+        public Builder withClientType(String clientType) {
+            this.clientType = clientType;
             return this;
         }
 
         public CreateTranslationClientRequest build() {
             return new CreateTranslationClientRequest(customerId, translationClientName,
-                    translationClientType);
+                    clientType);
         }
     }
 }

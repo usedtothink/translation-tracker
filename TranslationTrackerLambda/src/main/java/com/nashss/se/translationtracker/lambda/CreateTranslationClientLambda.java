@@ -21,7 +21,7 @@ public class CreateTranslationClientLambda
                         CreateTranslationClientRequest.builder()
                                 .withCustomerId(claims.get("email"))
                                 .withTranslationClientName(unauthenticatedRequest.getTranslationClientName())
-                                .withTranslationClientType(unauthenticatedRequest.getTranslationClientType())
+                                .withClientType(unauthenticatedRequest.getClientType())
                                 .build());
             },
             (request, serviceComponent) ->

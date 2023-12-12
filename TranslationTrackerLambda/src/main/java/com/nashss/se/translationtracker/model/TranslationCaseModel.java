@@ -9,12 +9,12 @@ import java.util.Objects;
 public class TranslationCaseModel {
     private String customerId;
     private String translationCaseId;
-    private String translationClientId;
     private String caseNickname;
+    private ProjectType projectType;
+    private String translationClientId;
     private String sourceTextTitle;
     private String sourceTextAuthor;
     private String translatedTitle;
-    private ProjectType projectType;
     private String dueDate;
     private String startDate;
     private String endDate;
@@ -24,19 +24,19 @@ public class TranslationCaseModel {
     private Double totalWorkingHours;
     private Double wordsPerHour;
 
-    private TranslationCaseModel(String customerId, String translationCaseId, String translationClientId,
-                                 String caseNickname, String sourceTextTitle, String sourceTextAuthor,
-                                 String translatedTitle, ProjectType projectType, String dueDate, String startDate,
-                                 String endDate, Boolean openCase, Boolean rushJob,
-                                 List<ProgressUpdate> progressLog, Double totalWorkingHours, Double wordsPerHour) {
+    private TranslationCaseModel(String customerId, String translationCaseId, String caseNickname,
+                                 ProjectType projectType, String translationClientId, String sourceTextTitle,
+                                 String sourceTextAuthor, String translatedTitle, String dueDate, String startDate,
+                                 String endDate, Boolean openCase, Boolean rushJob, List<ProgressUpdate> progressLog,
+                                 Double totalWorkingHours, Double wordsPerHour) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
-        this.translationClientId = translationClientId;
         this.caseNickname = caseNickname;
+        this.projectType = projectType;
+        this.translationClientId = translationClientId;
         this.sourceTextTitle = sourceTextTitle;
         this.sourceTextAuthor = sourceTextAuthor;
         this.translatedTitle = translatedTitle;
-        this.projectType = projectType;
         this.dueDate = dueDate;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -55,12 +55,16 @@ public class TranslationCaseModel {
         return translationCaseId;
     }
 
-    public String getTranslationClientId() {
-        return translationClientId;
-    }
-
     public String getCaseNickname() {
         return caseNickname;
+    }
+
+    public ProjectType getProjectType() {
+        return projectType;
+    }
+
+    public String getTranslationClientId() {
+        return translationClientId;
     }
 
     public String getSourceTextTitle() {
@@ -73,10 +77,6 @@ public class TranslationCaseModel {
 
     public String getTranslatedTitle() {
         return translatedTitle;
-    }
-
-    public ProjectType getProjectType() {
-        return projectType;
     }
 
     public String getDueDate() {
@@ -122,12 +122,12 @@ public class TranslationCaseModel {
         TranslationCaseModel that = (TranslationCaseModel) o;
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&
-                Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getCaseNickname(), that.getCaseNickname()) &&
+                getProjectType() == that.getProjectType() &&
+                Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
                 Objects.equals(getSourceTextTitle(), that.getSourceTextTitle()) &&
                 Objects.equals(getSourceTextAuthor(), that.getSourceTextAuthor()) &&
                 Objects.equals(getTranslatedTitle(), that.getTranslatedTitle()) &&
-                Objects.equals(getProjectType(), that.getProjectType()) &&
                 Objects.equals(getDueDate(), that.getDueDate()) &&
                 Objects.equals(getStartDate(), that.getStartDate()) &&
                 Objects.equals(getEndDate(), that.getEndDate()) &&
@@ -140,10 +140,11 @@ public class TranslationCaseModel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCustomerId(), getTranslationCaseId(), getTranslationClientId(), getCaseNickname(),
-                getSourceTextTitle(), getSourceTextAuthor(), getTranslatedTitle(), getProjectType(), getDueDate(),
-                getStartDate(), getEndDate(), getOpenCase(), getRushJob(), getProgressLog(), getTotalWorkingHours(),
-                getWordsPerHour());
+        return Objects.hash(getCustomerId(), getTranslationCaseId(), getCaseNickname(),
+                getProjectType(), getTranslationClientId(), getSourceTextTitle(),
+                getSourceTextAuthor(), getTranslatedTitle(), getDueDate(), getStartDate(),
+                getEndDate(), getOpenCase(), getRushJob(), getProgressLog(),
+                getTotalWorkingHours(), getWordsPerHour());
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -154,12 +155,12 @@ public class TranslationCaseModel {
     public static class Builder {
         private String customerId;
         private String translationCaseId;
-        private String translationClientId;
         private String caseNickname;
+        private ProjectType projectType;
+        private String translationClientId;
         private String sourceTextTitle;
         private String sourceTextAuthor;
         private String translatedTitle;
-        private ProjectType projectType;
         private String dueDate;
         private String startDate;
         private String endDate;
@@ -177,12 +178,16 @@ public class TranslationCaseModel {
             this.translationCaseId = translationCaseId;
             return this;
         }
-        public Builder withTranslationClientId(String translationClientId){
-            this.translationClientId = translationClientId;
-            return this;
-        }
         public Builder withCaseNickname(String caseNickname){
             this.caseNickname = caseNickname;
+            return this;
+        }
+        public Builder withProjectType(ProjectType projectType){
+            this.projectType = projectType;
+            return this;
+        }
+        public Builder withTranslationClientId(String translationClientId){
+            this.translationClientId = translationClientId;
             return this;
         }
         public Builder withSourceTextTitle(String sourceTextTitle){
@@ -195,10 +200,6 @@ public class TranslationCaseModel {
         }
         public Builder withTranslatedTitle(String translatedTitle){
             this.translatedTitle = translatedTitle;
-            return this;
-        }
-        public Builder withProjectType(ProjectType projectType){
-            this.projectType = projectType;
             return this;
         }
         public Builder withDueDate(String dueDate){
@@ -235,8 +236,8 @@ public class TranslationCaseModel {
         }
 
         public TranslationCaseModel build() {
-            return new TranslationCaseModel(customerId, translationCaseId, translationClientId, caseNickname,
-                    sourceTextTitle, sourceTextAuthor, translatedTitle, projectType, dueDate, startDate,
+            return new TranslationCaseModel(customerId, translationCaseId, caseNickname, projectType,
+                    translationClientId, sourceTextTitle, sourceTextAuthor, translatedTitle, dueDate, startDate,
                     endDate, openCase, rushJob, progressLog, totalWorkingHours, wordsPerHour);
         }
     }

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="assets/viewTranslationCase.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body class="background">
+    <header class="header" id="header"></header>
+    <div class="card">
+        <a href="#" class="button" id="archive-translation-case">Archive this case</a>
+    </div>
+    <div class="card">
+        <h2 id="case-nickname"></h2>
+        <h3 id="project-type"></h3>
+        <div id="translation-client-id"></div>
+        <div id="source-text-title"></div>
+        <div id="source-text-author"></div>
+        <div id="translated-title"></div>
+        <div id="due-date"></div>
+        <div id="start-date"></div>
+        <div id="end-date"></div>
+        <div id="open-case"></div>
+        <div id="rush-job"></div>
+        <div id="total-working-hours"></div>
+        <div id="words-per-hour"></div>
+        <div id="progress-log"></div>
+        <ul id="progress-update"></ul>
+        <br>
+        <a href="javascript:void(0);" class="button" id="update-translation-case">Update translation case details</a>
+    </div>
+    <div class="card hidden" id='hidden-update-case-card'>
+        <form class="card-content" id="update-case-form">
+            <p class="hidden error" id="case-update-error-message"> </p>
+            <h3>Update <span id="case-name-for-case-update"></span></h3>
+            <p class="hidden error" id="error-message"> </p>
+            <p class="form-field">
+                <label>Translation client ID:</label>
+                <input type="text" id="translation-client-id-update">
+            </p>
+            <p class="form-field">
+                <label>Source text title:</label>
+                <input type="text" id="source-text-title-update">
+            </p>
+            <p class="form-field">
+                <label>Source text author:</label>
+                <input type="text" id="source-text-author-update">
+            </p>
+            <p class="form-field">
+                <label>Translated title:</label>
+                <input type="text" id="translated-title-update">
+            </p>
+            <p class="form-field">
+                <label>Due date:</label>
+                <input type="date" id="due-date-update">
+            </p>
+            <p class="form-field">
+                <label>Start date:</label>
+                <input type="date" id="start-date-update">
+            </p>
+            <p class="form-field">
+                <label>End date:</label>
+                <input type="date" id="end-date-update">
+            </p>
+            <p class="form-field">
+                <label>Open case:</label>
+                <select name="open-case" id="open-case-update">
+                    <option value=""> </option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </p>
+            <p class="form-field">
+                <label>Rush job:</label>
+                <select name="rush-job" id="rush-job-update">
+                    <option value=""> </option>
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+            </p>
+        </form>
+        <p>
+            <a href="#" class="button" id="submit-case-update">Submit update</a>
+        </p>
+    </div>
+    <div class="card">
+        <h3><span id="payment-record"></span></h3>
+        <div id="case-paid"></div>
+        <div id="payment-date"></div>
+        <div id="on-time"></div>
+        <div id="gross-payment"></div>
+        <div id="tax-rate"></div>
+        <div id="pay-rate"></div><div id="pay-rate-unit"></div>
+        <div id="word-count-payment"></div><div id="word-count-unit"></div>
+        <br>
+        <a href="javascript:void(0);" class="button" id="update-payment-record">Update payment record details</a>
+    </div>
+    <div class="card hidden" id='hidden-update-payment-card'>
+        <form class="card-content" id="update-payment-form">
+            <p class="hidden error" id="payment-update-error-message"> </p>
+            <h3>Update payment info for <span id="case-name-for-payment-update"></span></h3>
+            <p class="hidden error" id="error-message"> </p>
+            <p class="form-field">
+                <label>Paid:</label>
+                <select name="case-paid-payment-update" id="case-paid-payment-update">
+                    <option value=""> </option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </p>
+            <p class="form-field">
+                <label>Payment date:</label>
+                <input type="date" id="payment-date-payment-update">
+            </p>
+            <p class="form-field">
+                <label>On-time payment:</label>
+                <select name="on-time-payment-update" id="on-time-payment-update">
+                    <option value=""> </option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </p>
+            <p class="form-field">
+                <label>Gross payment:</label>
+                <input type="number" min="0" id="gross-payment-update">
+            </p>
+            <p class="form-field">
+                <label>Tax rate:</label>
+                <input type="number" min="0" id="tax-rate-payment-update">
+            </p>
+            <p class="form-field">
+                <label>Pay rate:</label>
+                <input type="number" min="0" id="pay-rate-payment-update">
+            </p>
+            <p class="form-field">
+                <label>Pay rate unit:</label>
+                <input type="text" id="pay-rate-unit-payment-update">
+            </p>
+            <p class="form-field">
+                <label>Word count:</label>
+                <input type="number" min="0" id="word-count-payment-update">
+            </p>
+            <p class="form-field">
+                <label>Word count unit:</label>
+                <input type="text" id="word-count-unit-payment-update">
+            </p>
+        </form>
+        <p>
+            <a href="#" class="button" id="submit-payment-update">Submit update</a>
+        </p>
+    </div>
+    <div class="card">
+        <h2>Add progress update:</h2>
+        <form class="card-content" id="add-progress-update-form">
+            <p class="hidden error" id="progress-update-error-message"> </p>
+            <p class="form-field">
+                <label>Start date</label>
+                <input type="date" id="start-date-progress-update" class="validated-field" required>
+            </p>
+            <p class="form-field">
+                <label>Start time</label>
+                <input type="time" id="start-time" class="validated-field" required>
+            </p>
+            <p class="form-field">
+                <label>End date</label>
+                <input type="date" id="end-date-progress-update" class="validated-field" required>
+            </p>
+            <p class="form-field">
+                <label>End time</label>
+                <input type="time" id="end-time" class="validated-field" required>
+            </p>
+            <p class="form-field">
+                <label>Word count</label>
+                <input type="number" min="0" id="word-count" class="validated-field" required>
+            </p>
+            <p class="form-field">
+                <label>Notes</label>
+                <input type="text" id="notes" class="validated-field" required>
+            </p>
+        </form>
+        <a href="#" class="button" id="add-progress-update">Add progress update</a>
+    </div>
+</body>
+
+</html>

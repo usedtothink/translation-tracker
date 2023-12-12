@@ -8,7 +8,9 @@ import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
 import com.nashss.se.translationtracker.types.ProjectType;
+import com.nashss.se.translationtracker.utils.IdGenerator;
 
+import java.util.ArrayList;
 import javax.inject.Inject;
 
 /**
@@ -46,13 +48,24 @@ public class CreateTranslationCaseActivity {
     public CreateTranslationCaseResult handleRequest(final CreateTranslationCaseRequest
             createTranslationCaseRequest) {
         String customerId = createTranslationCaseRequest.getCustomerId();
-        String translationCaseId = createTranslationCaseRequest.getTranslationCaseId();
+        String translationCaseId = IdGenerator.newTranslationCaseId(createTranslationCaseRequest.getProjectType(),
+                createTranslationCaseRequest.getCaseNickname());
 
         TranslationCase newTranslationCase = new TranslationCase();
         newTranslationCase.setCustomerId(customerId);
         newTranslationCase.setTranslationCaseId(translationCaseId);
-        newTranslationCase.setProjectType(ProjectType.valueOf(createTranslationCaseRequest.getProjectType()));
         newTranslationCase.setCaseNickname(createTranslationCaseRequest.getCaseNickname());
+        newTranslationCase.setProjectType(ProjectType.valueOf(createTranslationCaseRequest.getProjectType()));
+        newTranslationCase.setTranslationClientId(createTranslationCaseRequest.getTranslationClientId());
+        newTranslationCase.setSourceTextTitle(createTranslationCaseRequest.getSourceTextTitle());
+        newTranslationCase.setSourceTextAuthor(createTranslationCaseRequest.getSourceTextAuthor());
+        newTranslationCase.setTranslatedTitle(createTranslationCaseRequest.getTranslatedTitle());
+        newTranslationCase.setDueDate(createTranslationCaseRequest.getDueDate());
+        newTranslationCase.setStartDate(createTranslationCaseRequest.getStartDate());
+        newTranslationCase.setEndDate(createTranslationCaseRequest.getEndDate());
+        newTranslationCase.setOpenCase(createTranslationCaseRequest.getOpenCase());
+        newTranslationCase.setRushJob(createTranslationCaseRequest.getRushJob());
+        newTranslationCase.setProgressLog(new ArrayList<>());
 
         caseDao.createTranslationCase(newTranslationCase);
         paymentRecordDao.createPaymentRecord(customerId, translationCaseId);

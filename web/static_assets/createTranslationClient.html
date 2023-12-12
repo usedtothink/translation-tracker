@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="assets/createTranslationClient.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body class="background">
+    <header class="header" id="header"></header>
+    <div class="card">
+        <h2>Create a new translation client:</h2>
+        <form class="card-content" id="create-translation-client-form">
+            <p class="hidden error" id="error-message"> </p>
+            <p class="form-field">
+                <label>Translation client name:</label>
+                <input type="text" required class="validated-field" id="client-name"
+                       placeholder="Translation client names must be unique." autofocus>
+            </p>
+            <p class="form-field">
+                <label>Client type:</label>
+                <select name="projectType" id="client-type">
+                    <option value="BUSINESS">Business</option>
+                    <option value="CAMPAIGN">Campaign</option>
+                    <option value="COMMERCIAL">Commercial</option>
+                    <option value="CONTRACT">Contract</option>
+                    <option value="CORPORATE">Corporate</option>
+                    <option value="INDIVIDUAL">Individual</option>
+                    <option value="GOVERNMENT">Government</option>
+                    <option value="MEDIA">Media</option>
+                    <option value="NGO">NGO</option>
+                    <option value="NONPROFIT">Non-profit</option>
+                    <option value="ONLINE">Online</option>
+                    <option value="OTHER">Other</option>
+                    <option value="PERSONAL">Personal</option>
+                    <option value="PROBONO">Pro bono</option>
+                    <option value="PRINT">Print</option>
+                    <option value="PUBLISHER">Publisher</option>
+                    <option value="SCHOOL">School</option>
+                    <option value="SOCIALMEDIA">Social media</option>
+                    <option value="SUBTITLE">Subtitle</option>
+                    <option value="UNIVERSITY">University</option>
+                </select>
+            </p>
+            <p>
+                <a href="#" class="button" id="create">Create Translation Client</a>
+            </p>
+        </form>
+    </div>
+</body>
+
+</html>

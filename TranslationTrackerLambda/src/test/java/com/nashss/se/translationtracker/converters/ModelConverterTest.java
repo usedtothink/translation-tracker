@@ -66,7 +66,7 @@ class ModelConverterTest {
         translationClient.setCustomerId(customerId);
         translationClient.setTranslationClientId(translationClientId);
         translationClient.setTranslationClientName(translationClientName);
-        translationClient.setTranslationClientType(translationClientType);
+        translationClient.setClientType(translationClientType);
     }
 
     @Test
@@ -132,7 +132,7 @@ class ModelConverterTest {
         assertEquals(customerId, translationClientModelList.get(0).getCustomerId());
         assertEquals(translationClientId, translationClientModelList.get(0).getTranslationClientId());
         assertEquals(translationClientName, translationClientModelList.get(0).getTranslationClientName());
-        assertEquals(translationClientType, translationClientModelList.get(0).getTranslationClientType());
+        assertEquals(translationClientType, translationClientModelList.get(0).getClientType());
     }
 
     @Test
@@ -145,6 +145,6 @@ class ModelConverterTest {
         assertEquals(customerId , translationClientModel.getCustomerId());
         assertEquals(translationClientId, translationClientModel.getTranslationClientId());
         assertEquals(translationClientName, translationClientModel.getTranslationClientName());
-        assertEquals(translationClientType, translationClientModel.getTranslationClientType());
+        assertEquals(translationClientType, translationClientModel.getClientType());
     }
 }

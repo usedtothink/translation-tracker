@@ -20,9 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 class CreateTranslationCaseActivityTest {
-    private static final String CUSTOMER_ID = "customerId";
-    private static final String CASE_NICKNAME = "caseNickname";
-    private static final ProjectType PROJECT_TYPE = ProjectType.ACADEMIC;
     @Mock
     private TranslationCaseDao caseDao;
     @Mock
@@ -38,10 +35,32 @@ class CreateTranslationCaseActivityTest {
     @Test
     void handleRequest_createsAndSavesTranslationCase() {
         // GIVEN
+        String customerId = "customerId";
+        String caseNickname = "caseNickname";
+        ProjectType projectType = ProjectType.ACADEMIC;
+        String translationClientId = "translationClientId";
+        String sourceTextTitle = "sourceTextTitle";
+        String sourceTextAuthor = "sourceTextAuthor";
+        String translatedTitle = "translatedTitle";
+        String dueDate = "dueDate";
+        String startDate = "startDate";
+        String endDate = "endDate";
+        Boolean openCase = true;
+        Boolean rushJob = false;
+
         CreateTranslationCaseRequest request = CreateTranslationCaseRequest.builder()
-                .withCustomerId(CUSTOMER_ID)
-                .withCaseNickname(CASE_NICKNAME)
-                .withProjectType(PROJECT_TYPE.name())
+                .withCustomerId(customerId)
+                .withCaseNickname(caseNickname)
+                .withProjectType(projectType.name())
+                .withTranslationClientId(translationClientId)
+                .withSourceTextTitle(sourceTextTitle)
+                .withSourceTextAuthor(sourceTextAuthor)
+                .withTranslatedTitle(translatedTitle)
+                .withDueDate(dueDate)
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .withOpenCase(openCase)
+                .withRushJob(rushJob)
                 .build();
 
         // WHEN
@@ -51,9 +70,21 @@ class CreateTranslationCaseActivityTest {
         verify(caseDao).createTranslationCase(any(TranslationCase.class));
         verify(paymentRecordDao).createPaymentRecord(any(String.class), any(String.class));
 
+        // Generated in the activity class
         assertNotNull(result.getTranslationCase().getTranslationCaseId());
-        assertEquals(CUSTOMER_ID, result.getTranslationCase().getCustomerId());
-        assertEquals(CASE_NICKNAME, result.getTranslationCase().getCaseNickname());
-        assertEquals(PROJECT_TYPE, result.getTranslationCase().getProjectType());
+        assertNotNull(result.getTranslationCase().getProgressLog());
+        // Passed in values
+        assertEquals(customerId, result.getTranslationCase().getCustomerId());
+        assertEquals(caseNickname, result.getTranslationCase().getCaseNickname());
+        assertEquals(projectType, result.getTranslationCase().getProjectType());
+        assertEquals(translationClientId, result.getTranslationCase().getTranslationClientId());
+        assertEquals(sourceTextTitle, result.getTranslationCase().getSourceTextTitle());
+        assertEquals(sourceTextAuthor, result.getTranslationCase().getSourceTextAuthor());
+        assertEquals(translatedTitle, result.getTranslationCase().getTranslatedTitle());
+        assertEquals(dueDate, result.getTranslationCase().getDueDate());
+        assertEquals(startDate, result.getTranslationCase().getStartDate());
+        assertEquals(endDate, result.getTranslationCase().getEndDate());
+        assertEquals(openCase, result.getTranslationCase().getOpenCase());
+        assertEquals(rushJob, result.getTranslationCase().getRushJob());
     }
 }

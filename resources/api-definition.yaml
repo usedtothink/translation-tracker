@@ -33,12 +33,28 @@ paths:
             schema:
               type: object
               properties:
-                customerId:
-                  type: string
                 caseNickname:
                   type: string
                 projectType:
                   type: string
+                translationClientId:
+                  type: string
+                sourceTextTitle:
+                  type: string
+                sourceTextAuthor:
+                  type: string
+                translatedTitle:
+                  type: string
+                dueDate:
+                  type: string
+                startDate:
+                  type: string
+                endDate:
+                  type: string
+                openCase:
+                  type: boolean
+                rushJob:
+                  type: boolean
       responses:
         "200":
           description: A translation case object
@@ -51,13 +67,11 @@ paths:
                     type: string
                   translationCaseId:
                     type: string
-                  translationClientId:
-                    type: string
                   caseNickname:
                     type: string
                   projectType:
                     type: string
-                  mostRecentActivity:
+                  translationClientId:
                     type: string
                   sourceTextTitle:
                     type: string
@@ -103,13 +117,11 @@ paths:
                           type: string
                         translationCaseId:
                           type: string
-                        translationClientId:
-                          type: string
                         caseNickname:
                           type: string
                         projectType:
                           type: string
-                        mostRecentActivity:
+                        translationClientId:
                           type: string
                         sourceTextTitle:
                           type: string
@@ -134,21 +146,18 @@ paths:
                         wordsPerHour:
                           type: number
 
-  /translationcases/case:
+  /translationcases/{id}:
     get:
       tags:
         - TranslationCases
       summary: Get an existing translation case (GetTranslationCaseLambda)
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                customerId:
-                  type: string
-                translationCaseId:
-                  type: string
+      parameters:
+        - name: id
+          in: path
+          description: ID of translation case to retrieve
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: GetTranslationCaseResponse
@@ -161,13 +170,11 @@ paths:
                     type: string
                   translationCaseId:
                     type: string
-                  translationClientId:
-                    type: string
                   caseNickname:
                     type: string
                   projectType:
                     type: string
-                  mostRecentActivity:
+                  translationClientId:
                     type: string
                   sourceTextTitle:
                     type: string
@@ -198,14 +205,43 @@ paths:
       tags:
         -TranslationCases
       summary: Update an existing translation case (UpdateTranslationCaseLambda)
+      parameters:
+        - name: id
+          in: path
+          description: ID of translation case to update
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              customerId:
-                type: string
               translationCaseId:
                 type: string
+              translationClientId:
+                type: string
+              sourceTextTitle:
+                type: string
+              sourceTextAuthor:
+                type: string
+              translatedTitle:
+                type: string
+              dueDate:
+                type: string
+              startDate:
+                type: string
+              endDate:
+                type: string
+              openCase:
+                type: boolean
+              rushJob:
+                type: boolean
+              progressLog:
+                type: list
+              totalWorkingHours:
+                type: number
+              wordsPerHour:
+                type: number
       responses:
         "200":
           description: UpdateTranslationCaseResponse
@@ -218,17 +254,17 @@ paths:
                     type: string
                   translationCaseId:
                     type: string
-                  translationClientId:
-                    type: string
                   caseNickname:
+                    type: string
+                  projectType:
+                    type: string
+                  translationClientId:
                     type: string
                   sourceTextTitle:
                     type: string
                   sourceTextAuthor:
                     type: string
                   translatedTitle:
-                    type: string
-                  projectType:
                     type: string
                   dueDate:
                     type: string
@@ -253,14 +289,14 @@ paths:
       tags:
         - TranslationCases
       summary: Archive an existing translation case (ArchiveTranslationCaseLambda)
-      requestBody:
-        content:
-          application/json:
-            schema:
-              customerId:
-                type: string
-              translationCaseId:
-                type: string
+      parameters:
+        - name: id
+          in: path
+          description: ID of translation case to retrieve
+          required: true
+          schema:
+            type: string
+
       responses:
         "200":
           description: ArchiveTranslationCaseResponse
@@ -273,13 +309,11 @@ paths:
                     type: string
                   translationCaseId:
                     type: string
-                  translationClientId:
-                    type: string
                   caseNickname:
                     type: string
                   projectType:
                     type: string
-                  mostRecentActivity:
+                  translationClientId:
                     type: string
                   sourceTextTitle:
                     type: string
@@ -306,17 +340,22 @@ paths:
         "500":
           description: "Invalid input parameters"
 
-  /translationcases/case/update:
+  /translationcases/{id}/update:
     post:
       tags:
         -ProgressUpdates
       summary: Add a progress update (AddProgressUpdateLambda)
+      parameters:
+        - name: id
+          in: path
+          description: ID of translation case to retrieve
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              customerId:
-                type: string
               translationCaseId:
                 type: string
               wordCount:
@@ -330,7 +369,7 @@ paths:
               endTime:
                 type: string
               notes:
-                type: list
+                type: string
       responses:
         "200":
           description: AddProgressUpdateResponse
@@ -343,34 +382,49 @@ paths:
                     type: string
                   translationCaseId:
                     type: string
-                  wordCount:
-                    type: number
+                  caseNickname:
+                    type: string
+                  projectType:
+                    type: string
+                  translationClientId:
+                    type: string
+                  sourceTextTitle:
+                    type: string
+                  sourceTextAuthor:
+                    type: string
+                  translatedTitle:
+                    type: string
+                  dueDate:
+                    type: string
                   startDate:
                     type: string
                   endDate:
                     type: string
-                  startTime:
-                    type: string
-                  endTime:
-                    type: string
-                  notes:
+                  openCase:
+                    type: boolean
+                  rushJob:
+                    type: boolean
+                  progressLog:
                     type: list
+                  totalWorkingHours:
+                    type: number
+                  wordsPerHour:
+                    type: number
         "500":
           description: "Invalid input parameters"
 
-  /translationcases/case/payment:
+  /translationcases/{id}/payment:
     get:
       tags:
         -PaymentRecords
       summary: Get an existing a payment record (GetPaymentRecordLambda)
-      requestBody:
-        content:
-          application/json:
-            schema:
-              customerId:
-                type: string
-              translationCaseId:
-                type: string
+      parameters:
+        - name: id
+          in: path
+          description: translation case ID for payment record to retrieve
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: GetPaymentRecordResponse
@@ -414,12 +468,6 @@ paths:
         content:
           application/json:
             schema:
-              customerId:
-                type: string
-              translationCaseId:
-                type: string
-              translationClientId:
-                type: string
               casePaid:
                 type: boolean
               paymentDate:
@@ -485,8 +533,6 @@ paths:
             schema:
               type: object
               properties:
-                customerId:
-                  type: string
                 translationClientName:
                   type: string
                 translationClientType:
@@ -507,22 +553,12 @@ paths:
                     type: string
                   translationClientType:
                     type: string
-                  mostRecentActivity:
-                    type: string
 
     get:
       tags:
         - TranslationClients
       summary: Get a list of all translation clients (GetAllTranslationClientsLambda)
       operationId: getAllClients
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                customerId:
-                  type: string
       responses:
         "200":
           description: A list of translation client objects
@@ -546,21 +582,18 @@ paths:
                         mostRecentActivity:
                           type: string
 
-  /translationclients/client:
+  /translationclients/{id}:
     get:
       tags:
         - TranslationClients
       summary: Get an existing translation client (GetTranslationClientsLambda)
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                customerId:
-                  type: string
-                translationClientId:
-                  type: string
+      parameters:
+        - name: id
+          in: path
+          description: ID of translation client to retrieve
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: GetTranslationClientResponse
@@ -580,58 +613,14 @@ paths:
         "500":
           description: "Invalid input parameters"
 
-    put:
-      tags:
-        -TranslationClients
-      summary: Update an existing translation client (UpdateTranslationClientLambda)
-      parameters:
-        - name: translationClientId
-          in: path
-          description: ID of translation client to retrieve
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              customerId:
-                type: string
-              translationClientName:
-                type: string
-              translationClientType:
-                type: string
-              mostRecentActivity:
-                type: string
-      responses:
-        "200":
-          description: UpdateTranslationClientResponse
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  customerId:
-                    type: string
-                  translationClientId:
-                    type: string
-                  translationClientName:
-                    type: string
-                  translationClientType:
-                    type: string
-                  mostRecentActivity:
-                    type: string
-        "500":
-          description: "Invalid input parameters"
-
     delete:
       tags:
         - TranslationClients
       summary: Archive an existing translation client (ArchiveTranslationClientLambda)
       parameters:
-        - name: translationClientId
+        - name: id
           in: path
-          description: ID of translation client to archive
+          description: ID of translation client to retrieve
           required: true
           schema:
             type: string

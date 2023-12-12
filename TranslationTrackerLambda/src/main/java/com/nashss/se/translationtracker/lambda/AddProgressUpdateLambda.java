@@ -22,8 +22,8 @@ public class AddProgressUpdateLambda
                                 .withTranslationCaseId(unauthenticatedRequest.getTranslationCaseId())
                                 .withWordCount(unauthenticatedRequest.getWordCount())
                                 .withStartDate(unauthenticatedRequest.getStartDate())
-                                .withEndDate(unauthenticatedRequest.getEndDate())
                                 .withStartTime(unauthenticatedRequest.getStartTime())
+                                .withEndDate(unauthenticatedRequest.getEndDate())
                                 .withEndTime(unauthenticatedRequest.getEndTime())
                                 .withNotes(unauthenticatedRequest.getNotes())
                                 .build());

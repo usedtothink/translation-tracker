@@ -34,7 +34,7 @@ class CreateTranslationClientActivityTest {
         CreateTranslationClientRequest request = CreateTranslationClientRequest.builder()
                 .withCustomerId(CUSTOMER_ID)
                 .withTranslationClientName(TRANSLATION_CLIENT_NAME)
-                .withTranslationClientType(CLIENT_TYPE.name())
+                .withClientType(CLIENT_TYPE.name())
                 .build();
 
         // WHEN
@@ -46,7 +46,7 @@ class CreateTranslationClientActivityTest {
         assertNotNull(result.getTranslationClient().getTranslationClientId());
         assertEquals(CUSTOMER_ID, result.getTranslationClient().getCustomerId());
         assertEquals(TRANSLATION_CLIENT_NAME, result.getTranslationClient().getTranslationClientName());
-        assertEquals(CLIENT_TYPE, result.getTranslationClient().getTranslationClientType());
+        assertEquals(CLIENT_TYPE, result.getTranslationClient().getClientType());
     }
 
 }

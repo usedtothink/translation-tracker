@@ -15,7 +15,10 @@ public class GetPaymentRecordLambda
         return super.runActivity(
             () -> {
                 GetPaymentRecordRequest unauthenticatedRequest =
-                        input.fromBody(GetPaymentRecordRequest.class);
+                        input.fromPath(path ->
+                                GetPaymentRecordRequest.builder()
+                                        .withTranslationCaseId(path.get("id"))
+                                        .build());
                 return input.fromUserClaims(claims ->
                         GetPaymentRecordRequest.builder()
                                 .withCustomerId(claims.get("email"))

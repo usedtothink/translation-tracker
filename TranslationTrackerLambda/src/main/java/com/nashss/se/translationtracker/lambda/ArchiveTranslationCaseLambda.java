@@ -16,7 +16,10 @@ public class ArchiveTranslationCaseLambda
         return super.runActivity(
             () -> {
                 ArchiveTranslationCaseRequest unauthenticatedRequest =
-                        input.fromBody(ArchiveTranslationCaseRequest.class);
+                        input.fromPath(path ->
+                                ArchiveTranslationCaseRequest.builder()
+                                        .withTranslationCaseId(path.get("id"))
+                                        .build());
                 return input.fromUserClaims(claims ->
                         ArchiveTranslationCaseRequest.builder()
                                 .withCustomerId(claims.get("email"))

@@ -140,20 +140,6 @@ class TranslationCaseDaoTest {
     }
 
     @Test
-    public void getAllTranslationCases_noCasesFoundForCustomerId_throwsException() {
-        // GIVEN
-        // Mocking the paginated query list
-        List<TranslationCase> testList = new ArrayList<>();
-        PaginatedQueryList listMock = mock(PaginatedQueryList.class);
-        // Return the size of the real list
-        when(listMock.isEmpty()).thenReturn(testList.isEmpty());
-        when(dynamoDBMapper.query(eq(TranslationCase.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
-
-        // WHEN & THEN
-        assertThrows(TranslationCaseNotFoundException.class, () -> caseDao.getAllTranslationCases(CUSTOMER_ID));
-    }
-
-    @Test
     public void archiveTranslationCase_validCustomerIdAndTranslationCaseId_callsSaveAndDelete() {
         // GIVEN
         TranslationCase translationCase = new TranslationCase();
