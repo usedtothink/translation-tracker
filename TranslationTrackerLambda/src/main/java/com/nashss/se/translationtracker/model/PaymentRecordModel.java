@@ -96,8 +96,12 @@ public class PaymentRecordModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         PaymentRecordModel that = (PaymentRecordModel) o;
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&

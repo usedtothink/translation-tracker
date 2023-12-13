@@ -42,10 +42,14 @@ class PaymentRecordDaoTest {
     @Test
     public void createPaymentRecord_noExistingClient_callsSave() {
         // GIVEN
+        PaymentRecord paymentRecord = new PaymentRecord();
+        paymentRecord.setCustomerId(CUSTOMER_ID);
+        paymentRecord.setTranslationCaseId(TRANSLATION_CASE_ID);
+
         when(dynamoDBMapper.load(PaymentRecord.class, TRANSLATION_CASE_ID)).thenReturn(null);
 
         // WHEN
-        paymentDao.createPaymentRecord(CUSTOMER_ID, TRANSLATION_CASE_ID);
+        paymentDao.createPaymentRecord(paymentRecord);
 
         // THEN
         verify(dynamoDBMapper).save(any(PaymentRecord.class));
@@ -57,11 +61,15 @@ class PaymentRecordDaoTest {
         paymentRecord.setCustomerId(CUSTOMER_ID);
         paymentRecord.setTranslationCaseId(TRANSLATION_CASE_ID);
 
+        PaymentRecord duplicatePaymentRecord = new PaymentRecord();
+        duplicatePaymentRecord.setCustomerId(CUSTOMER_ID);
+        duplicatePaymentRecord.setTranslationCaseId(TRANSLATION_CASE_ID);
+
         when(dynamoDBMapper.load(PaymentRecord.class, TRANSLATION_CASE_ID)).thenReturn(paymentRecord);
 
         // WHEN & THEN
         assertThrows(DuplicatePaymentRecordException.class, () ->
-                paymentDao.createPaymentRecord(CUSTOMER_ID, TRANSLATION_CASE_ID));
+                paymentDao.createPaymentRecord(duplicatePaymentRecord));
     }
 
     @Test
@@ -150,25 +158,29 @@ class PaymentRecordDaoTest {
 
         // WHEN
         List<PaymentRecord> result = paymentDao
-                .getAllPaymentRecordsForTranslationClientId(TRANSLATION_CLIENT_ID);
+                .getAllPaymentRecordsForTranslationClient(CUSTOMER_ID, TRANSLATION_CLIENT_ID);
 
         // THEN
         assertFalse(result.isEmpty());
     }
 
     @Test
-    void getAllPaymentRecordsForTranslationClientId_nonexistentTranslationClientId_throwsException() {
+    void getAllPaymentRecordsForTranslationClientId_wrongCustomerId_throwsException() {
         // GIVEN
         // Mocking the paginated query list - Empty because there are no payment records for the translation client id
         List<PaymentRecord> testList = new ArrayList<>();
+        PaymentRecord wrongIdPaymentRecord = new PaymentRecord();
+        wrongIdPaymentRecord.setCustomerId("wrongCustomerId");
+        testList.add(wrongIdPaymentRecord);
         PaginatedQueryList listMock = mock(PaginatedQueryList.class);
         // Return the size of the real list
-        when(listMock.isEmpty()).thenReturn(testList.isEmpty());
+        when(listMock.size()).thenReturn(testList.size());
+        when(listMock.stream()).thenReturn(testList.stream());
         when(dynamoDBMapper.query(eq(PaymentRecord.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
         // WHEN & THEN
-        assertThrows(TranslationClientNotFoundException.class, () -> paymentDao
-                .getAllPaymentRecordsForTranslationClientId(TRANSLATION_CLIENT_ID));
+        assertThrows(SecurityException.class, () -> paymentDao
+                .getAllPaymentRecordsForTranslationClient(CUSTOMER_ID, TRANSLATION_CLIENT_ID));
     }
 
     @Test

@@ -1,18 +1,17 @@
 package com.nashss.se.translationtracker.activity.results;
 
-
-import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
+import com.nashss.se.translationtracker.model.PaymentRecordModel;
 
 import java.util.List;
 
 public class GetAllPaymentRecordsForTranslationClientResult {
-    private final List<PaymentRecord> paymentRecordList;
+    private final List<PaymentRecordModel> paymentRecordList;
 
-    private GetAllPaymentRecordsForTranslationClientResult(List<PaymentRecord> paymentRecordList) {
+    private GetAllPaymentRecordsForTranslationClientResult(List<PaymentRecordModel> paymentRecordList) {
         this.paymentRecordList = paymentRecordList;
     }
 
-    public List<PaymentRecord> getPaymentRecordList() {
+    public List<PaymentRecordModel> getPaymentRecordList() {
         return paymentRecordList;
     }
 
@@ -29,9 +28,9 @@ public class GetAllPaymentRecordsForTranslationClientResult {
     }
 
     public static class Builder {
-        List<PaymentRecord> paymentRecordList;
+        List<PaymentRecordModel> paymentRecordList;
 
-        public Builder withPaymentRecordList(List<PaymentRecord> paymentRecordList) {
+        public Builder withPaymentRecordList(List<PaymentRecordModel> paymentRecordList) {
             this.paymentRecordList = paymentRecordList;
             return this;
         }

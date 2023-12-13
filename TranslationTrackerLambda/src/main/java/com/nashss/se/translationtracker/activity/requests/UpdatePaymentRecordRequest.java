@@ -208,9 +208,10 @@ public class UpdatePaymentRecordRequest {
         }
 
         public UpdatePaymentRecordRequest build() {
-            return new UpdatePaymentRecordRequest(customerId, translationCaseId, translationClientId,
-                                                  casePaid, paymentDate, onTime, grossPayment, taxRate,
-                                                  payRate, payRateUnit, wordCount, wordCountUnit);
+            return new UpdatePaymentRecordRequest(customerId, translationCaseId, translationCaseNickname,
+                                                  translationClientId, translationClientName, casePaid, paymentDate,
+                                                  onTime, grossPayment, taxRate, payRate, payRateUnit, wordCount,
+                                                  wordCountUnit);
         }
     }
 }

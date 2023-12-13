@@ -4,6 +4,7 @@ import com.nashss.se.translationtracker.activity.requests.CreateTranslationCaseR
 import com.nashss.se.translationtracker.activity.results.CreateTranslationCaseResult;
 import com.nashss.se.translationtracker.dynamodb.PaymentRecordDao;
 import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
+import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.types.ProjectType;
 
@@ -68,7 +69,7 @@ class CreateTranslationCaseActivityTest {
 
         // THEN
         verify(caseDao).createTranslationCase(any(TranslationCase.class));
-        verify(paymentRecordDao).createPaymentRecord(any(String.class), any(String.class));
+        verify(paymentRecordDao).createPaymentRecord(any(PaymentRecord.class));
 
         // Generated in the activity class
         assertNotNull(result.getTranslationCase().getTranslationCaseId());

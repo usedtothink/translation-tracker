@@ -11,6 +11,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -100,10 +101,11 @@ public class PaymentRecordDao {
     /**
      * Returns a list of {@link PaymentRecord} corresponding to the translation client id.
      *
+     * @param customerId The id of the customer ID.
      * @param translationClientId The translation client ID.
      * @return A list of stored PaymentRecords, or empty if none were found.
      */
-    public List<PaymentRecord> getAllPaymentRecordsForTranslationClientId(String translationClientId) {
+    public List<PaymentRecord> getAllPaymentRecordsForTranslationClient(String customerId, String translationClientId) {
         Map<String, AttributeValue> valueMap = new HashMap<>();
         valueMap.put(":translationClientId", new AttributeValue().withS(translationClientId));
         DynamoDBQueryExpression<PaymentRecord> queryExpression = new DynamoDBQueryExpression<PaymentRecord>()
@@ -111,8 +113,14 @@ public class PaymentRecordDao {
                 .withConsistentRead(false)
                 .withKeyConditionExpression("translationClientId = :translationClientId")
                 .withExpressionAttributeValues(valueMap);
-
-        return dynamoDbMapper.query(PaymentRecord.class, queryExpression);
+        List<PaymentRecord> result = dynamoDbMapper.query(PaymentRecord.class, queryExpression);
+        List<PaymentRecord> filteredList = result.stream()
+                .filter(paymentRecord -> paymentRecord.getCustomerId().equals(customerId))
+                .collect(Collectors.toList());
+        if (result.size() > 0 && filteredList.size() == 0) {
+            throw new SecurityException("CustomerId does not match, users may only retrieve payment records they own.");
+        }
+        return result;
     }
 
     /**
