@@ -207,8 +207,8 @@ Resources:
               - Effect: Allow
                 Action: "dynamodb:*"
                 Resource:
-                  - !Sub "arn:aws:dynamob:${AWS::Region}:${AWS::AccountId}:table/translation_clients"
-                  - !Sub "arn:aws:dynamob:${AWS::Region}:${AWS::AccountId}:table/translation_clients/index/ClientCustomerIdIndex"
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/translation_clients"
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/translation_clients/index/ClientCustomerIdIndex"
 
           - PolicyName: 'AccessTranslationCasesTable'
             PolicyDocument:
