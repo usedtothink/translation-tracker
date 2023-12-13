@@ -22,6 +22,7 @@ public class CreateTranslationCaseLambda
                                 .withCaseNickname(unauthenticatedRequest.getCaseNickname())
                                 .withProjectType(unauthenticatedRequest.getProjectType())
                                 .withTranslationClientId(unauthenticatedRequest.getTranslationClientId())
+                                .withTranslationClientName(unauthenticatedRequest.getTranslationClientName())
                                 .withSourceTextTitle(unauthenticatedRequest.getSourceTextTitle())
                                 .withSourceTextAuthor(unauthenticatedRequest.getSourceTextAuthor())
                                 .withTranslatedTitle(unauthenticatedRequest.getTranslatedTitle())

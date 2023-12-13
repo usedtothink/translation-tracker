@@ -5,7 +5,9 @@ import java.util.Objects;
 public class PaymentRecordModel {
     private String customerId;
     private String translationCaseId;
+    private String translationCaseNickname;
     private String translationClientId;
+    private String translationClientName;
     private Boolean casePaid;
     private String paymentDate;
     private Boolean onTime;
@@ -16,13 +18,15 @@ public class PaymentRecordModel {
     private Integer wordCount;
     private String wordCountUnit;
 
-    private PaymentRecordModel(String customerId, String translationCaseId, String translationClientId,
-                               Boolean casePaid, String paymentDate, Boolean onTime, Double grossPayment,
-                               Double taxRate, Double payRate, String payRateUnit, Integer wordCount,
-                               String wordCountUnit) {
+    private PaymentRecordModel(String customerId, String translationCaseId, String translationCaseNickname,
+                               String translationClientId, String translationClientName, Boolean casePaid,
+                               String paymentDate, Boolean onTime, Double grossPayment, Double taxRate, Double payRate,
+                               String payRateUnit, Integer wordCount, String wordCountUnit) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
+        this.translationCaseNickname = translationCaseNickname;
         this.translationClientId = translationClientId;
+        this.translationClientName = translationClientName;
         this.casePaid = casePaid;
         this.paymentDate = paymentDate;
         this.onTime = onTime;
@@ -42,8 +46,16 @@ public class PaymentRecordModel {
         return translationCaseId;
     }
 
+    public String getTranslationCaseNickname() {
+        return translationCaseNickname;
+    }
+
     public String getTranslationClientId() {
         return translationClientId;
+    }
+
+    public String getTranslationClientName() {
+        return translationClientName;
     }
 
     public Boolean getCasePaid() {
@@ -84,16 +96,14 @@ public class PaymentRecordModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         PaymentRecordModel that = (PaymentRecordModel) o;
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&
+                Objects.equals(getTranslationCaseNickname(), that.getTranslationCaseNickname()) &&
                 Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
+                Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
                 Objects.equals(getCasePaid(), that.getCasePaid()) &&
                 Objects.equals(getPaymentDate(), that.getPaymentDate()) &&
                 Objects.equals(getOnTime(), that.getOnTime()) &&
@@ -107,9 +117,9 @@ public class PaymentRecordModel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCustomerId(), getTranslationCaseId(), getTranslationClientId(), getCasePaid(),
-                getPaymentDate(), getOnTime(), getGrossPayment(), getTaxRate(), getPayRate(), getPayRateUnit(),
-                getWordCount(), getWordCountUnit());
+        return Objects.hash(getCustomerId(), getTranslationCaseId(), getTranslationCaseNickname(),
+                getTranslationClientId(), getTranslationClientName(), getCasePaid(), getPaymentDate(), getOnTime(),
+                getGrossPayment(), getTaxRate(), getPayRate(), getPayRateUnit(), getWordCount(), getWordCountUnit());
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -120,7 +130,9 @@ public class PaymentRecordModel {
     public static class Builder {
         private String customerId;
         private String translationCaseId;
+        private String translationCaseNickname;
         private String translationClientId;
+        private String translationClientName;
         private Boolean casePaid;
         private String paymentDate;
         private Boolean onTime;
@@ -141,8 +153,18 @@ public class PaymentRecordModel {
             return this;
         }
 
+        public Builder withTranslationCaseNickname(String translationCaseNickname) {
+            this.translationCaseNickname = translationCaseNickname;
+            return this;
+        }
+
         public Builder withTranslationClientId(String translationClientId) {
             this.translationClientId = translationClientId;
+            return this;
+        }
+
+        public Builder withTranslationClientName(String translationClientName) {
+            this.translationClientName = translationClientName;
             return this;
         }
 
@@ -192,8 +214,9 @@ public class PaymentRecordModel {
         }
 
         public PaymentRecordModel build() {
-            return new PaymentRecordModel(customerId, translationCaseId, translationClientId, casePaid, paymentDate,
-                    onTime, grossPayment, taxRate, payRate, payRateUnit, wordCount, wordCountUnit);
+            return new PaymentRecordModel(customerId, translationCaseId, translationCaseNickname, translationClientId,
+                    translationClientName, casePaid, paymentDate, onTime, grossPayment, taxRate, payRate, payRateUnit,
+                    wordCount, wordCountUnit);
         }
     }
 }

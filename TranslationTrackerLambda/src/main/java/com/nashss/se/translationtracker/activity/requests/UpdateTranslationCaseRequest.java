@@ -8,6 +8,7 @@ public class UpdateTranslationCaseRequest {
     private final String customerId;
     private final String translationCaseId;
     private final String translationClientId;
+    private final String translationClientName;
     private final String sourceTextTitle;
     private final String sourceTextAuthor;
     private final String translatedTitle;
@@ -20,12 +21,14 @@ public class UpdateTranslationCaseRequest {
     private final Double wordsPerHour;
 
     private UpdateTranslationCaseRequest(String customerId, String translationCaseId, String translationClientId,
-                                         String sourceTextTitle, String sourceTextAuthor, String translatedTitle,
-                                         String dueDate, String startDate, String endDate, Boolean openCase,
-                                         Boolean rushJob, Double totalWorkingHours, Double wordsPerHour) {
+                                         String translationClientName, String sourceTextTitle, String sourceTextAuthor,
+                                         String translatedTitle, String dueDate, String startDate, String endDate,
+                                         Boolean openCase, Boolean rushJob, Double totalWorkingHours,
+                                         Double wordsPerHour) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
         this.translationClientId = translationClientId;
+        this.translationClientName = translationClientName;
         this.sourceTextTitle = sourceTextTitle;
         this.sourceTextAuthor = sourceTextAuthor;
         this.translatedTitle = translatedTitle;
@@ -48,6 +51,10 @@ public class UpdateTranslationCaseRequest {
 
     public String getTranslationClientId() {
         return translationClientId;
+    }
+
+    public String getTranslationClientName() {
+        return translationClientName;
     }
 
     public String getSourceTextTitle() {
@@ -93,10 +100,11 @@ public class UpdateTranslationCaseRequest {
 
     @Override
     public String toString() {
-        return "UpdateTranslationCaseRequest{ " +
+        return "UpdateTranslationCaseRequest{" +
                 "customerId='" + customerId + '\'' +
                 ", translationCaseId='" + translationCaseId + '\'' +
                 ", translationClientId='" + translationClientId + '\'' +
+                ", translationClientName='" + translationClientName + '\'' +
                 ", sourceTextTitle='" + sourceTextTitle + '\'' +
                 ", sourceTextAuthor='" + sourceTextAuthor + '\'' +
                 ", translatedTitle='" + translatedTitle + '\'' +
@@ -107,7 +115,7 @@ public class UpdateTranslationCaseRequest {
                 ", rushJob=" + rushJob +
                 ", totalWorkingHours=" + totalWorkingHours +
                 ", wordsPerHour=" + wordsPerHour +
-                " }";
+                '}';
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -120,6 +128,7 @@ public class UpdateTranslationCaseRequest {
         private String customerId;
         private String translationCaseId;
         private String translationClientId;
+        private String translationClientName;
         private String sourceTextTitle;
         private String sourceTextAuthor;
         private String translatedTitle;
@@ -143,6 +152,11 @@ public class UpdateTranslationCaseRequest {
 
         public Builder withTranslationClientId(String translationClientId) {
             this.translationClientId = translationClientId;
+            return this;
+        }
+
+        public Builder withTranslationClientName(String translationClientName) {
+            this.translationClientName = translationClientName;
             return this;
         }
 
@@ -197,9 +211,9 @@ public class UpdateTranslationCaseRequest {
         }
 
         public UpdateTranslationCaseRequest build() {
-            return new UpdateTranslationCaseRequest(customerId, translationCaseId, translationClientId, sourceTextTitle,
-                    sourceTextAuthor, translatedTitle, dueDate, startDate, endDate, openCase, rushJob,
-                    totalWorkingHours, wordsPerHour);
+            return new UpdateTranslationCaseRequest(customerId, translationCaseId, translationClientId,
+                    translationClientName, sourceTextTitle, sourceTextAuthor, translatedTitle, dueDate, startDate,
+                    endDate, openCase, rushJob, totalWorkingHours, wordsPerHour);
         }
     }
 }

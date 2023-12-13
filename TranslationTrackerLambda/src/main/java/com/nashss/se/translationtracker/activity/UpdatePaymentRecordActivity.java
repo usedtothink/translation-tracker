@@ -42,8 +42,16 @@ public class UpdatePaymentRecordActivity {
         String customerId = updatePaymentRecordRequest.getCustomerId();
         PaymentRecord paymentRecord = paymentDao.getPaymentRecord(customerId, requestedTranslationCaseId);
 
+        if (updatePaymentRecordRequest.getTranslationCaseNickname() != null) {
+            paymentRecord.setTranslationCaseNickname(updatePaymentRecordRequest.getTranslationCaseNickname());
+        }
+
         if (updatePaymentRecordRequest.getTranslationClientId() != null) {
             paymentRecord.setTranslationClientId(updatePaymentRecordRequest.getTranslationClientId());
+        }
+
+        if (updatePaymentRecordRequest.getTranslationClientName() != null) {
+            paymentRecord.setTranslationClientName(updatePaymentRecordRequest.getTranslationClientName());
         }
 
         if (updatePaymentRecordRequest.getCasePaid() != null) {

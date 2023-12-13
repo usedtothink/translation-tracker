@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 public class UpdatePaymentRecordRequest {
     private String customerId;
     private String translationCaseId;
+    private String translationCaseNickname;
     private String translationClientId;
+    private String translationClientName;
     private Boolean casePaid;
     private String paymentDate;
     private Boolean onTime;
@@ -18,13 +20,15 @@ public class UpdatePaymentRecordRequest {
     private Integer wordCount;
     private String wordCountUnit;
 
-    private UpdatePaymentRecordRequest(String customerId, String translationCaseId, String translationClientId,
-                                       Boolean casePaid, String paymentDate, Boolean onTime, Double grossPayment,
-                                       Double taxRate, Double payRate, String payRateUnit, Integer wordCount,
-                                       String wordCountUnit) {
+    private UpdatePaymentRecordRequest(String customerId, String translationCaseId, String translationCaseNickname,
+                                       String translationClientId, String translationClientName, Boolean casePaid,
+                                       String paymentDate, Boolean onTime, Double grossPayment, Double taxRate,
+                                       Double payRate, String payRateUnit, Integer wordCount, String wordCountUnit) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
+        this.translationCaseNickname = translationCaseNickname;
         this.translationClientId = translationClientId;
+        this.translationClientName = translationClientName;
         this.casePaid = casePaid;
         this.paymentDate = paymentDate;
         this.onTime = onTime;
@@ -44,8 +48,16 @@ public class UpdatePaymentRecordRequest {
         return translationCaseId;
     }
 
+    public String getTranslationCaseNickname() {
+        return translationCaseNickname;
+    }
+
     public String getTranslationClientId() {
         return translationClientId;
+    }
+
+    public String getTranslationClientName() {
+        return translationClientName;
     }
 
     public Boolean getCasePaid() {
@@ -89,7 +101,9 @@ public class UpdatePaymentRecordRequest {
         return "UpdatePaymentRecordRequest{" +
                 "customerId='" + customerId + '\'' +
                 ", translationCaseId='" + translationCaseId + '\'' +
+                ", translationCaseNickname='" + translationCaseNickname + '\'' +
                 ", translationClientId='" + translationClientId + '\'' +
+                ", translationClientName='" + translationClientName + '\'' +
                 ", casePaid=" + casePaid +
                 ", paymentDate='" + paymentDate + '\'' +
                 ", onTime=" + onTime +
@@ -111,7 +125,9 @@ public class UpdatePaymentRecordRequest {
     public static class Builder {
         private String customerId;
         private String translationCaseId;
+        private String translationCaseNickname;
         private String translationClientId;
+        private String translationClientName;
         private Boolean casePaid;
         private String paymentDate;
         private Boolean onTime;
@@ -132,8 +148,18 @@ public class UpdatePaymentRecordRequest {
             return this;
         }
 
+        public Builder withTranslationCaseNickname(String translationCaseNickname) {
+            this.translationCaseNickname = translationCaseNickname;
+            return this;
+        }
+
         public Builder withTranslationClientId(String translationClientId) {
             this.translationClientId = translationClientId;
+            return this;
+        }
+
+        public Builder withTranslationClientName(String translationClientName) {
+            this.translationClientName = translationClientName;
             return this;
         }
 

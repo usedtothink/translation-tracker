@@ -37,22 +37,18 @@ public class PaymentRecordDao {
      * Creates a new payment record client, checks to make sure a payment record with the same
      * translation case id does not already exit.
      *
-     * @param translationCaseId The id of the translation case to make a new blank payment record for.
-     * @param customerId The customer id to check that the user owns the payment record.
+     * @param paymentRecord The new payment record to be saved in the database.
      * @return The PaymentRecord object that was saved.
      * @throws DuplicatePaymentRecordException when a payment record with the same translation case id already exists.
      */
-    public PaymentRecord createPaymentRecord(String customerId, String translationCaseId) {
+    public PaymentRecord createPaymentRecord(PaymentRecord paymentRecord) {
+        String translationCaseId = paymentRecord.getTranslationCaseId();
         PaymentRecord existingPaymentRecord = dynamoDbMapper.load(PaymentRecord.class, translationCaseId);
         if (existingPaymentRecord != null) {
             throw new DuplicatePaymentRecordException("A payment record for translation case with id '" +
                     translationCaseId + "' already exists.");
         }
-        PaymentRecord newPaymentRecord = new PaymentRecord();
-        newPaymentRecord.setCustomerId(customerId);
-        newPaymentRecord.setTranslationCaseId(translationCaseId);
-
-        return savePaymentRecord(newPaymentRecord);
+        return savePaymentRecord(paymentRecord);
     }
 
     /**

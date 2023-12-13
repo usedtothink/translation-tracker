@@ -12,6 +12,7 @@ public class TranslationCaseModel {
     private String caseNickname;
     private ProjectType projectType;
     private String translationClientId;
+    private String translationClientName;
     private String sourceTextTitle;
     private String sourceTextAuthor;
     private String translatedTitle;
@@ -25,15 +26,16 @@ public class TranslationCaseModel {
     private Double wordsPerHour;
 
     private TranslationCaseModel(String customerId, String translationCaseId, String caseNickname,
-                                 ProjectType projectType, String translationClientId, String sourceTextTitle,
-                                 String sourceTextAuthor, String translatedTitle, String dueDate, String startDate,
-                                 String endDate, Boolean openCase, Boolean rushJob, List<ProgressUpdate> progressLog,
-                                 Double totalWorkingHours, Double wordsPerHour) {
+                                 ProjectType projectType, String translationClientId, String translationClientName,
+                                 String sourceTextTitle, String sourceTextAuthor, String translatedTitle,
+                                 String dueDate, String startDate, String endDate, Boolean openCase, Boolean rushJob,
+                                 List<ProgressUpdate> progressLog, Double totalWorkingHours, Double wordsPerHour) {
         this.customerId = customerId;
         this.translationCaseId = translationCaseId;
         this.caseNickname = caseNickname;
         this.projectType = projectType;
         this.translationClientId = translationClientId;
+        this.translationClientName = translationClientName;
         this.sourceTextTitle = sourceTextTitle;
         this.sourceTextAuthor = sourceTextAuthor;
         this.translatedTitle = translatedTitle;
@@ -65,6 +67,10 @@ public class TranslationCaseModel {
 
     public String getTranslationClientId() {
         return translationClientId;
+    }
+
+    public String getTranslationClientName() {
+        return translationClientName;
     }
 
     public String getSourceTextTitle() {
@@ -113,18 +119,15 @@ public class TranslationCaseModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         TranslationCaseModel that = (TranslationCaseModel) o;
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&
                 Objects.equals(getCaseNickname(), that.getCaseNickname()) &&
                 getProjectType() == that.getProjectType() &&
                 Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
+                Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
                 Objects.equals(getSourceTextTitle(), that.getSourceTextTitle()) &&
                 Objects.equals(getSourceTextAuthor(), that.getSourceTextAuthor()) &&
                 Objects.equals(getTranslatedTitle(), that.getTranslatedTitle()) &&
@@ -140,11 +143,10 @@ public class TranslationCaseModel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCustomerId(), getTranslationCaseId(), getCaseNickname(),
-                getProjectType(), getTranslationClientId(), getSourceTextTitle(),
-                getSourceTextAuthor(), getTranslatedTitle(), getDueDate(), getStartDate(),
-                getEndDate(), getOpenCase(), getRushJob(), getProgressLog(),
-                getTotalWorkingHours(), getWordsPerHour());
+        return Objects.hash(getCustomerId(), getTranslationCaseId(), getCaseNickname(), getProjectType(),
+                getTranslationClientId(), getTranslationClientName(), getSourceTextTitle(), getSourceTextAuthor(),
+                getTranslatedTitle(), getDueDate(), getStartDate(), getEndDate(), getOpenCase(), getRushJob(),
+                getProgressLog(), getTotalWorkingHours(), getWordsPerHour());
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -158,6 +160,7 @@ public class TranslationCaseModel {
         private String caseNickname;
         private ProjectType projectType;
         private String translationClientId;
+        private String translationClientName;
         private String sourceTextTitle;
         private String sourceTextAuthor;
         private String translatedTitle;
@@ -188,6 +191,10 @@ public class TranslationCaseModel {
         }
         public Builder withTranslationClientId(String translationClientId){
             this.translationClientId = translationClientId;
+            return this;
+        }
+        public Builder withTranslationClientName(String translationClientName) {
+            this.translationClientName = translationClientName;
             return this;
         }
         public Builder withSourceTextTitle(String sourceTextTitle){
@@ -237,8 +244,8 @@ public class TranslationCaseModel {
 
         public TranslationCaseModel build() {
             return new TranslationCaseModel(customerId, translationCaseId, caseNickname, projectType,
-                    translationClientId, sourceTextTitle, sourceTextAuthor, translatedTitle, dueDate, startDate,
-                    endDate, openCase, rushJob, progressLog, totalWorkingHours, wordsPerHour);
+                    translationClientId, translationClientName, sourceTextTitle, sourceTextAuthor, translatedTitle,
+                    dueDate, startDate, endDate, openCase, rushJob, progressLog, totalWorkingHours, wordsPerHour);
         }
     }
 }

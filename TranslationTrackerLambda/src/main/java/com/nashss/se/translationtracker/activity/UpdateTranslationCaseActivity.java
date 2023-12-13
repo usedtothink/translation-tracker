@@ -51,11 +51,13 @@ public class UpdateTranslationCaseActivity {
         // it should also be set in the corresponding PaymentRecord
         if (updateTranslationCaseRequest.getTranslationClientId() != null) {
             translationCase.setTranslationClientId(updateTranslationCaseRequest.getTranslationClientId());
+            translationCase.setTranslationClientName(updateTranslationCaseRequest.getTranslationClientName());
 
             UpdatePaymentRecordRequest request = UpdatePaymentRecordRequest.builder()
                     .withCustomerId(updateTranslationCaseRequest.getCustomerId())
                     .withTranslationCaseId(updateTranslationCaseRequest.getTranslationCaseId())
                     .withTranslationClientId(updateTranslationCaseRequest.getTranslationClientId())
+                    .withTranslationClientName(updateTranslationCaseRequest.getTranslationClientName())
                     .build();
 
             updatePaymentRecordActivity.handleRequest(request);

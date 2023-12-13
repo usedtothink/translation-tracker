@@ -437,7 +437,11 @@ paths:
                     type: string
                   translationCaseId:
                     type: string
+                  translationCaseNickname:
+                    type: string
                   translationClientId:
+                    type: string
+                  translationClientName:
                     type: string
                   casePaid:
                     type: boolean
@@ -498,7 +502,11 @@ paths:
                     type: string
                   translationCaseId:
                     type: string
+                  translationCaseNickname:
+                    type: string
                   translationClientId:
+                    type: string
+                  translationClientName:
                     type: string
                   casePaid:
                     type: boolean
@@ -518,6 +526,61 @@ paths:
                     type: number
                   wordCountUnit:
                     type: string
+        "500":
+          description: "Invalid input parameters"
+
+  /paymentrecords/{id}:
+    get:
+      tags:
+        -PaymentRecords
+      summary: Get all existing a payment records associated with a translationClientId (GetAllPaymentRecordsForTranslationClientLambda)
+      parameters:
+        - name: id
+          in: path
+          description: translation client ID for payment records to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: GetAllPaymentRecordsForTranslationClientResponse
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paymentRecordList:
+                    type: array
+                    items:
+                      properties:
+                        customerId:
+                          type: string
+                        translationCaseId:
+                          type: string
+                        translationCaseNickname:
+                          type: string
+                        translationClientId:
+                          type: string
+                        translationClientName:
+                          type: string
+                        casePaid:
+                          type: boolean
+                        paymentDate:
+                          type: string
+                        onTime:
+                          type: boolean
+                        grossPayment:
+                          type: number
+                        taxRate:
+                          type: number
+                        payRate:
+                          type: number
+                        payRateUnit:
+                          type: string
+                        wordCount:
+                          type: number
+                        wordCountUnit:
+                          type: string
         "500":
           description: "Invalid input parameters"
 

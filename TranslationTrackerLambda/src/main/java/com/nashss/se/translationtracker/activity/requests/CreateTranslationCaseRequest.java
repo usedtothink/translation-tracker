@@ -9,6 +9,7 @@ public class CreateTranslationCaseRequest {
     private String caseNickname;
     private String projectType;
     private String translationClientId;
+    private String translationClientName;
     private String sourceTextTitle;
     private String sourceTextAuthor;
     private String translatedTitle;
@@ -19,13 +20,15 @@ public class CreateTranslationCaseRequest {
     private Boolean rushJob;
 
     private CreateTranslationCaseRequest(String customerId, String caseNickname, String projectType,
-                                         String translationClientId, String sourceTextTitle, String sourceTextAuthor,
+                                         String translationClientId, String translationClientName,
+                                         String sourceTextTitle, String sourceTextAuthor,
                                          String translatedTitle, String dueDate, String startDate,
                                          String endDate, Boolean openCase, Boolean rushJob) {
         this.customerId = customerId;
         this.caseNickname = caseNickname;
         this.projectType = projectType;
         this.translationClientId = translationClientId;
+        this.translationClientName = translationClientName;
         this.sourceTextTitle = sourceTextTitle;
         this.sourceTextAuthor = sourceTextAuthor;
         this.translatedTitle = translatedTitle;
@@ -50,6 +53,10 @@ public class CreateTranslationCaseRequest {
 
     public String getTranslationClientId() {
         return translationClientId;
+    }
+
+    public String getTranslationClientName() {
+        return translationClientName;
     }
 
     public String getSourceTextTitle() {
@@ -91,6 +98,7 @@ public class CreateTranslationCaseRequest {
                 ", caseNickname='" + caseNickname + '\'' +
                 ", projectType='" + projectType + '\'' +
                 ", translationClientId='" + translationClientId + '\'' +
+                ", translationClientName='" + translationClientName + '\'' +
                 ", sourceTextTitle='" + sourceTextTitle + '\'' +
                 ", sourceTextAuthor='" + sourceTextAuthor + '\'' +
                 ", translatedTitle='" + translatedTitle + '\'' +
@@ -113,6 +121,7 @@ public class CreateTranslationCaseRequest {
         private String caseNickname;
         private String projectType;
         private String translationClientId;
+        private String translationClientName;
         private String sourceTextTitle;
         private String sourceTextAuthor;
         private String translatedTitle;
@@ -138,6 +147,11 @@ public class CreateTranslationCaseRequest {
 
         public Builder withTranslationClientId(String translationClientId) {
             this.translationClientId = translationClientId;
+            return this;
+        }
+
+        public Builder withTranslationClientName(String translationClientName) {
+            this.translationClientName = translationClientName;
             return this;
         }
 
@@ -183,8 +197,8 @@ public class CreateTranslationCaseRequest {
 
         public CreateTranslationCaseRequest build() {
             return new CreateTranslationCaseRequest(customerId, caseNickname, projectType, translationClientId,
-                                                    sourceTextTitle, sourceTextAuthor, translatedTitle,
-                                                    dueDate, startDate, endDate, openCase, rushJob);
+                                                    translationClientName, sourceTextTitle, sourceTextAuthor,
+                                                    translatedTitle, dueDate, startDate, endDate, openCase, rushJob);
         }
     }
 }

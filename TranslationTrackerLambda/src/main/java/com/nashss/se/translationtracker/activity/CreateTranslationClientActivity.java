@@ -7,6 +7,7 @@ import com.nashss.se.translationtracker.dynamodb.TranslationClientDao;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
 import com.nashss.se.translationtracker.model.TranslationClientModel;
 import com.nashss.se.translationtracker.types.ClientType;
+import com.nashss.se.translationtracker.utils.IdGenerator;
 
 import javax.inject.Inject;
 
@@ -34,17 +35,21 @@ public class CreateTranslationClientActivity {
      * <p>
      * Then it returns the newly created translation client.
      * <p>
-     * If the provided client name and project type combination already exists, throw a
-     * DuplicateTranslationClientException.
+     * If no translation client name is provided, throws an IllegalArgumentException.
      * @param createTranslationClientRequest request object containing the customerID, translation client name,
      *                                       and translation client type.
      * @return createTranslationClientResult result object containing the API defined {@link TranslationClientModel}
      */
     public CreateTranslationClientResult handleRequest(final CreateTranslationClientRequest
                                                                createTranslationClientRequest) {
+        String translationClientName = createTranslationClientRequest.getTranslationClientName();
+        if (translationClientName == null || translationClientName.isBlank()) {
+            throw new IllegalArgumentException("A name must be provided for the translation client.");
+        }
         TranslationClient newTranslationClient = new TranslationClient();
         newTranslationClient.setCustomerId(createTranslationClientRequest.getCustomerId());
-        newTranslationClient.setTranslationClientId(createTranslationClientRequest.getTranslationClientId());
+        newTranslationClient.setTranslationClientId(IdGenerator.newTranslationClientId(translationClientName,
+                createTranslationClientRequest.getClientType()));
         newTranslationClient.setClientType(ClientType.valueOf(createTranslationClientRequest
                 .getClientType()));
         newTranslationClient.setTranslationClientName(createTranslationClientRequest.getTranslationClientName());

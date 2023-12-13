@@ -16,7 +16,9 @@ public class PaymentRecord {
     public static final String CLIENT_INDEX = "PaymentTranslationClientIdIndex";
     private String customerId;
     private String translationCaseId;
+    private String translationCaseNickname;
     private String translationClientId;
+    private String translationClientName;
     private Boolean casePaid;
     private String paymentDate;
     private Boolean onTime;
@@ -46,6 +48,15 @@ public class PaymentRecord {
         this.translationCaseId = translationCaseId;
     }
 
+    @DynamoDBHashKey(attributeName = "translationCaseNickname")
+    public String getTranslationCaseNickname() {
+        return translationCaseNickname;
+    }
+
+    public void setTranslationCaseNickname(String translationCaseNickname) {
+        this.translationCaseNickname = translationCaseNickname;
+    }
+
     @DynamoDBAttribute(attributeName = "translationClientId")
     @DynamoDBIndexHashKey(globalSecondaryIndexName = CLIENT_INDEX, attributeName = "TranslationClientId")
     public String getTranslationClientId() {
@@ -54,6 +65,15 @@ public class PaymentRecord {
 
     public void setTranslationClientId(String translationClientId) {
         this.translationClientId = translationClientId;
+    }
+
+    @DynamoDBAttribute(attributeName = "translationClientName")
+    public String getTranslationClientName() {
+        return translationClientName;
+    }
+
+    public void setTranslationClientName(String translationClientName) {
+        this.translationClientName = translationClientName;
     }
 
     @DynamoDBAttribute(attributeName = "casePaid")

@@ -24,6 +24,7 @@ public class TranslationCase {
     private String caseNickname;
     private ProjectType projectType;
     private String translationClientId;
+    private String translationClientName;
     private String sourceTextTitle;
     private String sourceTextAuthor;
     private String translatedTitle;
@@ -81,6 +82,15 @@ public class TranslationCase {
 
     public void setTranslationClientId(String translationClientId) {
         this.translationClientId = translationClientId;
+    }
+
+    @DynamoDBAttribute(attributeName = "translationClientName")
+    public String getTranslationClientName() {
+        return translationClientName;
+    }
+
+    public void setTranslationClientName(String translationClientName) {
+        this.translationClientName = translationClientName;
     }
 
     @DynamoDBAttribute(attributeName = "sourceTextTitle")
@@ -185,18 +195,15 @@ public class TranslationCase {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         TranslationCase that = (TranslationCase) o;
         return Objects.equals(getCustomerId(), that.getCustomerId()) &&
                 Objects.equals(getTranslationCaseId(), that.getTranslationCaseId()) &&
                 Objects.equals(getCaseNickname(), that.getCaseNickname()) &&
                 getProjectType() == that.getProjectType() &&
                 Objects.equals(getTranslationClientId(), that.getTranslationClientId()) &&
+                Objects.equals(getTranslationClientName(), that.getTranslationClientName()) &&
                 Objects.equals(getSourceTextTitle(), that.getSourceTextTitle()) &&
                 Objects.equals(getSourceTextAuthor(), that.getSourceTextAuthor()) &&
                 Objects.equals(getTranslatedTitle(), that.getTranslatedTitle()) &&
@@ -212,10 +219,9 @@ public class TranslationCase {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCustomerId(), getTranslationCaseId(), getCaseNickname(),
-                getProjectType(), getTranslationClientId(), getSourceTextTitle(),
-                getSourceTextAuthor(), getTranslatedTitle(), getDueDate(), getStartDate(),
-                getEndDate(), getOpenCase(), getRushJob(), getProgressLog(),
-                getTotalWorkingHours(), getWordsPerHour());
+        return Objects.hash(getCustomerId(), getTranslationCaseId(), getCaseNickname(), getProjectType(),
+                getTranslationClientId(), getTranslationClientName(), getSourceTextTitle(), getSourceTextAuthor(),
+                getTranslatedTitle(), getDueDate(), getStartDate(), getEndDate(), getOpenCase(), getRushJob(),
+                getProgressLog(), getTotalWorkingHours(), getWordsPerHour());
     }
 }
