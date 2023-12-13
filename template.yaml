@@ -132,7 +132,7 @@ Resources:
           # List of origins that Cloudfront will connect to
           Origins:
             - Id: s3-website
-              DomainName: !Sub "$S{S3Bucket}.s3.us-east-2.amazonaws.com"
+              DomainName: !Sub "${S3Bucket}.s3.us-east-2.amazonaws.com"
               OriginPath: /static
               S3OriginConfig:
                 # Restricting Bucket access through an origin access identity
@@ -204,25 +204,32 @@ Resources:
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
-                - Effect: Allow
-                  Action: dynamodb:*
-                  Resource: !Sub "arn:aws:dynamob:${AWS::Region}:${AWS::AccountId}:table/translation_clients"
+              - Effect: Allow
+                Action: "dynamodb:*"
+                Resource:
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/translation_clients"
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/translation_clients/index/ClientCustomerIdIndex"
 
           - PolicyName: 'AccessTranslationCasesTable'
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
               - Effect: Allow
-                Action: dynamodb:*
-                Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/translation_cases"
+                Action: "dynamodb:*"
+                Resource:
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/translation_cases"
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/translation_cases/index/CaseCustomerIdIndex"
 
           - PolicyName: 'AccessPaymentRecordTable'
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
-                - Effect: Allow
-                  Action: dynamodb:*
-                  Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/payment_records"
+              - Effect: Allow
+                Action: "dynamodb:*"
+                Resource:
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/payment_records"
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/payment_records/index/PaymentTranslationClientIdIndex"
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/payment_records/index/PaymentCustomerIdIndex"
 
     #-----------------------------------------------------
     # Lambda Functions Configuration

@@ -9,9 +9,10 @@ import DataStore from "../util/DataStore";
 class ViewTranslationCase extends BindingClass {
     constructor() {
         super();
-        this.bindClassMethods(['clientLoaded', 'mount', 'addTranslationCaseToPage', 'addProgressUpdate', 'archiveTranslationCase', 'displayUpdateCaseForm', 'updateTranslationCase', 'displayUpdatePaymentRecordForm', 'updatePaymentRecord'], this);
+        this.bindClassMethods(['clientLoaded', 'mount', 'addTranslationCaseToPage', 'addPaymentRecordToPage', 'addProgressUpdate', 'archiveTranslationCase', 'displayUpdateCaseForm', 'updateTranslationCase', 'displayUpdatePaymentRecordForm', 'updatePaymentRecord'], this);
         this.dataStore = new DataStore();
         this.dataStore.addChangeListener(this.addTranslationCaseToPage);
+        this.dataStore.addChangeListener(this.addPaymentRecordToPage);
         this.header = new Header(this.dataStore);
         console.log("viewTranslationCase constructor");
     }
@@ -61,11 +62,6 @@ class ViewTranslationCase extends BindingClass {
     addTranslationCaseToPage() {
         const translationCase = this.dataStore.get('translationCase');
         if (translationCase == null) {
-            return;
-        }
-
-        const paymentRecord = this.dataStore.get('paymentRecord');
-        if (paymentRecord == null) {
             return;
         }
 
@@ -127,7 +123,17 @@ class ViewTranslationCase extends BindingClass {
             progressUpdateHtml += '<div class="progress-update">' + "No progress updates available" + '</div>';
         }
         document.getElementById('progress-update').innerHTML = progressUpdateHtml;
-        
+    }
+
+    /**
+     * When the payment record is updated in the datastore, update the payment record metadata on the page.
+     */
+    addPaymentRecordToPage() {
+        const paymentRecord = this.dataStore.get('paymentRecord');
+        if (paymentRecord == null) {
+            return;
+        }
+
         document.getElementById('payment-record').innerText = "Payment record: ";
 
         document.getElementById('case-paid').innerText = "Paid: ";
