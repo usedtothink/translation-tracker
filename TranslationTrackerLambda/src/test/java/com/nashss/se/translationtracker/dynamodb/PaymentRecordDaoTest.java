@@ -116,7 +116,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.query(eq(PaymentRecord.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
         // WHEN
-        List<PaymentRecord> result = paymentDao.getAllTranslationClientsForCustomerId(CUSTOMER_ID);
+        List<PaymentRecord> result = paymentDao.getAllPaymentRecordsForCustomerId(CUSTOMER_ID);
 
         // THEN
         assertFalse(result.isEmpty());
@@ -134,7 +134,7 @@ class PaymentRecordDaoTest {
 
         // WHEN & THEN
         assertThrows(TranslationCaseNotFoundException.class, () -> paymentDao
-                .getAllTranslationClientsForCustomerId(CUSTOMER_ID));
+                .getAllPaymentRecordsForCustomerId(CUSTOMER_ID));
     }
 
     @Test
@@ -150,7 +150,7 @@ class PaymentRecordDaoTest {
 
         // WHEN
         List<PaymentRecord> result = paymentDao
-                .getAllTranslationClientsForTranslationClientId(TRANSLATION_CLIENT_ID);
+                .getAllPaymentRecordsForTranslationClientId(TRANSLATION_CLIENT_ID);
 
         // THEN
         assertFalse(result.isEmpty());
@@ -168,7 +168,7 @@ class PaymentRecordDaoTest {
 
         // WHEN & THEN
         assertThrows(TranslationClientNotFoundException.class, () -> paymentDao
-                .getAllTranslationClientsForTranslationClientId(TRANSLATION_CLIENT_ID));
+                .getAllPaymentRecordsForTranslationClientId(TRANSLATION_CLIENT_ID));
     }
 
     @Test

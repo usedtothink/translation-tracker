@@ -112,4 +112,20 @@ public class ModelConverter {
                 .withWordCountUnit(paymentRecord.getWordCountUnit())
                 .build();
     }
+
+    /**
+     * Converts a list of PaymentRecords to a list of PaymentRecordModels.
+     *
+     * @param paymentRecords The PaymentRecords to convert to PaymentRecordModels
+     * @return The converted list of PaymentRecordModels
+     */
+    public List<PaymentRecordModel> toPaymentRecordModelList(List<PaymentRecord> paymentRecords) {
+        List<PaymentRecordModel> paymentRecordModels = new ArrayList<>();
+
+        for (PaymentRecord paymentRecord : paymentRecords) {
+            paymentRecordModels.add(toPaymentRecordModel(paymentRecord));
+        }
+
+        return paymentRecordModels;
+    }
 }

@@ -3,7 +3,6 @@ package com.nashss.se.translationtracker.dynamodb;
 import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
 import com.nashss.se.translationtracker.exceptions.DuplicatePaymentRecordException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
-import com.nashss.se.translationtracker.exceptions.TranslationClientNotFoundException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
@@ -86,7 +85,7 @@ public class PaymentRecordDao {
      * @param customerId The customer ID.
      * @return A list of stored PaymentRecords, or null if none were found.
      */
-    public List<PaymentRecord> getAllTranslationClientsForCustomerId(String customerId) {
+    public List<PaymentRecord> getAllPaymentRecordsForCustomerId(String customerId) {
         Map<String, AttributeValue> valueMap = new HashMap<>();
         valueMap.put(":customerId", new AttributeValue().withS(customerId));
         DynamoDBQueryExpression<PaymentRecord> queryExpression = new DynamoDBQueryExpression<PaymentRecord>()
@@ -106,9 +105,9 @@ public class PaymentRecordDao {
      * Returns a list of {@link PaymentRecord} corresponding to the translation client id.
      *
      * @param translationClientId The translation client ID.
-     * @return A list of stored PaymentRecords, or null if none were found.
+     * @return A list of stored PaymentRecords, or empty if none were found.
      */
-    public List<PaymentRecord> getAllTranslationClientsForTranslationClientId(String translationClientId) {
+    public List<PaymentRecord> getAllPaymentRecordsForTranslationClientId(String translationClientId) {
         Map<String, AttributeValue> valueMap = new HashMap<>();
         valueMap.put(":translationClientId", new AttributeValue().withS(translationClientId));
         DynamoDBQueryExpression<PaymentRecord> queryExpression = new DynamoDBQueryExpression<PaymentRecord>()
@@ -116,12 +115,8 @@ public class PaymentRecordDao {
                 .withConsistentRead(false)
                 .withKeyConditionExpression("translationClientId = :translationClientId")
                 .withExpressionAttributeValues(valueMap);
-        List<PaymentRecord> paymentRecordList = dynamoDbMapper.query(PaymentRecord.class, queryExpression);
-        if (paymentRecordList.isEmpty()) {
-            throw new TranslationClientNotFoundException("No payment records are associated with " +
-                    "translation client id " + translationClientId);
-        }
-        return paymentRecordList;
+
+        return dynamoDbMapper.query(PaymentRecord.class, queryExpression);
     }
 
     /**

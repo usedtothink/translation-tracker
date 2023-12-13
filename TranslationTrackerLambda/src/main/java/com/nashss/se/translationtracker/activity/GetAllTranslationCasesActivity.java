@@ -33,7 +33,7 @@ public class GetAllTranslationCasesActivity {
      * This method handles the incoming request by retrieving all the translation cases from the database that are
      * associated with the customerId.
      * <p>
-     * It then returns a list of all translation cases associated with the customerId;
+     * It then returns a list of all translation cases associated with the customerId.
      * <p>
      * If there are no translation cases with that customerId, this should throw a TranslationCaseNotFoundException.
      *
