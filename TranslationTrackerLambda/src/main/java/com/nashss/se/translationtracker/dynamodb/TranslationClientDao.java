@@ -2,14 +2,13 @@ package com.nashss.se.translationtracker.dynamodb;
 
 import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
 import com.nashss.se.translationtracker.exceptions.DuplicateTranslationClientException;
-import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 import com.nashss.se.translationtracker.exceptions.TranslationClientNotFoundException;
+import com.nashss.se.translationtracker.metrics.MetricsConstants;
+import com.nashss.se.translationtracker.metrics.MetricsPublisher;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.nashss.se.translationtracker.metrics.MetricsConstants;
-import com.nashss.se.translationtracker.metrics.MetricsPublisher;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +30,7 @@ public class TranslationClientDao {
      * Instantiates a TranslationClientDao object.
      *
      * @param dynamoDbMapper the {@link DynamoDBMapper} used to interact with the translation client table.
+     * @param metricsPublisher the MetricsPublisher.
      */
     @Inject
     public TranslationClientDao(DynamoDBMapper dynamoDbMapper, MetricsPublisher metricsPublisher) {
@@ -110,8 +110,11 @@ public class TranslationClientDao {
                 .withConsistentRead(false)
                 .withKeyConditionExpression("customerId = :customerId")
                 .withExpressionAttributeValues(valueMap);
-        List<TranslationClient> translationClientList = dynamoDbMapper.query(TranslationClient.class, queryExpression);
-        return translationClientList;
+        List<TranslationClient> translationClientList = dynamoDbMapper
+                .query(TranslationClient.class, queryExpression);
+        return translationClientList.stream()
+                .filter(translationClient -> !translationClient.getTranslationClientId().startsWith("archived - "))
+                .collect(Collectors.toList());
     }
 
     /**

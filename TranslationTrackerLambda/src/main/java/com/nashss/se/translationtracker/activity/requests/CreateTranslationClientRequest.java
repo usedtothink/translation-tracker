@@ -1,31 +1,23 @@
 package com.nashss.se.translationtracker.activity.requests;
 
-import com.nashss.se.translationtracker.utils.IdGenerator;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 @JsonDeserialize(builder = CreateTranslationClientRequest.Builder.class)
 public class CreateTranslationClientRequest {
     private final String customerId;
-    private final String translationClientId;
     private final String translationClientName;
     private final String clientType;
 
     private CreateTranslationClientRequest(String customerId, String translationClientName,
                                            String clientType) {
         this.customerId = customerId;
-        this.translationClientId = IdGenerator.newTranslationClientId(clientType, translationClientName);
         this.translationClientName = translationClientName;
         this.clientType = clientType;
     }
 
     public String getCustomerId() {
         return customerId;
-    }
-
-    public String getTranslationClientId() {
-        return translationClientId;
     }
 
     public String getTranslationClientName() {
@@ -40,7 +32,6 @@ public class CreateTranslationClientRequest {
     public String toString() {
         return "CreateTranslationClientRequest{" +
                 "customerId='" + customerId + '\'' +
-                ", translationClientId='" + translationClientId + '\'' +
                 ", translationClientName='" + translationClientName + '\'' +
                 ", clientType='" + clientType + '\'' +
                 '}';
