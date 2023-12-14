@@ -87,18 +87,18 @@ public class UpdatePaymentRecordActivityTest {
 
         // THEN
         verify(paymentDao).savePaymentRecord(any(PaymentRecord.class));
-        assertEquals(CUSTOMER_ID, result.getTranslationCase().getCustomerId());
-        assertEquals(TRANSLATION_CASE_ID, result.getTranslationCase().getTranslationCaseId());
-        assertEquals(updatedTranslationClientId, result.getTranslationCase().getTranslationClientId());
-        assertEquals(updatedCasePaid, result.getTranslationCase().getCasePaid());
-        assertEquals(updatedPaymentDate, result.getTranslationCase().getPaymentDate());
-        assertEquals(updatedOnTime, result.getTranslationCase().getOnTime());
-        assertEquals(updatedGrossPayment, result.getTranslationCase().getGrossPayment());
-        assertEquals(updatedTaxRate, result.getTranslationCase().getTaxRate());
-        assertEquals(updatedPayRate, result.getTranslationCase().getPayRate());
-        assertEquals(updatedPayRateUnit, result.getTranslationCase().getPayRateUnit());
-        assertEquals(updatedWordCount, result.getTranslationCase().getWordCount());
-        assertEquals(updatedWordCountUnit, result.getTranslationCase().getWordCountUnit());
+        assertEquals(CUSTOMER_ID, result.getPaymentRecord().getCustomerId());
+        assertEquals(TRANSLATION_CASE_ID, result.getPaymentRecord().getTranslationCaseId());
+        assertEquals(updatedTranslationClientId, result.getPaymentRecord().getTranslationClientId());
+        assertEquals(updatedCasePaid, result.getPaymentRecord().getCasePaid());
+        assertEquals(updatedPaymentDate, result.getPaymentRecord().getPaymentDate());
+        assertEquals(updatedOnTime, result.getPaymentRecord().getOnTime());
+        assertEquals(updatedGrossPayment, result.getPaymentRecord().getGrossPayment());
+        assertEquals(updatedTaxRate, result.getPaymentRecord().getTaxRate());
+        assertEquals(updatedPayRate, result.getPaymentRecord().getPayRate());
+        assertEquals(updatedPayRateUnit, result.getPaymentRecord().getPayRateUnit());
+        assertEquals(updatedWordCount, result.getPaymentRecord().getWordCount());
+        assertEquals(updatedWordCountUnit, result.getPaymentRecord().getWordCountUnit());
     }
 
     @Test
@@ -141,18 +141,18 @@ public class UpdatePaymentRecordActivityTest {
 
         // THEN
         verify(paymentDao).savePaymentRecord(any(PaymentRecord.class));
-        assertEquals(CUSTOMER_ID, result.getTranslationCase().getCustomerId());
-        assertEquals(TRANSLATION_CASE_ID, result.getTranslationCase().getTranslationCaseId());
-        assertEquals(updatedTranslationClientId, result.getTranslationCase().getTranslationClientId());
-        assertEquals(updatedCasePaid, result.getTranslationCase().getCasePaid());
-        assertEquals(updatedPaymentDate, result.getTranslationCase().getPaymentDate());
-        assertEquals(updatedOnTime, result.getTranslationCase().getOnTime());
-        assertEquals(updatedGrossPayment, result.getTranslationCase().getGrossPayment());
-        assertEquals(updatedTaxRate, result.getTranslationCase().getTaxRate());
-        assertEquals(updatedPayRate, result.getTranslationCase().getPayRate());
-        assertEquals(updatedPayRateUnit, result.getTranslationCase().getPayRateUnit());
-        assertEquals(updatedWordCount, result.getTranslationCase().getWordCount());
-        assertEquals(updatedWordCountUnit, result.getTranslationCase().getWordCountUnit());
+        assertEquals(CUSTOMER_ID, result.getPaymentRecord().getCustomerId());
+        assertEquals(TRANSLATION_CASE_ID, result.getPaymentRecord().getTranslationCaseId());
+        assertEquals(updatedTranslationClientId, result.getPaymentRecord().getTranslationClientId());
+        assertEquals(updatedCasePaid, result.getPaymentRecord().getCasePaid());
+        assertEquals(updatedPaymentDate, result.getPaymentRecord().getPaymentDate());
+        assertEquals(updatedOnTime, result.getPaymentRecord().getOnTime());
+        assertEquals(updatedGrossPayment, result.getPaymentRecord().getGrossPayment());
+        assertEquals(updatedTaxRate, result.getPaymentRecord().getTaxRate());
+        assertEquals(updatedPayRate, result.getPaymentRecord().getPayRate());
+        assertEquals(updatedPayRateUnit, result.getPaymentRecord().getPayRateUnit());
+        assertEquals(updatedWordCount, result.getPaymentRecord().getWordCount());
+        assertEquals(updatedWordCountUnit, result.getPaymentRecord().getWordCountUnit());
     }
 
 }
