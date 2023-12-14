@@ -9,7 +9,20 @@
 <body class="background">
     <header class="header" id="header"></header>
     <div class="card">
-        <a href="#" class="button" id="archive-translation-case">Archive this case</a>
+        <a href="#" class="button" onclick="document.getElementById('id01').style.display='block'">Archive this case</a>
+
+<div id="id01" class="modal">
+  <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+  <form class="modal-content">
+    <div class="container">
+      <p>Are you sure you want to archive this case?</p>
+
+      <div class="clearfix">
+        <button type="button" class="archivebtn" id="archive-translation-case">Archive</button>
+      </div>
+    </div>
+  </form>
+</div>
     </div>
     <div class="card">
         <h2 id="case-nickname"></h2>

@@ -10,7 +10,20 @@
     <header class="header" id="header"></header>
     <div class="card">
         <p class="hidden error" id="error-message"> </p>
-        <a href="#" class="button" id="archive-translation-client">Archive this client</a>
+        <a href="#" class="button" onclick="document.getElementById('id01').style.display='block'">Archive this client</a>
+
+        <div id="id01" class="modal">
+          <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+          <form class="modal-content">
+            <div class="container">
+              <p>Are you sure you want to archive this client?</p>
+        
+              <div class="clearfix">
+                <button type="button" class="archivebtn" id="archive-translation-client">Archive</button>
+              </div>
+            </div>
+          </form>
+        </div>
     </div>
     <div class="card">
         <h3 id="translation-client-name"></h2> <br>
