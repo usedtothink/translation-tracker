@@ -9,7 +9,7 @@ public class UpdatePaymentRecordResult {
         this.paymentRecord = paymentRecord;
     }
 
-    public PaymentRecordModel getTranslationCase() {
+    public PaymentRecordModel getPaymentRecord() {
         return paymentRecord;
     }
 
