@@ -72,16 +72,14 @@ class FrontPage extends BindingClass {
         }
         let html = '<table><tr><th>Case Nickname</th><th>Project Type</th><th>Open</th></tr>';
         for (const translationCase of translationCaseList) {
-            if (!translationCase.translationCaseId.startsWith("archived - ")) {
-                html += `
-                <tr>
-                    <td>
-                        <a href="translationCase.html?id=${translationCase.translationCaseId}">${translationCase.caseNickname}</a>
-                    </td>
-                    <td>${translationCase.projectType}</td>
-                    <td>${translationCase.openCase}</td>
-                </tr>`;
-            }
+            html += `
+            <tr>
+                <td>
+                    <a href="translationCase.html?id=${translationCase.translationCaseId}">${translationCase.caseNickname}</a>
+                </td>
+                <td>${translationCase.projectType}</td>
+                <td>${translationCase.openCase}</td>
+            </tr>`;
         }
         html += '</table>';
 
