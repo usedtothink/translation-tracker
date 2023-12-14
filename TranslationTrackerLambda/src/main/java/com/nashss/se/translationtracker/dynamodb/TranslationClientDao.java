@@ -8,6 +8,8 @@ import com.nashss.se.translationtracker.exceptions.TranslationClientNotFoundExce
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.nashss.se.translationtracker.metrics.MetricsConstants;
+import com.nashss.se.translationtracker.metrics.MetricsPublisher;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,14 +26,16 @@ import javax.inject.Singleton;
 public class TranslationClientDao {
     public static final String CUSTOMER_INDEX = "ClientCustomerIdIndex";
     private final DynamoDBMapper dynamoDbMapper;
+    private final MetricsPublisher metricsPublisher;
     /**
      * Instantiates a TranslationClientDao object.
      *
      * @param dynamoDbMapper the {@link DynamoDBMapper} used to interact with the translation client table.
      */
     @Inject
-    public TranslationClientDao(DynamoDBMapper dynamoDbMapper) {
+    public TranslationClientDao(DynamoDBMapper dynamoDbMapper, MetricsPublisher metricsPublisher) {
         this.dynamoDbMapper = dynamoDbMapper;
+        this.metricsPublisher = metricsPublisher;
     }
 
     /**
@@ -57,10 +61,11 @@ public class TranslationClientDao {
                 .collect(Collectors.toList());
 
         if (!filteredList.isEmpty()) {
+            metricsPublisher.addCount(MetricsConstants.CREATETRANSLATIONCLIENT_DUPLICATETRANSLATIONCLIENT_COUNT, 1);
             throw new DuplicateTranslationClientException("A translation client with name '" +
-                    translationClient.getTranslationClientName() +
-                    "' and client type '" + translationClient.getClientType().name() + "' already exists. ");
+                    translationClient.getTranslationClientName() + "' already exists. ");
         }
+        metricsPublisher.addCount(MetricsConstants.CREATETRANSLATIONCLIENT_DUPLICATETRANSLATIONCLIENT_COUNT, 0);
         return saveTranslationClient(translationClient);
     }
 
@@ -77,13 +82,17 @@ public class TranslationClientDao {
         TranslationClient translationClient = this.dynamoDbMapper.load(TranslationClient.class, translationClientId);
 
         if (translationClient == null) {
+            metricsPublisher.addCount(MetricsConstants.GETTRANSLATIONCLIENT_TRANSLATIONCLIENTNOTFOUND_COUNT, 1);
             throw new TranslationClientNotFoundException("Could not find translation client with id" +
                     translationClientId);
         }
+        metricsPublisher.addCount(MetricsConstants.GETTRANSLATIONCLIENT_TRANSLATIONCLIENTNOTFOUND_COUNT, 0);
 
         if (!translationClient.getCustomerId().equals(customerId)) {
-            throw new SecurityException("CustomerId does not match, users may only retrieve cases they own.");
+            metricsPublisher.addCount(MetricsConstants.GETTRANSLATIONCLIENT_SECURITY_COUNT, 1);
+            throw new SecurityException("CustomerId does not match, users may only retrieve clients they own.");
         }
+        metricsPublisher.addCount(MetricsConstants.GETTRANSLATIONCLIENT_SECURITY_COUNT, 0);
         return translationClient;
     }
 
@@ -118,18 +127,26 @@ public class TranslationClientDao {
         TranslationClient translationClient = this.dynamoDbMapper.load(TranslationClient.class, translationClientId);
 
         if (translationClient == null) {
-            throw new TranslationCaseNotFoundException("Could not find translation client with id" +
+            metricsPublisher.addCount(MetricsConstants.ARCHIVETRANSLATIONCLIENT_TRANSLATIONCLIENTNOTFOUND_COUNT, 1);
+            throw new TranslationClientNotFoundException("Could not find translation client with id" +
                     translationClientId);
         }
+        metricsPublisher.addCount(MetricsConstants.ARCHIVETRANSLATIONCLIENT_TRANSLATIONCLIENTNOTFOUND_COUNT, 0);
 
         if (!translationClient.getCustomerId().equals(customerId)) {
+            metricsPublisher.addCount(MetricsConstants.ARCHIVETRANSLATIONCLIENT_SECURITY_COUNT, 1);
             throw new SecurityException("CustomerId does not match, users may only archive clients they own.");
         }
+        metricsPublisher.addCount(MetricsConstants.ARCHIVETRANSLATIONCLIENT_SECURITY_COUNT, 0);
 
-        translationClient.setTranslationClientId("archived - " + translationClientId);
-        saveTranslationClient(translationClient);
+        TranslationClient archivedTranslationClient = new TranslationClient();
+        archivedTranslationClient.setCustomerId(translationClient.getCustomerId());
+        archivedTranslationClient.setTranslationClientId("archived - " + translationClientId);
+        archivedTranslationClient.setTranslationClientName("archived - " +
+                translationClient.getTranslationClientName());
+        archivedTranslationClient.setClientType(translationClient.getClientType());
+        saveTranslationClient(archivedTranslationClient);
 
-        translationClient.setTranslationClientId(translationClientId);
         this.dynamoDbMapper.delete(translationClient);
         return translationClient;
     }

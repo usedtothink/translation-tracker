@@ -2,12 +2,15 @@ package com.nashss.se.translationtracker.dynamodb;
 
 import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
 import com.nashss.se.translationtracker.exceptions.DuplicatePaymentRecordException;
+import com.nashss.se.translationtracker.exceptions.PaymentRecordNotFoundException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 import com.nashss.se.translationtracker.exceptions.TranslationClientNotFoundException;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.nashss.se.translationtracker.metrics.MetricsConstants;
+import com.nashss.se.translationtracker.metrics.MetricsPublisher;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,14 +27,16 @@ public class PaymentRecordDao {
     public static final String CUSTOMER_INDEX = "PaymentCustomerIdIndex";
     public static final String CLIENT_INDEX = "PaymentTranslationClientIdIndex";
     private final DynamoDBMapper dynamoDbMapper;
+    private final MetricsPublisher metricsPublisher;
     /**
      * Instantiates a PaymentRecordDao object.
      *
      * @param dynamoDbMapper the {@link DynamoDBMapper} used to interact with the payment record table.
      */
     @Inject
-    public PaymentRecordDao(DynamoDBMapper dynamoDbMapper) {
+    public PaymentRecordDao(DynamoDBMapper dynamoDbMapper, MetricsPublisher metricsPublisher) {
         this.dynamoDbMapper = dynamoDbMapper;
+        this.metricsPublisher = metricsPublisher;
     }
 
     /**
@@ -46,9 +51,11 @@ public class PaymentRecordDao {
     public PaymentRecord createPaymentRecord(String customerId, String translationCaseId) {
         PaymentRecord existingPaymentRecord = dynamoDbMapper.load(PaymentRecord.class, translationCaseId);
         if (existingPaymentRecord != null) {
+            metricsPublisher.addCount(MetricsConstants.CREATEPAYMENTRECORD_DUPLICATEPAYMENTRECORD_COUNT, 1);
             throw new DuplicatePaymentRecordException("A payment record for translation case with id '" +
                     translationCaseId + "' already exists.");
         }
+        metricsPublisher.addCount(MetricsConstants.CREATEPAYMENTRECORD_DUPLICATEPAYMENTRECORD_COUNT, 0);
         PaymentRecord newPaymentRecord = new PaymentRecord();
         newPaymentRecord.setCustomerId(customerId);
         newPaymentRecord.setTranslationCaseId(translationCaseId);
@@ -69,59 +76,19 @@ public class PaymentRecordDao {
         PaymentRecord paymentRecord = this.dynamoDbMapper.load(PaymentRecord.class, translationCaseId);
 
         if (paymentRecord == null) {
-            throw new TranslationCaseNotFoundException("No payment record exists for translation case with ID '" +
+            metricsPublisher.addCount(MetricsConstants.GETPAYMENTRECORD_PAYMENTRECORDNOTFOUND_COUNT, 1);
+            throw new PaymentRecordNotFoundException("No payment record exists for translation case with ID '" +
                     translationCaseId + "'.");
         }
+        metricsPublisher.addCount(MetricsConstants.GETPAYMENTRECORD_PAYMENTRECORDNOTFOUND_COUNT, 0);
 
         if (!paymentRecord.getCustomerId().equals(customerId)) {
+            metricsPublisher.addCount(MetricsConstants.GETPAYMENTRECORD_SECURITY_COUNT, 1);
             throw new SecurityException("CustomerId does not match, users may only retrieve payment records they own.");
         }
+        metricsPublisher.addCount(MetricsConstants.GETPAYMENTRECORD_SECURITY_COUNT, 0);
 
         return paymentRecord;
-    }
-
-    /**
-     * Returns a list of {@link PaymentRecord} corresponding to the customer id.
-     *
-     * @param customerId The customer ID.
-     * @return A list of stored PaymentRecords, or null if none were found.
-     */
-    public List<PaymentRecord> getAllTranslationClientsForCustomerId(String customerId) {
-        Map<String, AttributeValue> valueMap = new HashMap<>();
-        valueMap.put(":customerId", new AttributeValue().withS(customerId));
-        DynamoDBQueryExpression<PaymentRecord> queryExpression = new DynamoDBQueryExpression<PaymentRecord>()
-                .withIndexName(CUSTOMER_INDEX)
-                .withConsistentRead(false)
-                .withKeyConditionExpression("customerId = :customerId")
-                .withExpressionAttributeValues(valueMap);
-        List<PaymentRecord> paymentRecordList = dynamoDbMapper.query(PaymentRecord.class, queryExpression);
-        if (paymentRecordList.isEmpty()) {
-            throw new TranslationCaseNotFoundException("No payment records are associated with id " +
-                    customerId);
-        }
-        return paymentRecordList;
-    }
-
-    /**
-     * Returns a list of {@link PaymentRecord} corresponding to the translation client id.
-     *
-     * @param translationClientId The translation client ID.
-     * @return A list of stored PaymentRecords, or null if none were found.
-     */
-    public List<PaymentRecord> getAllTranslationClientsForTranslationClientId(String translationClientId) {
-        Map<String, AttributeValue> valueMap = new HashMap<>();
-        valueMap.put(":translationClientId", new AttributeValue().withS(translationClientId));
-        DynamoDBQueryExpression<PaymentRecord> queryExpression = new DynamoDBQueryExpression<PaymentRecord>()
-                .withIndexName(CLIENT_INDEX)
-                .withConsistentRead(false)
-                .withKeyConditionExpression("translationClientId = :translationClientId")
-                .withExpressionAttributeValues(valueMap);
-        List<PaymentRecord> paymentRecordList = dynamoDbMapper.query(PaymentRecord.class, queryExpression);
-        if (paymentRecordList.isEmpty()) {
-            throw new TranslationClientNotFoundException("No payment records are associated with " +
-                    "translation client id " + translationClientId);
-        }
-        return paymentRecordList;
     }
 
     /**
@@ -137,13 +104,17 @@ public class PaymentRecordDao {
         PaymentRecord paymentRecord = this.dynamoDbMapper.load(PaymentRecord.class, translationCaseId);
 
         if (paymentRecord == null) {
+            metricsPublisher.addCount(MetricsConstants.ARCHIVEPAYMENTRECORD_PAYMENTRECORDNOTFOUND_COUNT, 1);
             throw new TranslationCaseNotFoundException("Could not find payment record for translation case with id" +
                     translationCaseId);
         }
+        metricsPublisher.addCount(MetricsConstants.ARCHIVEPAYMENTRECORD_PAYMENTRECORDNOTFOUND_COUNT, 0);
 
         if (!paymentRecord.getCustomerId().equals(customerId)) {
+            metricsPublisher.addCount(MetricsConstants.ARCHIVEPAYMENTRECORD_SECURITY_COUNT, 1);
             throw new SecurityException("CustomerId does not match, users may only archive payment records they own.");
         }
+        metricsPublisher.addCount(MetricsConstants.ARCHIVEPAYMENTRECORD_SECURITY_COUNT, 0);
 
         this.dynamoDbMapper.delete(paymentRecord);
 

@@ -5,8 +5,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
 import com.nashss.se.translationtracker.exceptions.DuplicatePaymentRecordException;
+import com.nashss.se.translationtracker.exceptions.PaymentRecordNotFoundException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 import com.nashss.se.translationtracker.exceptions.TranslationClientNotFoundException;
+import com.nashss.se.translationtracker.metrics.MetricsPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -31,12 +33,14 @@ class PaymentRecordDaoTest {
 
     @Mock
     private DynamoDBMapper dynamoDBMapper;
+    @Mock
+    private MetricsPublisher metricsPublisher;
     private PaymentRecordDao paymentDao;
 
     @BeforeEach
     public void setup() {
         openMocks(this);
-        paymentDao = new PaymentRecordDao(dynamoDBMapper);
+        paymentDao = new PaymentRecordDao(dynamoDBMapper, metricsPublisher);
     }
 
     @Test
@@ -86,7 +90,7 @@ class PaymentRecordDaoTest {
         when(dynamoDBMapper.load(PaymentRecord.class, NON_EXISTENT_CASE_ID)).thenReturn(null);
 
         // WHEN & THEN
-        assertThrows(TranslationCaseNotFoundException.class, () -> paymentDao.getPaymentRecord(CUSTOMER_ID,
+        assertThrows(PaymentRecordNotFoundException.class, () -> paymentDao.getPaymentRecord(CUSTOMER_ID,
                 NON_EXISTENT_CASE_ID));
     }
 
@@ -102,73 +106,6 @@ class PaymentRecordDaoTest {
         // WHEN & THEN
         assertThrows(SecurityException.class, () -> paymentDao.getPaymentRecord(WRONG_CUSTOMER_ID,
                 TRANSLATION_CASE_ID));
-    }
-
-    @Test
-    void getAllPaymentRecordsForCustomerId_validCustomerId_returnsPaymentRecordList() {
-        // GIVEN
-        // Mocking the paginated query list
-        List<PaymentRecord> testList = new ArrayList<>();
-        testList.add(new PaymentRecord());
-        PaginatedQueryList listMock = mock(PaginatedQueryList.class);
-        // Return the size of the real list
-        when(listMock.isEmpty()).thenReturn(testList.isEmpty());
-        when(dynamoDBMapper.query(eq(PaymentRecord.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
-
-        // WHEN
-        List<PaymentRecord> result = paymentDao.getAllTranslationClientsForCustomerId(CUSTOMER_ID);
-
-        // THEN
-        assertFalse(result.isEmpty());
-    }
-
-    @Test
-    void getAllPaymentRecordsForCustomerId_nonexistentCustomerId_throwsException() {
-        // GIVEN
-        // Mocking the paginated query list - Empty because there are no payment records for the customer id
-        List<PaymentRecord> testList = new ArrayList<>();
-        PaginatedQueryList listMock = mock(PaginatedQueryList.class);
-        // Return the size of the real list
-        when(listMock.isEmpty()).thenReturn(testList.isEmpty());
-        when(dynamoDBMapper.query(eq(PaymentRecord.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
-
-        // WHEN & THEN
-        assertThrows(TranslationCaseNotFoundException.class, () -> paymentDao
-                .getAllTranslationClientsForCustomerId(CUSTOMER_ID));
-    }
-
-    @Test
-    void getAllPaymentRecordsForTranslationClientId_validTranslationClientId_returnsPaymentRecordList() {
-        // GIVEN
-        // Mocking the paginated query list
-        List<PaymentRecord> testList = new ArrayList<>();
-        testList.add(new PaymentRecord());
-        PaginatedQueryList listMock = mock(PaginatedQueryList.class);
-        // Return the size of the real list
-        when(listMock.isEmpty()).thenReturn(testList.isEmpty());
-        when(dynamoDBMapper.query(eq(PaymentRecord.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
-
-        // WHEN
-        List<PaymentRecord> result = paymentDao
-                .getAllTranslationClientsForTranslationClientId(TRANSLATION_CLIENT_ID);
-
-        // THEN
-        assertFalse(result.isEmpty());
-    }
-
-    @Test
-    void getAllPaymentRecordsForTranslationClientId_nonexistentTranslationClientId_throwsException() {
-        // GIVEN
-        // Mocking the paginated query list - Empty because there are no payment records for the translation client id
-        List<PaymentRecord> testList = new ArrayList<>();
-        PaginatedQueryList listMock = mock(PaginatedQueryList.class);
-        // Return the size of the real list
-        when(listMock.isEmpty()).thenReturn(testList.isEmpty());
-        when(dynamoDBMapper.query(eq(PaymentRecord.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
-
-        // WHEN & THEN
-        assertThrows(TranslationClientNotFoundException.class, () -> paymentDao
-                .getAllTranslationClientsForTranslationClientId(TRANSLATION_CLIENT_ID));
     }
 
     @Test
