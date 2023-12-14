@@ -7,6 +7,7 @@ import com.nashss.se.translationtracker.dynamodb.PaymentRecordDao;
 import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
 import com.nashss.se.translationtracker.model.PaymentRecordModel;
 
+import java.util.Objects;
 import javax.inject.Inject;
 
 /**
@@ -42,43 +43,47 @@ public class UpdatePaymentRecordActivity {
         String customerId = updatePaymentRecordRequest.getCustomerId();
         PaymentRecord paymentRecord = paymentDao.getPaymentRecord(customerId, requestedTranslationCaseId);
 
-        if (updatePaymentRecordRequest.getTranslationClientId() != null) {
+        if (updatePaymentRecordRequest.getTranslationClientId() != null &&
+                !updatePaymentRecordRequest.getTranslationClientId().isBlank()) {
             paymentRecord.setTranslationClientId(updatePaymentRecordRequest.getTranslationClientId());
         }
 
-        if (updatePaymentRecordRequest.getCasePaid() != null) {
+        if (!Objects.isNull(updatePaymentRecordRequest.getCasePaid())) {
             paymentRecord.setCasePaid(updatePaymentRecordRequest.getCasePaid());
         }
 
-        if (updatePaymentRecordRequest.getPaymentDate() != null) {
+        if (updatePaymentRecordRequest.getPaymentDate() != null &&
+                !updatePaymentRecordRequest.getPaymentDate().isBlank()) {
             paymentRecord.setPaymentDate(updatePaymentRecordRequest.getPaymentDate());
         }
 
-        if (updatePaymentRecordRequest.getOnTime() != null) {
+        if (!Objects.isNull(updatePaymentRecordRequest.getOnTime())) {
             paymentRecord.setOnTime(updatePaymentRecordRequest.getOnTime());
         }
 
-        if (updatePaymentRecordRequest.getGrossPayment() != null) {
+        if (!Objects.isNull(updatePaymentRecordRequest.getGrossPayment())) {
             paymentRecord.setGrossPayment(updatePaymentRecordRequest.getGrossPayment());
         }
 
-        if (updatePaymentRecordRequest.getTaxRate() != null) {
+        if (!Objects.isNull(updatePaymentRecordRequest.getTaxRate())) {
             paymentRecord.setTaxRate(updatePaymentRecordRequest.getTaxRate());
         }
 
-        if (updatePaymentRecordRequest.getPayRate() != null) {
+        if (!Objects.isNull(updatePaymentRecordRequest.getPayRate())) {
             paymentRecord.setPayRate(updatePaymentRecordRequest.getPayRate());
         }
 
-        if (updatePaymentRecordRequest.getPayRateUnit() != null) {
+        if (updatePaymentRecordRequest.getPayRateUnit() != null &&
+                !updatePaymentRecordRequest.getPayRateUnit().isBlank()) {
             paymentRecord.setPayRateUnit(updatePaymentRecordRequest.getPayRateUnit());
         }
 
-        if (updatePaymentRecordRequest.getWordCount() != null) {
+        if (!Objects.isNull(updatePaymentRecordRequest.getWordCount())) {
             paymentRecord.setWordCount(updatePaymentRecordRequest.getWordCount());
         }
 
-        if (updatePaymentRecordRequest.getWordCountUnit() != null) {
+        if (updatePaymentRecordRequest.getWordCountUnit() != null &&
+                !updatePaymentRecordRequest.getWordCountUnit().isBlank()) {
             paymentRecord.setWordCountUnit(updatePaymentRecordRequest.getWordCountUnit());
         }
 

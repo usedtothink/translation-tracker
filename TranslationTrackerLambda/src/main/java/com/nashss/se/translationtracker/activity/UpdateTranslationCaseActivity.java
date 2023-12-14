@@ -8,8 +8,8 @@ import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
 
-import javax.inject.Inject;
 import java.util.Objects;
+import javax.inject.Inject;
 
 /**
  * Implementation of the UpdateTranslationCaseActivity for Translation Tracker's UpdateTranslationCase API.
@@ -88,8 +88,8 @@ public class UpdateTranslationCaseActivity {
             translationCase.setStartDate(updateTranslationCaseRequest.getStartDate());
         }
 
-        if (updateTranslationCaseRequest.getEndDate() != null
-                && updateTranslationCaseRequest.getEndDate().isBlank()) {
+        if (updateTranslationCaseRequest.getEndDate() != null &&
+                !updateTranslationCaseRequest.getEndDate().isBlank()) {
             translationCase.setEndDate(updateTranslationCaseRequest.getEndDate());
         }
 
