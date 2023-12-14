@@ -8,6 +8,7 @@ import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.exceptions.DuplicateTranslationCaseException;
 import com.nashss.se.translationtracker.exceptions.DuplicateProgressUpdateException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
+import com.nashss.se.translationtracker.metrics.MetricsPublisher;
 import com.nashss.se.translationtracker.types.ProjectType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,12 +38,14 @@ class TranslationCaseDaoTest {
 
     @Mock
     private DynamoDBMapper dynamoDBMapper;
+    @Mock
+    private MetricsPublisher metricsPublisher;
     private TranslationCaseDao caseDao;
 
     @BeforeEach
     public void setup() {
         openMocks(this);
-        caseDao = new TranslationCaseDao(dynamoDBMapper);
+        caseDao = new TranslationCaseDao(dynamoDBMapper, metricsPublisher);
     }
 
     @Test
@@ -144,6 +147,7 @@ class TranslationCaseDaoTest {
         // GIVEN
         TranslationCase translationCase = new TranslationCase();
         translationCase.setCustomerId(CUSTOMER_ID);
+        translationCase.setTranslationCaseId(TRANSLATION_CASE_ID);
         when(dynamoDBMapper.load(TranslationCase.class, TRANSLATION_CASE_ID)).thenReturn(translationCase);
 
         // WHEN

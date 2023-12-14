@@ -5,6 +5,8 @@ import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.exceptions.DuplicateProgressUpdateException;
 import com.nashss.se.translationtracker.exceptions.DuplicateTranslationCaseException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
+import com.nashss.se.translationtracker.metrics.MetricsPublisher;
+import com.nashss.se.translationtracker.metrics.MetricsConstants;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
@@ -26,15 +28,18 @@ import javax.inject.Singleton;
 public class TranslationCaseDao {
     public static final String CUSTOMER_INDEX = "CaseCustomerIdIndex";
     private final DynamoDBMapper dynamoDbMapper;
+    private final MetricsPublisher metricsPublisher;
 
     /**
      * Instantiates a TranslationCaseDao object.
      *
      * @param dynamoDbMapper the {@link DynamoDBMapper} used to interact with the translation case table.
+     * @param metricsPublisher the {@link MetricsPublisher} used to record metrics.
      */
     @Inject
-    public TranslationCaseDao(DynamoDBMapper dynamoDbMapper) {
+    public TranslationCaseDao(DynamoDBMapper dynamoDbMapper, MetricsPublisher metricsPublisher) {
         this.dynamoDbMapper = dynamoDbMapper;
+        this.metricsPublisher = metricsPublisher;
     }
 
     /**
@@ -58,10 +63,12 @@ public class TranslationCaseDao {
                         .equals(translationCase.getCaseNickname()))
                 .collect(Collectors.toList());
         if (!filteredList.isEmpty()) {
+            metricsPublisher.addCount(MetricsConstants.CREATETRANSLATIONCASE_DUPLICATETRANSLATIONCASE_COUNT, 1);
             throw new DuplicateTranslationCaseException("A translation case with nickname '" +
                     translationCase.getCaseNickname() +
                     "' already exists.");
         }
+        metricsPublisher.addCount(MetricsConstants.CREATETRANSLATIONCASE_DUPLICATETRANSLATIONCASE_COUNT, 0);
         return saveTranslationCase(translationCase);
     }
 
@@ -77,12 +84,15 @@ public class TranslationCaseDao {
         TranslationCase translationCase = this.dynamoDbMapper.load(TranslationCase.class, translationCaseId);
 
         if (translationCase == null) {
+            metricsPublisher.addCount(MetricsConstants.GETTRANSLATIONCASE_TRANSLATIONCASENOTFOUND_COUNT, 1);
             throw new TranslationCaseNotFoundException("Could not find translation case with id " + translationCaseId);
         }
-
+        metricsPublisher.addCount(MetricsConstants.GETTRANSLATIONCASE_TRANSLATIONCASENOTFOUND_COUNT, 0);
         if (!translationCase.getCustomerId().equals(customerId)) {
+            metricsPublisher.addCount(MetricsConstants.GETTRANSLATIONCASE_SECURITY_COUNT, 1);
             throw new SecurityException("CustomerId does not match, users may only access cases they own.");
         }
+        metricsPublisher.addCount(MetricsConstants.GETTRANSLATIONCASE_SECURITY_COUNT, 0);
 
         return translationCase;
     }
@@ -119,17 +129,37 @@ public class TranslationCaseDao {
         TranslationCase translationCase = this.dynamoDbMapper.load(TranslationCase.class, translationCaseId);
 
         if (translationCase == null) {
+            metricsPublisher.addCount(MetricsConstants.ARCHIVETRANSLATIONCASE_TRANSLATIONCASENOTFOUND_COUNT, 1);
             throw new TranslationCaseNotFoundException("Could not find translation case with id" + translationCaseId);
         }
+        metricsPublisher.addCount(MetricsConstants.ARCHIVETRANSLATIONCASE_TRANSLATIONCASENOTFOUND_COUNT, 0);
 
         if (!translationCase.getCustomerId().equals(customerId)) {
+            metricsPublisher.addCount(MetricsConstants.ARCHIVETRANSLATIONCASE_SECURITY_COUNT, 1);
             throw new SecurityException("CustomerId does not match, users may only archive cases they own.");
         }
+        metricsPublisher.addCount(MetricsConstants.ARCHIVETRANSLATIONCASE_SECURITY_COUNT, 0);
 
-        translationCase.setTranslationCaseId("archived - " + translationCaseId);
-        saveTranslationCase(translationCase);
+        TranslationCase archivedTranslationCase = new TranslationCase();
+        archivedTranslationCase.setCustomerId(translationCase.getCustomerId());
+        archivedTranslationCase.setTranslationCaseId("archived - " + translationCase.getTranslationCaseId());
+        archivedTranslationCase.setCaseNickname("archived - " + translationCase.getCaseNickname());
+        archivedTranslationCase.setProjectType(translationCase.getProjectType());
+        archivedTranslationCase.setTranslationClientId(translationCase.getTranslationClientId());
+        archivedTranslationCase.setSourceTextTitle(translationCase.getSourceTextTitle());
+        archivedTranslationCase.setSourceTextAuthor(translationCase.getSourceTextAuthor());
+        archivedTranslationCase.setTranslatedTitle(translationCase.getTranslatedTitle());
+        archivedTranslationCase.setDueDate(translationCase.getDueDate());
+        archivedTranslationCase.setStartDate(translationCase.getStartDate());
+        archivedTranslationCase.setEndDate(translationCase.getEndDate());
+        archivedTranslationCase.setOpenCase(translationCase.getOpenCase());
+        archivedTranslationCase.setRushJob(translationCase.getRushJob());
+        archivedTranslationCase.setProgressLog(translationCase.getProgressLog());
+        archivedTranslationCase.setTotalWorkingHours(translationCase.getTotalWorkingHours());
+        archivedTranslationCase.setWordsPerHour(translationCase.getWordsPerHour());
 
-        translationCase.setTranslationCaseId(translationCaseId);
+        saveTranslationCase(archivedTranslationCase);
+
         this.dynamoDbMapper.delete(translationCase);
         return translationCase;
     }
@@ -141,22 +171,33 @@ public class TranslationCaseDao {
      * @return The updated TranslationCase object.
      * @throws TranslationCaseNotFoundException if no translation case with the given id is found.
      * @throws SecurityException if the customerId does not match the customerId of the given case.
-     * @throws IllegalArgumentException if the translation case already contains an identical progress update.
+     * @throws DuplicateProgressUpdateException if the translation case already contains an identical progress update.
      */
     public TranslationCase addProgressUpdate(ProgressUpdate progressUpdate) {
         TranslationCase translationCase = getTranslationCase(progressUpdate.getCustomerId(),
                 progressUpdate.getTranslationCaseId());
 
+        if (translationCase == null) {
+            metricsPublisher.addCount(MetricsConstants.ADDPROGRESSUPDATE_TRANSLATIONCASENOTFOUND_COUNT, 1);
+            throw new TranslationCaseNotFoundException("Could not find translation case with id" +
+                    progressUpdate.getTranslationCaseId());
+        }
+        metricsPublisher.addCount(MetricsConstants.ADDPROGRESSUPDATE_TRANSLATIONCASENOTFOUND_COUNT, 0);
+
         if (!translationCase.getCustomerId().equals(progressUpdate.getCustomerId())) {
+            metricsPublisher.addCount(MetricsConstants.ADDPROGRESSUPDATE_SECURITY_COUNT, 1);
             throw new SecurityException("CustomerId does not match, " +
                     "users may only progress updates to cases they own.");
         }
+        metricsPublisher.addCount(MetricsConstants.ADDPROGRESSUPDATE_SECURITY_COUNT, 0);
 
         List<ProgressUpdate> progressLog = translationCase.getProgressLog();
         if (progressLog != null && progressLog.contains(progressUpdate)) {
+            metricsPublisher.addCount(MetricsConstants.ADDPROGRESSUPDATE_DUPLICATEPROGRESSUPDATE_COUNT, 1);
             throw new DuplicateProgressUpdateException("This progress update is already in the progress log " +
                     progressUpdate);
         }
+        metricsPublisher.addCount(MetricsConstants.ADDPROGRESSUPDATE_DUPLICATEPROGRESSUPDATE_COUNT, 0);
 
         if (progressLog == null) {
             progressLog = new ArrayList<>();

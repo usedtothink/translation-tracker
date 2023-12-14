@@ -4,6 +4,7 @@ import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
 import com.nashss.se.translationtracker.exceptions.DuplicateTranslationClientException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
 import com.nashss.se.translationtracker.exceptions.TranslationClientNotFoundException;
+import com.nashss.se.translationtracker.metrics.MetricsPublisher;
 import com.nashss.se.translationtracker.types.ClientType;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -39,12 +40,14 @@ class TranslationClientDaoTest {
 
     @Mock
     private DynamoDBMapper dynamoDBMapper;
+    @Mock
+    private MetricsPublisher metricsPublisher;
     private TranslationClientDao clientDao;
 
     @BeforeEach
     public void setup() {
         openMocks(this);
-        clientDao = new TranslationClientDao(dynamoDBMapper);
+        clientDao = new TranslationClientDao(dynamoDBMapper, metricsPublisher);
     }
 
     @Test
@@ -146,6 +149,7 @@ class TranslationClientDaoTest {
         // GIVEN
         TranslationClient translationClient = new TranslationClient();
         translationClient.setCustomerId(CUSTOMER_ID);
+        translationClient.setTranslationClientId(TRANSLATION_CLIENT_ID);
         when(dynamoDBMapper.load(TranslationClient.class, TRANSLATION_CLIENT_ID)).thenReturn(translationClient);
 
         // WHEN
@@ -164,7 +168,7 @@ class TranslationClientDaoTest {
         when(dynamoDBMapper.load(TranslationClient.class, TRANSLATION_CLIENT_ID)).thenReturn(null);
 
         // WHEN & THEN
-        assertThrows(TranslationCaseNotFoundException.class, () -> clientDao.archiveTranslationClient(CUSTOMER_ID,
+        assertThrows(TranslationClientNotFoundException.class, () -> clientDao.archiveTranslationClient(CUSTOMER_ID,
                 TRANSLATION_CLIENT_ID));
     }
 

@@ -21,7 +21,7 @@ import javax.inject.Singleton;
  * Dagger component for providing dependency injection in Translation Tracker.
  */
 @Singleton
-@Component(modules = {DaoModule.class})
+@Component(modules = {DaoModule.class, MetricsModule.class})
 public interface ServiceComponent {
 
     /**
