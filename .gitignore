@@ -12,6 +12,7 @@
 *.iml
 .aws-sam
 .vscode
+web/.idea/
 
 # Ignore Gradle project-specific cache directory
 .gradle
