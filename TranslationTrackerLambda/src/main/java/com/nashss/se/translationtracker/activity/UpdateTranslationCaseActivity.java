@@ -8,6 +8,7 @@ import com.nashss.se.translationtracker.dynamodb.TranslationCaseDao;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.model.TranslationCaseModel;
 
+import java.util.Objects;
 import javax.inject.Inject;
 
 /**
@@ -49,7 +50,8 @@ public class UpdateTranslationCaseActivity {
 
         // When the translation case TranslationClientId is set,
         // it should also be set in the corresponding PaymentRecord
-        if (updateTranslationCaseRequest.getTranslationClientId() != null) {
+        if (updateTranslationCaseRequest.getTranslationClientId() != null &&
+                !updateTranslationCaseRequest.getTranslationClientId().isBlank()) {
             translationCase.setTranslationClientId(updateTranslationCaseRequest.getTranslationClientId());
 
             UpdatePaymentRecordRequest request = UpdatePaymentRecordRequest.builder()
@@ -61,43 +63,49 @@ public class UpdateTranslationCaseActivity {
             updatePaymentRecordActivity.handleRequest(request);
         }
 
-        if (updateTranslationCaseRequest.getSourceTextTitle() != null) {
+        if (updateTranslationCaseRequest.getSourceTextTitle() != null &&
+                !updateTranslationCaseRequest.getSourceTextTitle().isBlank()) {
             translationCase.setSourceTextTitle(updateTranslationCaseRequest.getSourceTextTitle());
         }
 
-        if (updateTranslationCaseRequest.getSourceTextAuthor() != null) {
+        if (updateTranslationCaseRequest.getSourceTextAuthor() != null &&
+                !updateTranslationCaseRequest.getSourceTextAuthor().isBlank()) {
             translationCase.setSourceTextAuthor(updateTranslationCaseRequest.getSourceTextAuthor());
         }
 
-        if (updateTranslationCaseRequest.getTranslatedTitle() != null) {
+        if (updateTranslationCaseRequest.getTranslatedTitle() != null &&
+                !updateTranslationCaseRequest.getTranslatedTitle().isBlank()) {
             translationCase.setTranslatedTitle(updateTranslationCaseRequest.getTranslatedTitle());
         }
 
-        if (updateTranslationCaseRequest.getDueDate() != null) {
+        if (updateTranslationCaseRequest.getDueDate() != null &&
+                !updateTranslationCaseRequest.getDueDate().isBlank()) {
             translationCase.setDueDate(updateTranslationCaseRequest.getDueDate());
         }
 
-        if (updateTranslationCaseRequest.getStartDate() != null) {
+        if (updateTranslationCaseRequest.getStartDate() != null &&
+                !updateTranslationCaseRequest.getStartDate().isBlank()) {
             translationCase.setStartDate(updateTranslationCaseRequest.getStartDate());
         }
 
-        if (updateTranslationCaseRequest.getEndDate() != null) {
+        if (updateTranslationCaseRequest.getEndDate() != null &&
+                !updateTranslationCaseRequest.getEndDate().isBlank()) {
             translationCase.setEndDate(updateTranslationCaseRequest.getEndDate());
         }
 
-        if (updateTranslationCaseRequest.getOpenCase() != null) {
+        if (!Objects.isNull(updateTranslationCaseRequest.getOpenCase())) {
             translationCase.setOpenCase(updateTranslationCaseRequest.getOpenCase());
         }
 
-        if (updateTranslationCaseRequest.getRushJob() != null) {
+        if (!Objects.isNull(updateTranslationCaseRequest.getRushJob())) {
             translationCase.setRushJob(updateTranslationCaseRequest.getRushJob());
         }
 
-        if (updateTranslationCaseRequest.getTotalWorkingHours() != null) {
+        if (!Objects.isNull(updateTranslationCaseRequest.getTotalWorkingHours())) {
             translationCase.setTotalWorkingHours(updateTranslationCaseRequest.getTotalWorkingHours());
         }
 
-        if (updateTranslationCaseRequest.getWordsPerHour() != null) {
+        if (!Objects.isNull(updateTranslationCaseRequest.getWordsPerHour())) {
             translationCase.setWordsPerHour(updateTranslationCaseRequest.getWordsPerHour());
         }
 
