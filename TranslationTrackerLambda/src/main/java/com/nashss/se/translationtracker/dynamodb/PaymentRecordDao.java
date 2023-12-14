@@ -4,17 +4,10 @@ import com.nashss.se.translationtracker.dynamodb.models.PaymentRecord;
 import com.nashss.se.translationtracker.exceptions.DuplicatePaymentRecordException;
 import com.nashss.se.translationtracker.exceptions.PaymentRecordNotFoundException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
-import com.nashss.se.translationtracker.exceptions.TranslationClientNotFoundException;
-
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.nashss.se.translationtracker.metrics.MetricsConstants;
 import com.nashss.se.translationtracker.metrics.MetricsPublisher;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,6 +25,7 @@ public class PaymentRecordDao {
      * Instantiates a PaymentRecordDao object.
      *
      * @param dynamoDbMapper the {@link DynamoDBMapper} used to interact with the payment record table.
+     * @param metricsPublisher the MetricsPublisher.
      */
     @Inject
     public PaymentRecordDao(DynamoDBMapper dynamoDbMapper, MetricsPublisher metricsPublisher) {

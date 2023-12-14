@@ -40,13 +40,20 @@ public class CreateTranslationCaseActivity {
      * <p>
      * Then it returns the newly created translation case.
      * <p>
-     * If the provided case nickname already exists, throw a
-     * DuplicateCaseNicknameException.
      * @param createTranslationCaseRequest request object containing the translation case nickname and project type.
      * @return createTranslationCaseResult result object containing the API defined {@link TranslationCaseModel}
      */
     public CreateTranslationCaseResult handleRequest(final CreateTranslationCaseRequest
             createTranslationCaseRequest) {
+        if (createTranslationCaseRequest.getCaseNickname().isBlank()) {
+            throw new IllegalArgumentException("The translation case nickname cannot be blank.");
+        }
+
+        if (createTranslationCaseRequest.getProjectType().isBlank()) {
+            throw new IllegalArgumentException("The project type cannot be blank.");
+        }
+
+
         String customerId = createTranslationCaseRequest.getCustomerId();
         String translationCaseId = IdGenerator.newTranslationCaseId(createTranslationCaseRequest.getProjectType(),
                 createTranslationCaseRequest.getCaseNickname());

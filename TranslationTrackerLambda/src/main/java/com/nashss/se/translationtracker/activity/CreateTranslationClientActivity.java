@@ -7,6 +7,7 @@ import com.nashss.se.translationtracker.dynamodb.TranslationClientDao;
 import com.nashss.se.translationtracker.dynamodb.models.TranslationClient;
 import com.nashss.se.translationtracker.model.TranslationClientModel;
 import com.nashss.se.translationtracker.types.ClientType;
+import com.nashss.se.translationtracker.utils.IdGenerator;
 
 import javax.inject.Inject;
 
@@ -42,9 +43,19 @@ public class CreateTranslationClientActivity {
      */
     public CreateTranslationClientResult handleRequest(final CreateTranslationClientRequest
                                                                createTranslationClientRequest) {
+        if (createTranslationClientRequest.getTranslationClientName().isBlank()) {
+            throw new IllegalArgumentException("The name of the translation client cannot be blank.");
+        }
+
+        if (createTranslationClientRequest.getClientType().isBlank()) {
+            throw new IllegalArgumentException("The translation client type cannot be blank.");
+        }
+
         TranslationClient newTranslationClient = new TranslationClient();
         newTranslationClient.setCustomerId(createTranslationClientRequest.getCustomerId());
-        newTranslationClient.setTranslationClientId(createTranslationClientRequest.getTranslationClientId());
+        newTranslationClient.setTranslationClientId(IdGenerator.newTranslationClientId(
+                createTranslationClientRequest.getClientType(),
+                createTranslationClientRequest.getTranslationClientName()));
         newTranslationClient.setClientType(ClientType.valueOf(createTranslationClientRequest
                 .getClientType()));
         newTranslationClient.setTranslationClientName(createTranslationClientRequest.getTranslationClientName());

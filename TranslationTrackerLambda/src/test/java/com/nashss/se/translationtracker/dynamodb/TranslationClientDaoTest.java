@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -131,17 +132,39 @@ class TranslationClientDaoTest {
         // GIVEN
         // Mocking the paginated query list
         List<TranslationClient> testList = new ArrayList<>();
-        testList.add(new TranslationClient());
+        TranslationClient translationClient = new TranslationClient();
+        translationClient.setTranslationClientId("translationClientId");
+        testList.add(translationClient);
         PaginatedQueryList listMock = mock(PaginatedQueryList.class);
-        // Return the size of the real list
-        when(listMock.isEmpty()).thenReturn(testList.isEmpty());
-        when(dynamoDBMapper.query(eq(TranslationClient.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
+        // Stream the real list
+        when(listMock.stream()).thenReturn(testList.stream());
+        when(dynamoDBMapper.query(any(), any())).thenReturn(listMock);
 
         // WHEN
         List<TranslationClient> result = clientDao.getAllTranslationClients(CUSTOMER_ID);
 
         // THEN
         assertFalse(result.isEmpty());
+    }
+
+    @Test
+    void getAllTranslationClients_allClientsArchived_returnsEmptyList() {
+        // GIVEN
+        // Mocking the paginated query list
+        List<TranslationClient> testList = new ArrayList<>();
+        TranslationClient translationClient = new TranslationClient();
+        translationClient.setTranslationClientId("archived - translationClientId");
+        testList.add(translationClient);
+        PaginatedQueryList listMock = mock(PaginatedQueryList.class);
+        // Stream the real list
+        when(listMock.stream()).thenReturn(testList.stream());
+        when(dynamoDBMapper.query(any(), any())).thenReturn(listMock);
+
+        // WHEN
+        List<TranslationClient> result = clientDao.getAllTranslationClients(CUSTOMER_ID);
+
+        // THEN
+        assertTrue(result.isEmpty());
     }
 
     @Test

@@ -5,8 +5,8 @@ import com.nashss.se.translationtracker.dynamodb.models.TranslationCase;
 import com.nashss.se.translationtracker.exceptions.DuplicateProgressUpdateException;
 import com.nashss.se.translationtracker.exceptions.DuplicateTranslationCaseException;
 import com.nashss.se.translationtracker.exceptions.TranslationCaseNotFoundException;
-import com.nashss.se.translationtracker.metrics.MetricsPublisher;
 import com.nashss.se.translationtracker.metrics.MetricsConstants;
+import com.nashss.se.translationtracker.metrics.MetricsPublisher;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
@@ -113,7 +113,9 @@ public class TranslationCaseDao {
                 .withKeyConditionExpression("customerId = :customerId")
                 .withExpressionAttributeValues(valueMap);
         List<TranslationCase> translationCaseList = dynamoDbMapper.query(TranslationCase.class, queryExpression);
-        return translationCaseList;
+        return translationCaseList.stream()
+                .filter(translationCase -> !translationCase.getTranslationCaseId().startsWith("archived - "))
+                .collect(Collectors.toList());
     }
 
     /**

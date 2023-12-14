@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -129,10 +130,12 @@ class TranslationCaseDaoTest {
         // GIVEN
         // Mocking the paginated query list
         List<TranslationCase> testList = new ArrayList<>();
-        testList.add(new TranslationCase());
+        TranslationCase translationCase = new TranslationCase();
+        translationCase.setTranslationCaseId("translationCaseId");
+        testList.add(translationCase);
         PaginatedQueryList listMock = mock(PaginatedQueryList.class);
         // Return the size of the real list
-        when(listMock.isEmpty()).thenReturn(testList.isEmpty());
+        when(listMock.stream()).thenReturn(testList.stream());
         when(dynamoDBMapper.query(eq(TranslationCase.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
 
         // WHEN
@@ -140,6 +143,26 @@ class TranslationCaseDaoTest {
 
         // THEN
         assertFalse(result.isEmpty());
+    }
+
+    @Test
+    public void getAllTranslationCases_allCasesArchived_returnsEmptyList() {
+        // GIVEN
+        // Mocking the paginated query list
+        List<TranslationCase> testList = new ArrayList<>();
+        TranslationCase translationCase = new TranslationCase();
+        translationCase.setTranslationCaseId("archived - translationCaseId");
+        testList.add(translationCase);
+        PaginatedQueryList listMock = mock(PaginatedQueryList.class);
+        // Return the size of the real list
+        when(listMock.stream()).thenReturn(testList.stream());
+        when(dynamoDBMapper.query(eq(TranslationCase.class), any(DynamoDBQueryExpression.class))).thenReturn(listMock);
+
+        // WHEN
+        List<TranslationCase> result = caseDao.getAllTranslationCases(CUSTOMER_ID);
+
+        // THEN
+        assertTrue(result.isEmpty());
     }
 
     @Test
