@@ -9,11 +9,20 @@ import DataStore from '../util/DataStore';
 class CreateTranslationCase extends BindingClass {
     constructor() {
         super();
-        this.bindClassMethods(['mount', 'submit', 'redirectToViewTranslationCase'], this);
+        this.bindClassMethods(['mount', 'submit', 'redirectToViewTranslationCase', 'addTranslationClientListToPage'], this);
         this.dataStore = new DataStore();
         this.dataStore.addChangeListener(this.redirectToViewTranslationCase);
+        this.dataStore.addChangeListener(this.addTranslationClientListToPage);
         this.header = new Header(this.dataStore);
     }
+
+    /**
+     * Once the client is loaded, get the list of translation clients.
+     */
+        async clientLoaded() {
+            const translationClientList = await this.client.getAllTranslationClients();
+            this.dataStore.set('translationClientList', translationClientList);
+        }
 
     /**
      * Add the header to the page and load the TranslationTrackerClient.
@@ -24,6 +33,25 @@ class CreateTranslationCase extends BindingClass {
         this.header.addHeaderToPage();
 
         this.client = new TranslationTrackerClient();
+        this.clientLoaded();
+    }
+
+    /**
+     * When the translation client list is updated in the datastore, update the translation client metadata on the page.
+     */
+    async addTranslationClientListToPage() {
+        const translationClientList = this.dataStore.get('translationClientList');
+
+        let translationClientListHtml = '<option value=""></option>';
+        let translationClient;
+        if (translationClientList != null) {
+            for (translationClient of translationClientList) {
+                translationClientListHtml += '<option value="' + translationClient.translationClientId + '">' + translationClient.translationClientName + '</option>';
+            }
+        } else {
+            translationClientListHtml += '<option value=""></option>';
+        }
+        document.getElementById('translation-client-id').innerHTML = translationClientListHtml;
     }
 
     /**
