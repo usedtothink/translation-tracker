@@ -10,7 +10,7 @@ export default class TranslationTrackerClient extends BindingClass {
     constructor(props = {}) {
         super();
 
-        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'createTranslationCase', 'getTranslationCase', 'addProgressUpdate', 'getPaymentRecord', 'updateTranslationCase', 'getAllTranslationCases', 'getAllTranslationClients', 'createTranslationClient', 'getTranslationClient', 'archiveTranslationCase', 'archiveTranslationClient', 'updatePaymentRecord'];
+        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'createTranslationCase', 'getTranslationCase', 'addProgressUpdate', 'getPaymentRecord', 'updateTranslationCase', 'getAllTranslationCases', 'getAllTranslationClients', 'createTranslationClient', 'getTranslationClient', 'archiveTranslationCase', 'archiveTranslationClient', 'updatePaymentRecord', 'getAllTranslationCasesForTranslationClient'];
         this.bindClassMethods(methodsToBind, this);
 
         this.authenticator = new Authenticator();;
@@ -382,6 +382,25 @@ export default class TranslationTrackerClient extends BindingClass {
             this.handleError(error, errorCallback)
         }
     }
+
+    /**
+     * Gets all translation  cases for the given translation client id.
+     * @param errorCallback (Optional) A function to execute if the call fails.
+     * @returns A list of translation case metadata.
+     */
+        async getAllTranslationCasesForTranslationClient(translationClientId, errorCallback) {
+            try {
+                const token = await this.getTokenOrThrow("Only authenticated users can get translation cases for a given client.");
+                const response = await this.axiosClient.get(`translationclients/${translationClientId}/cases`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                return response.data.translationCaseList;
+            } catch (error) {
+                this.handleError(error, errorCallback)
+            }
+        }
     
 
     /**

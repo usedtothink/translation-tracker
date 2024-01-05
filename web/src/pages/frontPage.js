@@ -62,8 +62,8 @@ class FrontPage extends BindingClass {
     }
 
     /**
-     * Create appropriate HTML for displaying searchResults on the page.
-     * @param translationCaseList An array of playlists objects to be displayed on the page.
+     * Create appropriate HTML for displaying translation cases on the page.
+     * @param translationCaseList An array of translation case objects to be displayed on the page.
      * @returns A string of HTML suitable for being dropped on the page.
      */
     getHTMLForTranslationCases(translationCaseList) {
@@ -87,8 +87,8 @@ class FrontPage extends BindingClass {
     }
 
         /**
-     * Create appropriate HTML for displaying searchResults on the page.
-     * @param translationCaseList An array of playlists objects to be displayed on the page.
+     * Create appropriate HTML for displaying translation clients on the page.
+     * @param translationCaseList An array of translation client objects to be displayed on the page.
      * @returns A string of HTML suitable for being dropped on the page.
      */
         getHTMLForTranslationClients(translationClientList) {

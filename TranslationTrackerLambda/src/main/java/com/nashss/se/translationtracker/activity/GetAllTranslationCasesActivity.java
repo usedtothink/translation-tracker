@@ -35,15 +35,14 @@ public class GetAllTranslationCasesActivity {
      * <p>
      * It then returns a list of all translation cases associated with the customerId;
      * <p>
-     * If there are no translation cases with that customerId, this should throw a TranslationCaseNotFoundException.
      *
-     * @param getAllTranslationCasesRequest request object containing the customerId.
+     * @param request request object containing the customerId.
      * @return getAllTranslationCasesResult result object containing a list of
      * the API defined {@link TranslationCaseModel}
      */
     public GetAllTranslationCasesResult handleRequest(final GetAllTranslationCasesRequest
-                                                              getAllTranslationCasesRequest) {
-        String requestedCustomerId = getAllTranslationCasesRequest.getCustomerId();
+                                                              request) {
+        String requestedCustomerId = request.getCustomerId();
         List<TranslationCase> translationCaseList = caseDao.getAllTranslationCases(requestedCustomerId);
         List<TranslationCaseModel> translationCaseModelList = new ModelConverter()
                 .toTranslationCaseModelList(translationCaseList);
