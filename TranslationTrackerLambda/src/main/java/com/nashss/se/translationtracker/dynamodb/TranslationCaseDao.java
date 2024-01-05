@@ -102,7 +102,6 @@ public class TranslationCaseDao {
      *
      * @param customerId The customer ID.
      * @return A list of stored TranslationCases, or null if none were found.
-     * @throws TranslationCaseNotFoundException if no translation cases are associated with the customer id.
      */
     public List<TranslationCase> getAllTranslationCases(String customerId) {
         Map<String, AttributeValue> valueMap = new HashMap<>();
@@ -115,6 +114,22 @@ public class TranslationCaseDao {
         List<TranslationCase> translationCaseList = dynamoDbMapper.query(TranslationCase.class, queryExpression);
         return translationCaseList.stream()
                 .filter(translationCase -> !translationCase.getTranslationCaseId().startsWith("archived - "))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns a list of {@link TranslationCase} corresponding to the translation client id.
+     *
+     * @param customerId The customer ID.
+     * @param translationClientId The ID of the translation client.
+     * @return A list of stored TranslationCases, or null if none were found.
+     */
+    public List<TranslationCase> getAllTranslationCasesForTranslationClientId(String customerId,
+                                                                              String translationClientId) {
+        List<TranslationCase> allTranslationCases = getAllTranslationCases(customerId);
+        return allTranslationCases.stream()
+                .filter(translationCase -> translationCase.getTranslationClientId() != null &&
+                        translationCase.getTranslationClientId().equals(translationClientId))
                 .collect(Collectors.toList());
     }
 

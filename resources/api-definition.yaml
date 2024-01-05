@@ -644,3 +644,63 @@ paths:
                     type: string
         "500":
           description: "Invalid input parameters"
+
+
+    /translationclients/{id}/cases:
+      get:
+        tags:
+          - TranslationClients
+        summary: Get all cases for a translation client (GetAllTranslationCasesForTranslationClientLambda)
+        parameters:
+          - name: id
+            in: path
+            description: ID of translation client to retrieve cases for
+            required: true
+            schema:
+              type: string
+        responses:
+          "200":
+            description: GetAllTranslationCasesForTranslationClientResponse
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    translationCaseList:
+                      type: array
+                      items:
+                        properties:
+                          customerId:
+                            type: string
+                          translationCaseId:
+                            type: string
+                          caseNickname:
+                            type: string
+                          projectType:
+                            type: string
+                          translationClientId:
+                            type: string
+                          sourceTextTitle:
+                            type: string
+                          sourceTextAuthor:
+                            type: string
+                          translatedTitle:
+                            type: string
+                          dueDate:
+                            type: string
+                          startDate:
+                            type: string
+                          endDate:
+                            type: string
+                          openCase:
+                            type: boolean
+                          rushJob:
+                            type: boolean
+                          progressLog:
+                            type: list
+                          totalWorkingHours:
+                            type: number
+                          wordsPerHour:
+                            type: number
+          "500":
+            description: "Invalid input parameters"
